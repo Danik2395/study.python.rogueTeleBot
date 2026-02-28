@@ -1,0 +1,67 @@
+{
+    "active": true, 
+    "current_room": 0,
+    "player": {
+	"base_health": 100,
+	"current_health": 100,
+	"base_damage": 5,
+	"base_defence": 0,
+	"base_speed": 7,
+	"equipped_items": {
+	    "weapon": "sword",
+	    "armour": null
+	},
+	"inventory": ["apple", "sword"]
+    },
+    "floor": {
+	"index": 1,
+	"rooms": {
+    	    "room_0": {
+		"index": 0,
+		"type": "entrance",
+		"name": null,
+		"mood": "вы ничего не помните",
+		"cleared": true,
+		"enemies": null,
+		"loot": null,
+		"exits": {
+		    "forward": "room_1",
+		    "backward": null,
+		    "left": null,
+		    "right": null,
+		    "down": null
+		}
+	    },
+	    "room_1": {
+		"index": 1,
+		"type": "combat",
+		"name": "пещера",
+		"mood": [
+		    "напряжённо",
+		    "затхло"
+		],
+		"cleared": false,
+		"enemies": [
+		    {
+			"id": "dragon",
+			"current_health": 15
+		    },
+		    {
+			"id": "lizard",
+			"current_health": 12
+		    }
+		],
+		"loot": [
+		    "apple"
+		],
+		"exits": {
+		    "forward": null,
+		    "backward": "room_0",
+		    "left": null,
+		    "right": null,
+		    "down": true
+		}
+	    }
+	}
+    }
+}

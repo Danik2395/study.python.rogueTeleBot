@@ -1,0 +1,27 @@
+{
+    "enemies": {
+	"dragon": {
+	    "name": "Дракон",
+	    "health": 20,
+	    "damage": 4,
+	    "defence": 5,
+	    "speed": 10,
+	    "min_floor": 1,
+	    "biom": ["cave"]
+	},
+	"lizard": {
+	    "name": "Ящерица",
+	    "health": 10,
+	    "damage": 2,
+	    "defence": 3,
+	    "speed": 15,
+	    "min_floor": 1,
+	    "biom": ["cave"]
+	}
+    },
+    "npcs": {
+	"npc": {
+	    "name": "noname"
+	}
+    }
+}
