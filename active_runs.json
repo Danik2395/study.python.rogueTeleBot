@@ -1,6 +1,5 @@
 {
     "active": true, 
-    "current_room": 0,
     "player": {
 	"base_health": 100,
 	"current_health": 100,
@@ -15,6 +14,9 @@
     },
     "floor": {
 	"index": 1,
+	"current_room": 0,
+	"fork_stack": ["room_1"],
+	"down_in_room": 2,
 	"rooms": {
     	    "room_0": {
 		"index": 0,
@@ -24,12 +26,13 @@
 		"cleared": true,
 		"enemies": null,
 		"loot": null,
-		"exits": {
+		"doors": {
 		    "forward": "room_1",
 		    "backward": null,
 		    "left": null,
 		    "right": null,
-		    "down": null
+		    "down": null,
+		    "branch_power": 0.5
 		}
 	    },
 	    "room_1": {
@@ -41,25 +44,53 @@
 		    "затхло"
 		],
 		"cleared": false,
-		"enemies": [
-		    {
-			"id": "dragon",
+		"enemies": {
+		    "dragon": {
 			"current_health": 15
 		    },
-		    {
-			"id": "lizard",
+		    "lizard": {
 			"current_health": 12
 		    }
-		],
+		},
 		"loot": [
 		    "apple"
 		],
-		"exits": {
-		    "forward": null,
+		"doors": {
+		    "forward": "room_2",
 		    "backward": "room_0",
+		    "left": "NEW",
+		    "right": null,
+		    "down": false,
+		    "branch_power": 0.38
+		}
+	    },
+	    "room_2": {
+		"index": 2,
+		"type": "combat",
+		"name": "пещера",
+		"mood": [
+		    "напряжённо",
+		    "затхло"
+		],
+		"cleared": false,
+		"enemies": {
+		    "dragon": {
+			"current_health": 15
+		    },
+		    "lizard": {
+			"current_health": 12
+		    }
+		},
+		"loot": [
+		    "apple"
+		],
+		"doors": {
+		    "forward": null,
+		    "backward": "room_1",
 		    "left": null,
 		    "right": null,
-		    "down": true
+		    "down": true,
+		    "branch_power": 0.26
 		}
 	    }
 	}

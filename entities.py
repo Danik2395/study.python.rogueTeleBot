@@ -95,7 +95,7 @@ class Player(Dummy):
             self.add_weight = weight
 
 
-# TODO: сделать фолбэки, чтоб скейлились от этажа 
+# TODO: Убери заполнение отсюда, потому что оно будет в боевой системе
 class Enemy(Dummy):
     """Class for enemies to give a life for dummy from json"""
     def __init__(self, id: int, current_health: int) -> None:
