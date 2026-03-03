@@ -72,13 +72,22 @@ class Dummy:
 
 class Player(Dummy):
     """Player class. Sets properties parcing values from jsons"""
+    
+    class Dead(Exception):
+        """Exception that occured on the players death"""
+        # TODO: сделать обработку через систему логов
+
+        def __init__(self, log: dict):
+            super().__init__("player_dead")
+            self.log = log
+
 
     def __init__(self, health: int, defence: int, damage: int, speed: int, equipped_items: dict) -> None:
         super().__init__("Player", health, defence, damage, speed)
         self.equipped_items = equipped_items
-        self._set_stats()
+        # self._set_stats()
 
-    def _set_stats(self) -> None:
+    # def _set_stats(self) -> None:
         if self.equipped_items:
             damage, defence, weight = 0, 0, 0
 
