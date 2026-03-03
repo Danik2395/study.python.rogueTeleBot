@@ -4,12 +4,14 @@
 
 from typing import Any
 import random
-from presets import LAYOUT, ITEMS, ENEMIES
+from presets import LAYOUT, ITEMS, ENEMIES, COMBAT_RULES, LOG
+from entities import Enemy, Player
 
 
 class FloorSystem:
     """Class for floor generation"""
 # TODO: сделать логику стека для веток
+# а ещё сделать логирование
     def __init__(
             self,
             floor: dict
@@ -66,19 +68,19 @@ class FloorSystem:
         """Filter all enemies to lower scope of the floor"""
 
         self.floor_enemies_pool = [
-                enemy for enemy in ENEMIES
+                enemy for enemy, data in ENEMIES.items()
 
-                if enemy["min_floor"] <= self.floor_index
-                and self.biom_key in enemy["biom"]
+                if data.get("min_floor", 1) <= self.floor_index
+                and self.biom_key in data.get("biom", LAYOUT["bioms"])
                 ]
 
     def _filter_loot_pool(self) -> None:
         """Filter items"""
 
         self.floor_loot_pool = [
-                item for item in ITEMS
+                item for item, data in ITEMS
 
-                if item["min_floor"] <= self.floor_index
+                if data.get("min_floor", 1) <= self.floor_index
                 ]
 
     @staticmethod
@@ -172,18 +174,18 @@ class FloorSystem:
         room_doors = self._gen_room_doors(room_type, prev_room_doors, room_index, backward_direction)
 
         # ===ENEMIES===
-        room_enemies = []
+        room_enemies = {}
         if room_type == "combat":
             enemies_amount = self.biom["enemies_amount"]
             room_enemies_signs = self._get_room_content_pool(self.floor_enemies_pool, enemies_amount)
-
-            for enemy_name in room_enemies_signs:
-               health = ENEMIES[enemy_name]["health"]
-              
-               room_enemies[enemy_name] = {
-                   "current_health": health * self.floor_scale
-               }
-
+            #
+            # for enemy_name in room_enemies_signs:
+            #    health = ENEMIES[enemy_name]["health"]
+            #
+            #    room_enemies[enemy_name] = {
+            #        "current_health": health * self.floor_scale
+            #    }
+            #
         # ===LOOT===
         loot_amount = random.choice(self.biom["loot_amount"])
         room_loot = self._get_room_content_pool(self.floor_loot_pool, loot_amount)
