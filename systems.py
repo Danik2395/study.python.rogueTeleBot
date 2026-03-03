@@ -177,15 +177,8 @@ class FloorSystem:
         room_enemies = {}
         if room_type == "combat":
             enemies_amount = self.biom["enemies_amount"]
-            room_enemies_signs = self._get_room_content_pool(self.floor_enemies_pool, enemies_amount)
-            #
-            # for enemy_name in room_enemies_signs:
-            #    health = ENEMIES[enemy_name]["health"]
-            #
-            #    room_enemies[enemy_name] = {
-            #        "current_health": health * self.floor_scale
-            #    }
-            #
+            room_enemies = self._get_room_content_pool(self.floor_enemies_pool, enemies_amount)
+
         # ===LOOT===
         loot_amount = random.choice(self.biom["loot_amount"])
         room_loot = self._get_room_content_pool(self.floor_loot_pool, loot_amount)
