@@ -1,0 +1,19 @@
+{
+    "combat": {
+	"type": null,
+	"turns": null,
+	"enemies_turn_triggered": false,
+	"combat_ended": false,
+	"consequence": null
+    },
+    "combat_consequence": {
+	"target": null,
+	"stat": null,
+	"delta": null,
+	"dead": false
+    },
+    "dead_log": {
+	"enemy": null,
+	"damage": null
+    }
+}

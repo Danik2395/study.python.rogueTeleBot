@@ -1,0 +1,10 @@
+{
+    "combat": {
+	"turn_delimiter": 4,
+	"actions": ["attack"],
+	"damage_scale_limits": [
+	    [0.8, 1.2],
+	    [0.6, 1.0]
+	]
+    }
+}

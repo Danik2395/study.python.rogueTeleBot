@@ -5,12 +5,17 @@
 	"current_health": 100,
 	"base_damage": 5,
 	"base_defence": 0,
-	"base_speed": 7,
+	"base_speed": 8,
 	"equipped_items": {
 	    "weapon": "sword",
 	    "armour": null
 	},
 	"inventory": ["apple", "sword"]
+    },
+    "combat_state": {
+	"in_combat": false,
+	"turns": null,
+	"enemies": null
     },
     "floor": {
 	"index": 1,
@@ -44,14 +49,7 @@
 		    "затхло"
 		],
 		"cleared": false,
-		"enemies": {
-		    "dragon": {
-			"current_health": 15
-		    },
-		    "lizard": {
-			"current_health": 12
-		    }
-		},
+		"enemies": [ "dragon", "lizard" ],
 		"loot": [
 		    "apple"
 		],
@@ -73,14 +71,7 @@
 		    "затхло"
 		],
 		"cleared": false,
-		"enemies": {
-		    "dragon": {
-			"current_health": 15
-		    },
-		    "lizard": {
-			"current_health": 12
-		    }
-		},
+		"enemies": [ "dragon", "lizard" ],
 		"loot": [
 		    "apple"
 		],
