@@ -3,7 +3,7 @@
 #
 
 import random
-from presets import ITEMS, CREATURES
+from presets import ITEMS, ENEMIES
 
 
 class Dummy:
@@ -95,15 +95,18 @@ class Player(Dummy):
             self.add_weight = weight
 
 
-# TODO: Убери заполнение отсюда, потому что оно будет в боевой системе
 class Enemy(Dummy):
-    """Class for enemies to give a life for dummy from json"""
-    def __init__(self, id: int, current_health: int) -> None:
-        dummy = CREATURES.get(id)
+    """
+    Class for the combat system that sets enemies stats.
+    Needed to proceed combat action onto player
+    """
+
+    def __init__(self, enemy_name: str) -> None:
+        enemy_template = ENEMIES[enemy_name]
 
         rand_name = ["тень", "присутствие", "силуэт", "сущность"]
-        self.name = dummy.get("name", random.choice(rand_name)) 
-        self.current_health = current_health 
-        self.base_damage = dummy.get("damage", random.randint(1, 20))
-        self.base_defence = dummy.get("defence", random.randint(3, 15))
-        self.base_speed = dummy.get("speed", random.randint(5, 30))
+        self.name = enemy_template.get("name", random.choice(rand_name)) 
+        self.current_health = enemy_template.get("health", random.randint(5, 15))
+        self.base_damage = enemy_template.get("damage", random.randint(1, 20))
+        self.base_defence = enemy_template.get("defence", random.randint(3, 15))
+        self.base_speed = enemy_template.get("speed", random.randint(5, 30))
