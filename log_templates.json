@@ -13,7 +13,14 @@
 	"dead": false
     },
     "dead_log": {
+	"type": "death",
 	"enemy": null,
 	"damage": null
+    },
+    "move": {
+	"type": "move",
+	"room_index": null,
+	"is_new_room": false
+
     }
 }

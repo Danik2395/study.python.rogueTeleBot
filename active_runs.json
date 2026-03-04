@@ -22,8 +22,8 @@
 	"current_room": 0,
 	"fork_stack": ["room_1"],
 	"down_in_room": 2,
-	"rooms": {
-    	    "room_0": {
+	"rooms": [
+	    {
 		"index": 0,
 		"type": "entrance",
 		"name": null,
@@ -32,7 +32,7 @@
 		"enemies": null,
 		"loot": null,
 		"doors": {
-		    "forward": "room_1",
+		    "forward": 1,
 		    "backward": null,
 		    "left": null,
 		    "right": null,
@@ -40,7 +40,7 @@
 		    "branch_power": 0.5
 		}
 	    },
-	    "room_1": {
+	    {
 		"index": 1,
 		"type": "combat",
 		"name": "пещера",
@@ -54,15 +54,15 @@
 		    "apple"
 		],
 		"doors": {
-		    "forward": "room_2",
-		    "backward": "room_0",
+		    "forward": 2,
+		    "backward": 0,
 		    "left": "NEW",
 		    "right": null,
 		    "down": false,
 		    "branch_power": 0.38
 		}
 	    },
-	    "room_2": {
+	    {
 		"index": 2,
 		"type": "combat",
 		"name": "пещера",
@@ -77,13 +77,13 @@
 		],
 		"doors": {
 		    "forward": null,
-		    "backward": "room_1",
+		    "backward": 1,
 		    "left": null,
 		    "right": null,
 		    "down": true,
 		    "branch_power": 0.26
 		}
 	    }
-	}
+	]
     }
 }
