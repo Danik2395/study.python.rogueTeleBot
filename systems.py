@@ -11,7 +11,10 @@ from entities import Enemy, Player
 class FloorSystem:
     """Class for floor generation"""
 # TODO: сделать логику стека для веток
-# а ещё сделать логирование
+# TODO: а ещё сделать логирование; оно наверно в перемещении будет, а не в этажах.
+# TODO: а ещё у тебя нет 100% выпадения выхода на следующий этаж. в плане он просто может не выпасть
+# TODO: да и впринципе нет обработки выхода
+    pass
     def __init__(
             self,
             floor: dict
@@ -134,7 +137,7 @@ class FloorSystem:
             power = prev_room_doors["branch_power"] - rules["power_decrease"]
             
             # Setting previous room door
-            doors[backward_direction] = f"room_{prev_room_index}"
+            doors[backward_direction] = prev_room_index
             
             door_chance = rules["door_chance"]
             down_chance = rules["down_chance"]
@@ -170,7 +173,6 @@ class FloorSystem:
         room_mood = random.choice(self.biom["mood"])
 
         # ===DOORS===
-        # prev_room[direction] = f"room_{room_index}"
         room_doors = self._gen_room_doors(room_type, prev_room_doors, room_index, backward_direction)
 
         # ===ENEMIES===
@@ -193,6 +195,7 @@ class FloorSystem:
                 "loot": room_loot,
                 "doors": room_doors
                 }
+        self.rooms.append(new_room)
         return new_room
 
     def gen_entrance(self) -> dict:
@@ -213,6 +216,7 @@ class FloorSystem:
                 "doors": self._gen_room_doors("entrance")
                 }
 
+        self.rooms.append(entrance)
         return entrance
 
 
@@ -293,7 +297,7 @@ class CombatSystem:
 
                 # Setting dead flag in consequence
                 if targ_enemy.current_health <= 0:
-                    consequence_dead = True
+                    consequence["dead"] = True
                     
                 # Parcing all left alive enemies and rewriting enemies in the battle
                 # It is possible to leave enemies untouched but it require additional logic
