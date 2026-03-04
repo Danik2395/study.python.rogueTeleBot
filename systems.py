@@ -348,3 +348,41 @@ class CombatSystem:
 
             case _:
                 return {}
+
+
+class MoveSystem:
+    def __init__(
+            self,
+            floor: dict
+            ) -> None:
+        self.floor = floor
+
+    def _get_curr_room(self) -> dict:
+        room_index = self.floor["current_room"]
+        return self.floor["rooms"][room_index]
+
+    def move(self, direction: str) -> dict:
+        """
+        Handles "movement"
+        Two flags will get all states of the desired room
+        """
+        log = LOG["move"].copy()
+
+        current_room = self._get_curr_room()
+        new_current_room_sign = current_room["doors"].get(direction)
+
+        # Minimal exception handle
+        if not new_current_room_sign:
+            return log
+
+        # If there is no room return log with flag
+        if new_current_room_sign == "NEW":
+            log["is_new_room"] = True
+            return log
+
+        # Changing current room
+        self.floor["current_room"] = new_current_room_sign
+
+        log["room_index"] = new_current_room_sign
+
+        return log
