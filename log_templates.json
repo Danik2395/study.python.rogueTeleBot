@@ -22,5 +22,10 @@
 	"room_index": null,
 	"is_new_room": false
 
+    },
+    "item": {
+	"transition_item": null,
+	"transition_into": null,
+	"is_items_left": true
     }
 }
