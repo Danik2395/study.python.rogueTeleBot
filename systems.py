@@ -232,7 +232,10 @@ class CombatSystem:
 
         self.combat_state = combat_state
         self.combat_state["in_combat"] = True
+        
+        # Enemies from state
         self.enemies: dict
+        # Enemies objects
         self.enemies_pack: dict[str, Enemy]
         
         self.player = Player(
@@ -245,7 +248,9 @@ class CombatSystem:
         self.turns = combat_state["turns"]
 
         self._set_enemies()
-        self._get_turns()
+
+        if self.turns is None:
+            self._get_turns()
 
     def _set_enemies(self) -> None:
         """
@@ -253,14 +258,17 @@ class CombatSystem:
         And creates Enemy objects for combat operations
         """
 
-        enemies = self.combat_state["enemies"]
-        if enemies is None:
-            enemies = {
-                    name: ENEMIES[name] for name in self.room_enemies
+        self.enemies = self.combat_state["enemies"]
+
+        # If its the first action take data from presets
+        if self.enemies is None:
+            self.enemies = {
+                    name: ENEMIES[name].copy() for name in self.room_enemies
                     }
 
+        # Then converting dict to the objects
         self.enemies_pack = {
-                name: Enemy(name) for name in self.enemies 
+                name: Enemy(enemy) for name, enemy in self.enemies.items() 
                 }
 
     def _get_turns(self) -> None:
@@ -273,13 +281,14 @@ class CombatSystem:
 # в систему логов, которая обрабатывает их, и движок отдаёт готовый текст с логом или без в интерфейс
 # который записывает всё обратно в бд и выводит текст в боте
 
-        log = LOG["combat"].copy()
-        log["consequence"] = []
-        consequence = LOG["combat_consequence"].copy()
-
-        log["type"] = action_type
         match action_type:
             case "attack":               
+                log = LOG["combat"].copy()
+                log["type"] = action_type
+                log["consequence"] = []
+                consequence = LOG["combat_consequence"].copy()
+
+                consequence["attacker"] = "player"
                 consequence["target"] = target_enemy
                 consequence["stat"] = "damage"
 
@@ -307,7 +316,15 @@ class CombatSystem:
                         if enemy.current_health > 0
                     }
 
-                self.combat_state["enemies"] = list(self.enemies_pack.keys())
+                # Rewriting enemies in combat state for valid data
+                self.combat_state["enemies"] = {
+                        name: {
+                            "health": enemy.current_health,
+                            "damage": enemy.base_damage,
+                            "defence": enemy.base_defence,
+                            "speed": enemy.base_speed
+                            } for name, enemy in self.enemies_pack.items()
+                        }
 
                 if not self.enemies_pack:
                     self.combat_state["in_combat"] = False
@@ -326,6 +343,9 @@ class CombatSystem:
                     log["enemies_turn_triggered"] = True
 
                     for name, enemy in self.enemies_pack.items():
+                        consequence = LOG["combat_consequence"].copy()
+
+                        consequence["attacker"] = name
                         consequence["target"] = "player"
                         consequence["stat"] = "damage"
                         
@@ -342,6 +362,8 @@ class CombatSystem:
                             dead_log["enemy"] = name
                             dead_log["damage"] = enemy_damage
                             raise self.player.Dead(dead_log)
+
+                        log['consequence'].append(consequence)
 
                     self.combat_state["turns"] = self._get_turns()
 
