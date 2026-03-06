@@ -20,7 +20,7 @@
     "floor": {
 	"index": 1,
 	"current_room": 0,
-	"fork_stack": ["room_1"],
+	"fork_stack": [1],
 	"down_in_room": 2,
 	"rooms": [
 	    {

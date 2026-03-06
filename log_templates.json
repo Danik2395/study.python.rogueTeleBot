@@ -7,6 +7,7 @@
 	"consequence": null
     },
     "combat_consequence": {
+	"attacker": null,
 	"target": null,
 	"stat": null,
 	"delta": null,
@@ -20,6 +21,7 @@
     "move": {
 	"type": "move",
 	"room_index": null,
+	"is_fork": false,
 	"is_new_room": false
 
     },
