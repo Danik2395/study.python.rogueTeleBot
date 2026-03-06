@@ -110,12 +110,12 @@ class Enemy(Dummy):
     Needed to proceed combat action onto player
     """
 
-    def __init__(self, enemy_name: str) -> None:
-        enemy_template = ENEMIES[enemy_name]
+    def __init__(self, enemy: dict) -> None:
+        # enemy_template = ENEMIES[enemy_name]
 
         rand_name = ["тень", "присутствие", "силуэт", "сущность"]
-        self.name = enemy_template.get("name", random.choice(rand_name)) 
-        self.current_health = enemy_template.get("health", random.randint(5, 15))
-        self.base_damage = enemy_template.get("damage", random.randint(1, 20))
-        self.base_defence = enemy_template.get("defence", random.randint(3, 15))
-        self.base_speed = enemy_template.get("speed", random.randint(5, 30))
+        self.name = enemy.get("name", random.choice(rand_name)) 
+        self.current_health = enemy.get("health", random.randint(5, 15))
+        self.base_damage = enemy.get("damage", random.randint(1, 20))
+        self.base_defence = enemy.get("defence", random.randint(3, 15))
+        self.base_speed = enemy.get("speed", random.randint(5, 30))
