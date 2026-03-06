@@ -1,8 +1,3 @@
-#
-# items.py
-#
-
-
 class Item:
     """Class for items that are giving general properties"""
 

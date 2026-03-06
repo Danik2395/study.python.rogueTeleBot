@@ -1,7 +1,3 @@
-#
-# entities.py
-#
-
 import random
 from presets import ITEMS, ENEMIES
 
