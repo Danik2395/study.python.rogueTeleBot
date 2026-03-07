@@ -1,5 +1,5 @@
 import random
-from presets import ITEMS, ENEMIES
+from data.presets import ITEMS, ENEMIES
 
 
 class Dummy:
@@ -21,10 +21,10 @@ class Dummy:
 
         self.base_damage = damage
         self.extra_damage = 0
-        
+
         self.base_defence = defence
         self.extra_defence = 0
-        
+
         self.base_speed = speed
         self.add_weight = 0
 
@@ -68,10 +68,9 @@ class Dummy:
 
 class Player(Dummy):
     """Player class. Sets properties parcing values from jsons"""
-    
+
     class Dead(Exception):
         """Exception that occured on the players death"""
-        # TODO: сделать обработку через систему логов
 
         def __init__(self, log: dict):
             super().__init__("player_dead")
@@ -106,12 +105,12 @@ class Enemy(Dummy):
     Needed to proceed combat action onto player
     """
 
-    def __init__(self, enemy: dict) -> None:
+    def __init__(self, enemy_data: dict) -> None:
         # enemy_template = ENEMIES[enemy_name]
 
         rand_name = ["тень", "присутствие", "силуэт", "сущность"]
-        self.name = enemy.get("name", random.choice(rand_name)) 
-        self.current_health = enemy.get("health", random.randint(5, 15))
-        self.base_damage = enemy.get("damage", random.randint(1, 20))
-        self.base_defence = enemy.get("defence", random.randint(3, 15))
-        self.base_speed = enemy.get("speed", random.randint(5, 30))
+        self.name = enemy_data.get("name", random.choice(rand_name))
+        self.current_health = enemy_data.get("health", random.randint(5, 15))
+        self.base_damage = enemy_data.get("damage", random.randint(1, 20))
+        self.base_defence = enemy_data.get("defence", random.randint(3, 15))
+        self.base_speed = enemy_data.get("speed", random.randint(5, 30))

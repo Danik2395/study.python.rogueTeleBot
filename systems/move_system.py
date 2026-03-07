@@ -9,8 +9,8 @@ class MoveSystem:
         self.fork_stack = floor["fork_stack"]
 
     @property
-    def _current_room(self) -> dict:
-        return self.floor["rooms"][self.floor["current_room"]]
+    def current_room(self) -> dict:
+        return self.floor["rooms"][self.floor["current_room_index"]]
 
     @property
     def _current_room_doors(self) -> dict:
@@ -22,50 +22,50 @@ class MoveSystem:
         Two flags will get all states of the desired room
         """
 
-        log = LOG["move"].copy()
+        move_log = LOG["move_log_template"].copy()
 
         new_current_room_sign = self._current_room_doors.get(direction)
 
         # Minimal exception handle
         if not new_current_room_sign:
-            return log
+            return move_log
 
         # If there is no room return log with flag
         if new_current_room_sign == "NEW":
-            log["is_new_room"] = True
-            return log
+            move_log["is_new_room"] = True
+            return move_log
 
         new_rooms_count = 0
         for door in self._current_room_doors.values():
             if door == "NEW":
                 new_rooms_count += 1
 
-        if new_rooms_count >= 1 and self.floor["current_room"] not in self.fork_stack:
-            self.fork_stack.append(self._current_room["index"])
+        if new_rooms_count >= 1 and self.floor["current_room_index"] not in self.fork_stack:
+            self.fork_stack.append(self.current_room["index"])
 
-        if new_rooms_count == 0 and self.floor["current_room"] in self.fork_stack: 
-            self.fork_stack.remove(self._current_room["index"])
+        if new_rooms_count == 0 and self.floor["current_room_index"] in self.fork_stack:
+            self.fork_stack.remove(self.current_room["index"])
 
         # Changing current room
-        self.floor["current_room"] = new_current_room_sign
+        self.floor["current_room_index"] = new_current_room_sign
 
-        log["room_index"] = new_current_room_sign
+        move_log["room_index"] = new_current_room_sign
 
-        return log
+        return move_log
 
     def move_to_fork(self) -> dict:
         """
         Handles "movement" to the last fork (room with more then one door)
         """
 
-        log = LOG["move"].copy()
+        log = LOG["move_log_template"].copy()
         log["is_fork"] = True
 
         if self.fork_stack:
-            self.floor["current_room"] = self.fork_stack[-1]
+            self.floor["current_room_index"] = self.fork_stack[-1]
         else:
-            self.floor["current_room"] = 0
+            self.floor["current_room_index"] = 0
 
-        log["room_index"] = self.floor["current_room"]
+        log["room_index"] = self.floor["current_room_index"]
 
         return log

@@ -1,31 +1,31 @@
 {
-    "combat": {
+    "combat_log_template": {
 	"type": null,
 	"turns": null,
 	"enemies_turn_triggered": false,
 	"combat_ended": false,
 	"consequence": null
     },
-    "combat_consequence": {
+    "combat_consequence_log_template": {
 	"attacker": null,
 	"target": null,
 	"stat": null,
 	"delta": null,
 	"dead": false
     },
-    "dead_log": {
+    "dead_log_template": {
 	"type": "death",
 	"enemy": null,
 	"damage": null
     },
-    "move": {
+    "move_log_template": {
 	"type": "move",
 	"room_index": null,
 	"is_fork": false,
 	"is_new_room": false
 
     },
-    "item": {
+    "item_transition_log_template": {
 	"transition_item": null,
 	"transition_into": null,
 	"is_items_left": true

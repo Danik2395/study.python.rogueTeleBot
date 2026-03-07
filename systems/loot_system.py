@@ -14,7 +14,7 @@ class LootSystem():
 
     # Two functions in case of some special flags are added to the log
     def take_item(self, item_name: str) -> dict:
-        log = LOG["item"].copy()
+        log = LOG["item_transition_log_template"].copy()
         log["transition_into"] = "inventory"
 
         # Checking wether the item really is in the loot
@@ -33,7 +33,7 @@ class LootSystem():
         return log
 
     def put_item(self, item_name: str) -> dict:
-        log = LOG["item"].copy()
+        log = LOG["item_transition_log_template"].copy()
         log["transition_into"] = "loot"
 
         if item_name in self.inventory:

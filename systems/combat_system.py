@@ -14,12 +14,12 @@ class CombatSystem:
 
         self.combat_state = combat_state
         self.combat_state["in_combat"] = True
-        
+
         # Enemies from state
-        self.enemies: dict
+        self.enemies_data: dict
         # Enemies objects
-        self.enemies_pack: dict[str, Enemy]
-        
+        self.enemies_objects: dict[str, Enemy]
+
         self.player = Player(
                 player["current_health"],
                 player["defence"],
@@ -40,38 +40,38 @@ class CombatSystem:
         And creates Enemy objects for combat operations
         """
 
-        self.enemies = self.combat_state["enemies"]
+        self.enemies_data = self.combat_state["enemies"]
 
         # If its the first action take data from presets
-        if self.enemies is None:
-            self.enemies = {
+        if self.enemies_data is None:
+            self.enemies_data = {
                     name: ENEMIES[name].copy() for name in self.room_enemies
                     }
 
         # Then converting dict to the objects
-        self.enemies_pack = {
-                name: Enemy(enemy) for name, enemy in self.enemies.items() 
+        self.enemies_objects = {
+                name: Enemy(enemy_data) for name, enemy_data in self.enemies_data.items()
                 }
 
     def _get_turns(self) -> None:
        self.turns = self.player.speed // COMBAT_RULES["turn_delimiter"]
 
-    def proceed_action(self, action_type: str, target_enemy: str = "") -> dict:
+    def proceed_action(self, action_type: str, target_enemy_name: str = "") -> dict:
         """Proceeds player actions and returns combat action log"""
 # TODO: сделать систему для логов, и туда уже передавать это всё
-# типа движок получает jsonы от интерфейса после sql запроса по id пользователя, системы их меняют и отдают логи 
+# типа движок получает jsonы от интерфейса после sql запроса по id пользователя, системы их меняют и отдают логи
 # в систему логов, которая обрабатывает их, и движок отдаёт готовый текст с логом или без в интерфейс
 # который записывает всё обратно в бд и выводит текст в боте
 
         match action_type:
-            case "attack":               
-                log = LOG["combat"].copy()
+            case "attack":
+                log = LOG["combat_log_template"].copy()
                 log["type"] = action_type
                 log["consequence"] = []
-                consequence = LOG["combat_consequence"].copy()
+                consequence = LOG["combat_consequence_log_template"].copy()
 
                 consequence["attacker"] = "player"
-                consequence["target"] = target_enemy
+                consequence["target"] = target_enemy_name
                 consequence["stat"] = "damage"
 
                 damage_scale = random.choice(COMBAT_RULES["damage_scale_limits"])
@@ -81,41 +81,41 @@ class CombatSystem:
                 player_damage = random.randint(int(self.player.damage * low_damage), int(self.player.damage * high_damage))
 
                 # Applying damage to the target
-                targ_enemy = self.enemies_pack[target_enemy]
-                targ_enemy_health_before = targ_enemy.current_health
-                targ_enemy.take_damage(player_damage)
-                delta_damage = targ_enemy.current_health - targ_enemy_health_before
+                target_enemy = self.enemies_objects[target_enemy_name]
+                targ_enemy_health_before = target_enemy.current_health
+                target_enemy.take_damage(player_damage)
+                delta_damage = target_enemy.current_health - targ_enemy_health_before
                 consequence["delta"] = delta_damage
 
                 # Setting dead flag in consequence
-                if targ_enemy.current_health <= 0:
+                if target_enemy.current_health <= 0:
                     consequence["dead"] = True
-                    
+
                 # Parcing all left alive enemies and rewriting enemies in the battle
                 # It is possible to leave enemies untouched but it require additional logic
-                self.enemies_pack = {
-                        name: enemy for name, enemy in self.enemies_pack.items() 
-                        if enemy.current_health > 0
+                self.enemies_objects = {
+                        name: enemy_object for name, enemy_object in self.enemies_objects.items()
+                        if enemy_object.current_health > 0
                     }
 
                 # Rewriting enemies in combat state for valid data
                 self.combat_state["enemies"] = {
                         name: {
-                            "health": enemy.current_health,
-                            "damage": enemy.base_damage,
-                            "defence": enemy.base_defence,
-                            "speed": enemy.base_speed
-                            } for name, enemy in self.enemies_pack.items()
+                            "health": enemy_object.current_health,
+                            "damage": enemy_object.base_damage,
+                            "defence": enemy_object.base_defence,
+                            "speed": enemy_object.base_speed
+                            } for name, enemy_object in self.enemies_objects.items()
                         }
 
-                if not self.enemies_pack:
+                if not self.enemies_objects:
                     self.combat_state["in_combat"] = False
                     log["combat_ended"] = True
 
-                    return log 
+                    return log
 
                 # Appending consequence to the log after players attack
-                log["consequence"].append(consequence)
+                log["combat_consequence_log_template"].append(consequence)
 
                 self.combat_state["turns"] -= 1
 
@@ -124,8 +124,9 @@ class CombatSystem:
 
                     log["enemies_turn_triggered"] = True
 
-                    for name, enemy in self.enemies_pack.items():
-                        consequence = LOG["combat_consequence"].copy()
+                    # enemy stands for enemy_object. To shorten typing
+                    for name, enemy in self.enemies_objects.items():
+                        consequence = LOG["combat_consequence_log_template"].copy()
 
                         consequence["attacker"] = name
                         consequence["target"] = "player"
@@ -140,12 +141,12 @@ class CombatSystem:
 
                         # If player dead transfering data to the upper structure
                         if self.player.current_health <= 0:
-                            dead_log = LOG["dead_log"].copy()
+                            dead_log = LOG["dead_log_template"].copy()
                             dead_log["enemy"] = name
                             dead_log["damage"] = enemy_damage
                             raise self.player.Dead(dead_log)
 
-                        log['consequence'].append(consequence)
+                        log["combat_consequence_log_template"].append(consequence)
 
                     self.combat_state["turns"] = self._get_turns()
 

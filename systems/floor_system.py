@@ -4,7 +4,6 @@ from data.presets import LAYOUT, ITEMS, ENEMIES
 
 class FloorSystem:
     """Class for floor generation"""
-# TODO: а ещё сделать логирование; оно наверно в перемещении будет, а не в этажах.
 # TODO: а ещё у тебя нет 100% выпадения выхода на следующий этаж. в плане он просто может не выпасть
 # TODO: да и впринципе нет обработки выхода
     pass
@@ -13,11 +12,11 @@ class FloorSystem:
             floor: dict
             ) -> None:
         self.floor_index = floor["index"]
-        self.current_room = floor["current_room"]
+        self.current_room = floor["current_room_index"]
         self.fork_stack = floor["fork_stack"]
         self.down_in_room = floor["down_in_room"]
         self.rooms = floor["rooms"]
-        self.rooms_curr_amount = len(self.rooms)
+        self.rooms_current_amount = len(self.rooms)
 
         self.biom_key: str
         self.biom: dict
@@ -157,8 +156,8 @@ class FloorSystem:
         """Randomly creates a new room depending on the floor and room index"""
 
         # The first room is entrance room
-        room_index = self.rooms_curr_amount
-        self.rooms_curr_amount += 1
+        room_index = self.rooms_current_amount
+        self.rooms_current_amount += 1
 
         # ===SETTING===
         room_type = random.choice(LAYOUT["type"]) 
