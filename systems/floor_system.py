@@ -160,8 +160,8 @@ class FloorSystem:
         self.rooms_current_amount += 1
 
         # ===SETTING===
-        room_type = random.choice(LAYOUT["type"]) 
-        room_name = random.choice(self.biom["name"]) 
+        room_type = random.choice(LAYOUT["room_type"])
+        room_name = random.choice(self.biom["name"])
         room_mood = random.choice(self.biom["mood"])
 
         # ===DOORS===
@@ -179,7 +179,8 @@ class FloorSystem:
 
         new_room: dict[str, Any] = {
                 "index": room_index,
-                "type": room_type,
+                "type": "room",
+                "room_type": room_type,
                 "name": room_name,
                 "mood": room_mood,
                 "cleared": True if not room_enemies else False,
@@ -197,9 +198,11 @@ class FloorSystem:
         entr_prompt = LAYOUT["entrance_prompt"]
         entrance_mood = random.choice(entr_prompt[str(self.floor_index)])
 
+        # TODO: нужно сделать проверку, чтобы логхэндлер отличал начало на этаже от входа повтороного в начальную комнату
         entrance: dict[str, Any] = {
                 "index": 0,
                 "type": "entrance",
+                "room_type": "entrance",
                 "name": None,
                 "mood": entrance_mood,
                 "cleared": True,
