@@ -1,6 +1,6 @@
 import random
 from typing import Any
-from data.presets import LAYOUT, ITEMS, ENEMIES
+from data.presets import LAYOUT, ITEMS, ENEMIES, RULES
 
 class FloorSystem:
     """Class for floor generation"""
@@ -20,7 +20,7 @@ class FloorSystem:
 
         self.biom_key: str
         self.biom: dict
-        self.floor_scale: float 
+        self.floor_scale: float
         self._set_biom()
         self._set_scale()
 
@@ -46,14 +46,14 @@ class FloorSystem:
         """
         Set scale for the floor.
         To multiply enemies stats by it
-        """ 
- 
+        """
+
         dirty_scale = self.biom["floor_scale"]
         if not dirty_scale:
             self.floor_scale = 1.5
             return
- 
-        scale_limits = random.choice(dirty_scale) 
+
+        scale_limits = random.choice(dirty_scale)
         if not scale_limits: scale_limits = [1.0, 1.5]
 
         low, high, *buff = scale_limits
@@ -83,7 +83,7 @@ class FloorSystem:
         """Returns list of "pool" limited by amount"""
 
         if not dirty_pool: return []
-        
+
         pool = []
 
         if not pool_amount_limits: pool_amount_limits = [0, 2]
@@ -121,16 +121,16 @@ class FloorSystem:
 
             door_chance = rules["entrance_door_chance"]
             down_chance = rules["entrance_down_chance"]
-            
+
         else:
             # Not a forged skeleton 'cause of the scalability
             doors: dict[str, Any] = dict.fromkeys(prev_room_doors, None)
 
             power = prev_room_doors["branch_power"] - rules["power_decrease"]
-            
+
             # Setting previous room door
             doors[backward_direction] = prev_room_index
-            
+
             door_chance = rules["door_chance"]
             down_chance = rules["down_chance"]
 
@@ -141,7 +141,7 @@ class FloorSystem:
         # Set to not to get an error
         keys_to_remove = {backward_direction, "branch_power", "down"}
         door_keys = set(doors.keys()) - keys_to_remove
-        
+
         for door_key in door_keys:
             if random.random() <= door_chance:
                 doors[door_key] = "NEW"
@@ -166,6 +166,8 @@ class FloorSystem:
 
         # ===DOORS===
         room_doors = self._gen_room_doors(room_type, prev_room_doors, room_index, backward_direction)
+        opposite_direction = RULES["opposite_direction"][backward_direction]
+        prev_room_doors[opposite_direction] = room_index
 
         # ===ENEMIES===
         room_enemies = {}
