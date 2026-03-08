@@ -1,7 +1,7 @@
 from typing import Any
 
 
-class LogSystem:
+class LogHandler:
     """
      Plug for the LogSystem
     """
