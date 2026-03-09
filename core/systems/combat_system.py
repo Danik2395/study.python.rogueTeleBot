@@ -3,7 +3,6 @@ from entities import Player, Enemy
 from data.presets import LOG, ENEMIES, COMBAT_RULES
 
 class CombatSystem:
-    # TODO: ты не сделал чтоб у комнаты флаг cleared был. лучше сделай инит не врагами а комнатой
     def __init__(
             self,
             player: dict,
@@ -131,7 +130,7 @@ class CombatSystem:
                         consequence["attacker"] = name
                         consequence["target"] = "player"
                         consequence["stat"] = "damage"
-                        
+
                         enemy_damage = random.randint(int(enemy.damage * low_damage), int(enemy.damage * high_damage))
 
                         player_health_before = self.player.current_health

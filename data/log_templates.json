@@ -22,12 +22,40 @@
 	"type": "move",
 	"room_index": null,
 	"is_fork": false,
-	"is_new_room": false
-
+	"is_new_room": false,
+	"event": null
     },
     "item_transition_log_template": {
+	"type": "item",
 	"transition_item": null,
 	"transition_into": null,
 	"is_items_left": true
+    },
+    "run_state_template": {
+	"active": true,
+	"player": {
+	    "base_health": 100,
+	    "current_health": 100,
+	    "base_damage": 5,
+	    "base_defence": 0,
+	    "base_speed": 8,
+	    "equipped_items": {
+		"weapon": null,
+		"armour": null
+	    },
+	    "inventory": []
+	},
+	"combat_state": {
+	    "in_combat": false,
+	    "turns": null,
+	    "enemies": null
+	},
+	"floor": {
+	    "index": null,
+	    "current_room_index": null,
+	    "fork_stack": [],
+	    "down_in_room": null,
+	    "rooms": []
+	}
     }
 }

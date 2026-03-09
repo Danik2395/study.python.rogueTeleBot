@@ -17,3 +17,8 @@ with open("rules.json", "r", encoding="utf-8") as f:
 
 with open("log_templates.json", "r", encoding="utf-8") as f:
     LOG = json.load(f)
+
+with open("bridge_spec.json", "r", encoding="utf-8") as f:
+    BRIDGE_SPEC = json.load(f)
+    BRIDGE_CONTRACT = BRIDGE_SPEC["contract"]
+    UI_LABELS = BRIDGE_SPEC["ui_lables"]

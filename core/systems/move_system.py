@@ -13,8 +13,8 @@ class MoveSystem:
         return self.floor["rooms"][self.floor["current_room_index"]]
 
     @property
-    def _current_room_doors(self) -> dict:
-        return self._current_room["doors"]
+    def current_room_doors(self) -> dict:
+        return self.current_room["doors"]
 
     def move(self, direction: str) -> dict:
         """
@@ -24,7 +24,7 @@ class MoveSystem:
 
         move_log = LOG["move_log_template"].copy()
 
-        new_current_room_sign = self._current_room_doors.get(direction)
+        new_current_room_sign = self.current_room_doors.get(direction)
 
         # Minimal exception handle
         if not new_current_room_sign:
@@ -36,7 +36,7 @@ class MoveSystem:
             return move_log
 
         new_rooms_count = 0
-        for door in self._current_room_doors.values():
+        for door in self.current_room_doors.values():
             if door == "NEW":
                 new_rooms_count += 1
 

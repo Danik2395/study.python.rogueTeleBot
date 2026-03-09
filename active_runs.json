@@ -1,89 +1,94 @@
 {
-    "active": true, 
-    "player": {
-	"base_health": 100,
-	"current_health": 100,
-	"base_damage": 5,
-	"base_defence": 0,
-	"base_speed": 8,
-	"equipped_items": {
-	    "weapon": "sword",
-	    "armour": null
+    "12345": {
+	"active": true,
+	"player": {
+	    "base_health": 100,
+	    "current_health": 100,
+	    "base_damage": 5,
+	    "base_defence": 0,
+	    "base_speed": 8,
+	    "equipped_items": {
+		"weapon": "sword",
+		"armour": null
+	    },
+	    "inventory": ["apple", "sword"]
 	},
-	"inventory": ["apple", "sword"]
-    },
-    "combat_state": {
-	"in_combat": false,
-	"turns": null,
-	"enemies": null
-    },
-    "floor": {
-	"index": 1,
-	"current_room": 0,
-	"fork_stack": [1],
-	"down_in_room": 2,
-	"rooms": [
-	    {
-		"index": 0,
-		"type": "entrance",
-		"name": null,
-		"mood": "вы ничего не помните",
-		"cleared": true,
-		"enemies": null,
-		"loot": null,
-		"doors": {
-		    "forward": 1,
-		    "backward": null,
-		    "left": null,
-		    "right": null,
-		    "down": null,
-		    "branch_power": 0.5
+	"combat_state": {
+	    "in_combat": false,
+	    "turns": null,
+	    "enemies": null
+	},
+	"floor": {
+	    "index": 1,
+	    "current_room_index": 0,
+	    "fork_stack": [1],
+	    "down_in_room": 2,
+	    "rooms": [
+		{
+		    "index": 0,
+		    "type": "entrance",
+		    "room_type": "entrance",
+		    "name": null,
+		    "mood": "вы ничего не помните",
+		    "cleared": true,
+		    "enemies": null,
+		    "loot": null,
+		    "doors": {
+			"forward": 1,
+			"backward": null,
+			"left": null,
+			"right": null,
+			"down": null,
+			"branch_power": 0.5
+		    }
+		},
+		{
+		    "index": 1,
+		    "type": "room",
+		    "room_type": "combat",
+		    "name": "пещера",
+		    "mood": [
+			"напряжённо",
+			"затхло"
+		    ],
+		    "cleared": false,
+		    "enemies": [ "dragon", "lizard" ],
+		    "loot": [
+			"apple"
+		    ],
+		    "doors": {
+			"forward": 2,
+			"backward": 0,
+			"left": "NEW",
+			"right": null,
+			"down": false,
+			"branch_power": 0.38
+		    }
+		},
+		{
+		    "index": 2,
+		    "type": "room",
+		    "room_type": "combat",
+		    "name": "пещера",
+		    "mood": [
+			"напряжённо",
+			"затхло"
+		    ],
+		    "cleared": false,
+		    "enemies": [ "dragon", "lizard" ],
+		    "loot": [
+			"apple"
+		    ],
+		    "doors": {
+			"forward": null,
+			"backward": 1,
+			"left": null,
+			"right": null,
+			"down": true,
+			"branch_power": 0.26
+		    }
 		}
-	    },
-	    {
-		"index": 1,
-		"type": "combat",
-		"name": "пещера",
-		"mood": [
-		    "напряжённо",
-		    "затхло"
-		],
-		"cleared": false,
-		"enemies": [ "dragon", "lizard" ],
-		"loot": [
-		    "apple"
-		],
-		"doors": {
-		    "forward": 2,
-		    "backward": 0,
-		    "left": "NEW",
-		    "right": null,
-		    "down": false,
-		    "branch_power": 0.38
-		}
-	    },
-	    {
-		"index": 2,
-		"type": "combat",
-		"name": "пещера",
-		"mood": [
-		    "напряжённо",
-		    "затхло"
-		],
-		"cleared": false,
-		"enemies": [ "dragon", "lizard" ],
-		"loot": [
-		    "apple"
-		],
-		"doors": {
-		    "forward": null,
-		    "backward": 1,
-		    "left": null,
-		    "right": null,
-		    "down": true,
-		    "branch_power": 0.26
-		}
-	    }
-	]
+	    ]
+	}
     }
 }
