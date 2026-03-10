@@ -11,10 +11,10 @@ class FloorSystem:
             self,
             floor: dict
             ) -> None:
+        self.floor = floor
         self.floor_index = floor["index"]
         self.current_room = floor["current_room_index"]
         self.fork_stack = floor["fork_stack"]
-        self.down_in_room = floor["down_in_room"]
         self.rooms = floor["rooms"]
         self.rooms_current_amount = len(self.rooms)
 
@@ -89,7 +89,13 @@ class FloorSystem:
         if not pool_amount_limits: pool_amount_limits = [0, 2]
         low, high, *buff = pool_amount_limits
         pool_amount = random.randint(low, high)
-        if pool_amount == 0: return pool
+
+        if pool_amount == 0 or pool_amount < 0:
+            return pool
+
+        dirty_pool_len = len(dirty_pool)
+        if pool_amount > dirty_pool_len:
+            pool_amount = dirty_pool_len
 
         pool = random.sample(dirty_pool, k=pool_amount)
         return pool
@@ -148,12 +154,22 @@ class FloorSystem:
 
 
         throw_down = power <= rules["down_chance"]
-        doors["down"] = True if throw_down and random.random() <= down_chance else False
+
+        if (
+            throw_down
+            and self.floor["down_in_room"] == -1
+            and random.random() <= down_chance
+        ):
+            doors["down"] = True
+            self.floor["down_in_room"] = prev_room_index + 1
+            breakpoint()
 
         return doors
 
-    def gen_room(self, prev_room_doors: dict, backward_direction: str) -> dict:
-        """Randomly creates a new room depending on the floor and room index"""
+    def gen_room(self, prev_room: dict, backward_direction: str) -> dict:
+        """
+        Randomly generates new current room
+        """
 
         # The first room is entrance room
         room_index = self.rooms_current_amount
@@ -165,14 +181,16 @@ class FloorSystem:
         room_mood = random.choice(self.biom["mood"])
 
         # ===DOORS===
-        room_doors = self._gen_room_doors(room_type, prev_room_doors, room_index, backward_direction)
+        prev_room_doors = prev_room["doors"]
+        prev_room_index = prev_room["index"]
+        room_doors = self._gen_room_doors(room_type, prev_room_doors, prev_room_index, backward_direction)
         opposite_direction = RULES["opposite_direction"][backward_direction]
         prev_room_doors[opposite_direction] = room_index
 
         # ===ENEMIES===
         room_enemies = {}
         if room_type == "combat":
-            enemies_amount = self.biom["enemies_amount"]
+            enemies_amount = random.choice(self.biom["enemies_amount"])
             room_enemies = self._get_room_content_pool(self.floor_enemies_pool, enemies_amount)
 
         # ===LOOT===

@@ -24,14 +24,14 @@ class MoveSystem:
 
         move_log = LOG["move_log_template"].copy()
 
-        new_current_room_sign = self.current_room_doors.get(direction)
+        new_current_room_index = self.current_room_doors.get(direction)
 
         # Minimal exception handle
-        if not new_current_room_sign:
+        if new_current_room_index is None:
             return move_log
 
         # If there is no room return log with flag
-        if new_current_room_sign == "NEW":
+        if new_current_room_index == "NEW":
             move_log["is_new_room"] = True
             return move_log
 
@@ -47,9 +47,9 @@ class MoveSystem:
             self.fork_stack.remove(self.current_room["index"])
 
         # Changing current room
-        self.floor["current_room_index"] = new_current_room_sign
+        self.floor["current_room_index"] = new_current_room_index
 
-        move_log["room_index"] = new_current_room_sign
+        move_log["room_index"] = new_current_room_index
 
         return move_log
 

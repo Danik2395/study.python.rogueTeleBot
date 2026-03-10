@@ -1,6 +1,7 @@
 {
     "combat_log_template": {
-	"type": null,
+	"type": "combat",
+	"action": null,
 	"turns": null,
 	"enemies_turn_triggered": false,
 	"combat_ended": false,
@@ -36,7 +37,7 @@
 	"player": {
 	    "base_health": 100,
 	    "current_health": 100,
-	    "base_damage": 5,
+	    "base_damage": 15,
 	    "base_defence": 0,
 	    "base_speed": 8,
 	    "equipped_items": {
@@ -54,7 +55,7 @@
 	    "index": null,
 	    "current_room_index": null,
 	    "fork_stack": [],
-	    "down_in_room": null,
+	    "down_in_room": -1,
 	    "rooms": []
 	}
     }

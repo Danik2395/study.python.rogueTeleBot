@@ -53,18 +53,22 @@ def move(direction: str, active_run_state: dict) -> dict[str, Any]:
         if move_log["is_new_room"] == True:
             floor_system = FloorSystem(floor)
             opposite_direction = RULES["opposite_direction"][direction]
-            floor_system.gen_room(move_system.current_room_doors, opposite_direction)
+            floor_system.gen_room(move_system.current_room, opposite_direction)
 
             continue
 
         current_room_index = floor["current_room_index"]
         current_room = floor["rooms"][current_room_index]
+        current_room_enemies = current_room["enemies"]
 
-        if current_room["enemies"] and not current_room["cleared"]:
-            active_run_state["combat_state"]["in_combat"] = True
+        if current_room_enemies and not current_room["cleared"]:
+            combat_state = active_run_state["combat_state"]
 
+            combat_state["in_combat"] = True
             move_log["event"] = "combat"
-            active_run_state["combat_state"]["in_combat"] = True
+
+            # We need to set enemies so buttons append correctly
+            combat_state["enemies"] = CombatSystem.build_state_enemies(current_room_enemies)
 
         return move_log
 
@@ -89,14 +93,20 @@ def attack(target_enemy_name: str, active_run_state: dict) -> dict:
     """
 
     floor = active_run_state["floor"]
+    current_room_index = floor["current_room_index"]
+    current_room = floor["rooms"][current_room_index]
 
     player = active_run_state["player"]
-    room_enemies = floor["rooms"][floor["current_room_index"]]["enemies"]
+    room_enemies = current_room["enemies"]
     combat_state = active_run_state["combat_state"]
 
     combat_system = CombatSystem(player, room_enemies, combat_state)
 
     combat_log = combat_system.proceed_action("attack", target_enemy_name)
+
+    if combat_log["combat_ended"] == True:
+        room_enemies.clear()
+        current_room["cleared"] = True
 
     return combat_log
 

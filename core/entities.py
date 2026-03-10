@@ -90,9 +90,12 @@ class Player(Dummy):
             # "sword" = { ..., "damage": 1, ... }
             for ITEMS_key in self.equipped_items.values():
                 item = ITEMS.get(ITEMS_key)
-                damage += item.get("damage", 0)
-                defence += item.get("defence", 0)
-                weight += item.get("weight", 0)
+
+                # If there is no equipped_items
+                if item is not None:
+                    damage += item.get("damage", 0)
+                    defence += item.get("defence", 0)
+                    weight += item.get("weight", 0)
 
             self.extra_damage = damage
             self.extra_defence = defence
@@ -105,12 +108,16 @@ class Enemy(Dummy):
     Needed to proceed combat action onto player
     """
 
-    def __init__(self, enemy_data: dict) -> None:
+    def __init__(self, key_name: str, enemy_data: dict) -> None:
         # enemy_template = ENEMIES[enemy_name]
 
         rand_name = ["тень", "присутствие", "силуэт", "сущность"]
         self.name = enemy_data.get("name", random.choice(rand_name))
-        self.current_health = enemy_data.get("health", random.randint(5, 15))
+        base_health = ENEMIES[key_name]["health"]
         self.base_damage = enemy_data.get("damage", random.randint(1, 20))
         self.base_defence = enemy_data.get("defence", random.randint(3, 15))
         self.base_speed = enemy_data.get("speed", random.randint(5, 30))
+
+        super().__init__(self.name, base_health, self.base_defence, self.base_damage, self.base_speed)
+
+        self.current_health = enemy_data.get("health", random.randint(5, 15))

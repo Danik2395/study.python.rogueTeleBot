@@ -19,7 +19,8 @@ class CombatSystem:
         # Enemies objects
         self.enemies_objects: dict[str, Enemy]
 
-        self.player = Player(
+        self.player = player
+        self.player_object = Player(
                 player["current_health"],
                 player["base_defence"],
                 player["base_damage"],
@@ -32,6 +33,14 @@ class CombatSystem:
 
         if self.turns is None:
             self._set_turns()
+
+    @staticmethod
+    def build_state_enemies(room_enemies: list) -> dict:
+        return {
+            key_name: ENEMIES[key_name].copy()
+            for key_name in room_enemies
+            # TODO: сделай, чтобы в этой инициализации и в методе ниже не было полей минимального этажа и биома
+        }
 
     def _set_enemies(self) -> None:
         """
@@ -46,14 +55,18 @@ class CombatSystem:
             self.enemies_data = {
                     name: ENEMIES[name].copy() for name in self.room_enemies
                     }
+            # Initialize combat_state["enemies"] on the first room visit
+            self.combat_state["enemies"] = self.enemies_data
 
         # Then converting dict to the objects
         self.enemies_objects = {
-                name: Enemy(enemy_data) for name, enemy_data in self.enemies_data.items()
+                # TODO: переделай все имена, которые по факту ключи на key_name, а все имена, которые текстовые имена на text_name
+                name: Enemy(name, enemy_data) for name, enemy_data in self.enemies_data.items()
                 }
 
     def _set_turns(self) -> None:
-       self.turns = self.player.speed // COMBAT_RULES["turn_delimiter"]
+       self.turns = self.player_object.speed // COMBAT_RULES["turn_delimiter"]
+       self.combat_state["turns"] = self.turns
 
     def proceed_action(self, action_type: str, target_enemy_name: str = "") -> dict:
         """Proceeds player actions and returns combat action log"""
@@ -65,7 +78,11 @@ class CombatSystem:
         match action_type:
             case "attack":
                 log = LOG["combat_log_template"].copy()
-                log["type"] = action_type
+
+                if target_enemy_name not in self.enemies_data:
+                    return log
+
+                log["action"] = action_type
                 log["consequence"] = []
                 consequence = LOG["combat_consequence_log_template"].copy()
 
@@ -77,7 +94,7 @@ class CombatSystem:
                 low_damage, high_damage, *buff = damage_scale
 
                 # Rolling player damage
-                player_damage = random.randint(int(self.player.damage * low_damage), int(self.player.damage * high_damage))
+                player_damage = random.randint(int(self.player_object.damage * low_damage), int(self.player_object.damage * high_damage))
 
                 # Applying damage to the target
                 target_enemy = self.enemies_objects[target_enemy_name]
@@ -107,6 +124,8 @@ class CombatSystem:
                             } for name, enemy_object in self.enemies_objects.items()
                         }
 
+                # self.room_enemies = [key_name for key_name in self.enemies_objects.keys()]
+
                 if not self.enemies_objects:
                     self.combat_state["in_combat"] = False
                     log["combat_ended"] = True
@@ -133,22 +152,31 @@ class CombatSystem:
 
                         enemy_damage = random.randint(int(enemy.damage * low_damage), int(enemy.damage * high_damage))
 
-                        player_health_before = self.player.current_health
-                        self.player.take_damage(enemy_damage)
-                        delta_damage = self.player.current_health - player_health_before
+                        player_health_before = self.player_object.current_health
+                        self.player_object.take_damage(enemy_damage)
+                        delta_damage = self.player_object.current_health - player_health_before
                         consequence["delta"] = delta_damage
 
                         # If player dead transfering data to the upper structure
-                        if self.player.current_health <= 0:
+                        if self.player_object.current_health <= 0:
                             dead_log = LOG["dead_log_template"].copy()
                             dead_log["enemy"] = name
                             dead_log["damage"] = enemy_damage
-                            raise self.player.Dead(dead_log)
+                            raise self.player_object.Dead(dead_log)
 
-                        log["combat_consequence_log_template"].append(consequence)
+                        log["consequence"].append(consequence)
 
+                    self.player.update({
+                        "base_health": self.player_object.base_health,
+                        "current_health": self.player_object.current_health,
+                        "base_damage": self.player_object.base_damage,
+                        "base_defence": self.player_object.base_defence,
+                        "base_speed": self.player_object.base_speed,
+                        "equipped_items": self.player_object.equipped_items.copy()
+                    })
                     self._set_turns()
 
+                log["turns"] = self.combat_state["turns"]
                 return log
 
             case _:
