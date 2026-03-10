@@ -1,17 +1,14 @@
 import json
 
 class Database:
-    """
-    Plug for database
-    """
-
-    def __init__(self) -> None:
-        pass
+    def __init__(self):
+        self._store = {}
 
     def get_state(self, user_id: int) -> dict:
-        with open("sample_run.json", "r", encoding="utf-8") as f:
-            run_states =  json.load(f)
-            return run_states[str(user_id)]
+        return self._store[user_id]
 
     def save_state(self, user_id: int, state: dict) -> None:
-        pass
+        self._store[user_id] = state
+
+    def delete_state(self, user_id: int) -> None:
+        self._store.pop(user_id, None)

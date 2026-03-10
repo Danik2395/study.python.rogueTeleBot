@@ -7,7 +7,7 @@ from core.systems.floor_system import FloorSystem
 from core.systems.combat_system import CombatSystem
 from core.systems.move_system import MoveSystem
 from core.systems.loot_system import LootSystem
-from log_handler import LogHandler
+# from core.log_handler import LogHandler
 from data.presets import LOG
 from data.presets import RULES
 
@@ -57,7 +57,7 @@ def move(direction: str, active_run_state: dict) -> dict[str, Any]:
 
             continue
 
-        current_room_index = active_run_state["floor"]["current_room_index"]
+        current_room_index = floor["current_room_index"]
         current_room = floor["rooms"][current_room_index]
 
         if current_room["enemies"] and not current_room["cleared"]:
@@ -99,3 +99,13 @@ def attack(target_enemy_name: str, active_run_state: dict) -> dict:
     combat_log = combat_system.proceed_action("attack", target_enemy_name)
 
     return combat_log
+
+def take_item(item_name: str, active_run_state: dict) -> dict:
+    floor = active_run_state["floor"]
+    room = floor["rooms"][floor["current_room_index"]]
+
+    player = active_run_state["player"]
+
+    loot_system = LootSystem(room, player)
+
+    return loot_system.take_item(item_name)

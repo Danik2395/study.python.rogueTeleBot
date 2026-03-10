@@ -77,9 +77,9 @@ def _combat_buttons(state: dict) -> list:
     enemies = combat_state.get("enemies") or {}
 
     for name, data in enemies.items():
-        if data.get("current_health", 0) > 0:
-            enemy_name = ENEMIES[name]
-            enemy_hp = data["current_health"]
+        if data.get("health", 0) > 0:
+            enemy_name = ENEMIES[name]["name"]
+            enemy_hp = data["health"]
             label = f"{UI_LABELS['attack']} {enemy_name} ({enemy_hp} HP)"
             buttons.append({"label": label, "action": f"attack_{name}"})
 
@@ -97,7 +97,7 @@ def _loot_buttons(state: dict) -> list:
     loot = room.get("loot") or []
 
     for name in loot:
-        item_name = ITEMS[name]
+        item_name = ITEMS[name]["name"]
         label = f"Взять {item_name}"
         buttons.append({"label": label, "action": f"take_{name}"})
 

@@ -1,7 +1,7 @@
-import engine as engine
-import ui_builder as ui_builder
+import core.engine as engine
+import core.ui_builder as ui_builder
 from database.database import Database
-from log_handler import LogHandler
+from core.log_handler import LogHandler
 
 from data.presets import BRIDGE_CONTRACT
 
@@ -36,6 +36,11 @@ class RogueInterface:
         combat_log = engine.attack(target_enemy_name, active_run_state)
 
         return self._finalize(user_id, active_run_state, combat_log)
+
+    def take_item(self, user_id: int, item_name: str) -> dict:
+        active_run_state = self.database.get_state(user_id)
+        log = engine.take_item(item_name, active_run_state)
+        return self._finalize(user_id, active_run_state, log)
 
     def _finalize(self, user_id: int, state: dict, log: dict) -> dict:
         self.database.save_state(user_id, state)

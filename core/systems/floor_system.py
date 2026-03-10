@@ -73,7 +73,7 @@ class FloorSystem:
         """Filter items"""
 
         self.floor_loot_pool = [
-                item for item, data in ITEMS
+                item for item, data in ITEMS.items()
 
                 if data.get("min_floor", 1) <= self.floor_index
                 ]

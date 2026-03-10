@@ -1,5 +1,5 @@
 import random
-from entities import Player, Enemy
+from core.entities import Player, Enemy
 from data.presets import LOG, ENEMIES, COMBAT_RULES
 
 class CombatSystem:
@@ -21,9 +21,9 @@ class CombatSystem:
 
         self.player = Player(
                 player["current_health"],
-                player["defence"],
-                player["damage"],
-                player["speed"],
+                player["base_defence"],
+                player["base_damage"],
+                player["base_speed"],
                 player["equipped_items"]
                 )
         self.turns = combat_state["turns"]
@@ -31,7 +31,7 @@ class CombatSystem:
         self._set_enemies()
 
         if self.turns is None:
-            self._get_turns()
+            self._set_turns()
 
     def _set_enemies(self) -> None:
         """
@@ -52,7 +52,7 @@ class CombatSystem:
                 name: Enemy(enemy_data) for name, enemy_data in self.enemies_data.items()
                 }
 
-    def _get_turns(self) -> None:
+    def _set_turns(self) -> None:
        self.turns = self.player.speed // COMBAT_RULES["turn_delimiter"]
 
     def proceed_action(self, action_type: str, target_enemy_name: str = "") -> dict:
@@ -114,7 +114,7 @@ class CombatSystem:
                     return log
 
                 # Appending consequence to the log after players attack
-                log["combat_consequence_log_template"].append(consequence)
+                log["consequence"].append(consequence)
 
                 self.combat_state["turns"] -= 1
 
@@ -147,7 +147,7 @@ class CombatSystem:
 
                         log["combat_consequence_log_template"].append(consequence)
 
-                    self.combat_state["turns"] = self._get_turns()
+                    self._set_turns()
 
                 return log
 
