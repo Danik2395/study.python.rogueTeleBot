@@ -1,1 +1,8 @@
+bin/
+include/
+lib/
+lib64
+rogue_database.db
 __pycache__/
+pyvenv.cfg
+pyrightconfig.json

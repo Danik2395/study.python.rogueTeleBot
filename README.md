@@ -35,7 +35,7 @@
 # TODO
 - [x] Set up core codebase
 - [x] Enable terminal debugging
-- [ ] Create  an asynchronous database
+- [x] Create  an asynchronous database
 - [ ] Develop an asynchronous bot
 - [ ] Develop an user interface in bot
 - [ ] Integrate LLM
