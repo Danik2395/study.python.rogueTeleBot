@@ -30,3 +30,14 @@
 ## Death mode
 - Start again
 - To menu
+
+
+# TODO
+- [x] Set up core codebase
+- [x] Enable terminal debugging
+- [ ] Create  an asynchronous database
+- [ ] Develop an asynchronous bot
+- [ ] Develop an user interface in bot
+- [ ] Integrate LLM
+- [ ] Add new features
+- [ ] Neat the balance
