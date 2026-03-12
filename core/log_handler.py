@@ -18,6 +18,9 @@ class LogHandler:
         if log_type == "combat":
             return self._render_combat(log)
 
+        if log_type == "continue":
+            return "Вы находитесь всё там же"
+
         return "Событие произошло, но текст для него пока не готов."
 
     def _render_move(self, log: dict[str, Any]) -> str:

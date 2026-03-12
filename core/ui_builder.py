@@ -1,7 +1,7 @@
 from data.presets import UI_LABELS, ENEMIES, ITEMS
 
 
-def get_state_type(log: dict) -> str:
+def get_state_type(log: dict, state: dict) -> str:
     log_type = log.get("type")
 
     if log_type == "death":
@@ -22,7 +22,10 @@ def get_state_type(log: dict) -> str:
             return "explore"
         return "loot"
 
-    return "explore"
+    if log_type == "continue":
+        return state["last_state_type"]
+
+    return state["last_state_type"]
 
 
 def get_buttons(log: dict, state: dict, state_type: str) -> list:

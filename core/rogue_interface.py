@@ -3,7 +3,7 @@ import core.ui_builder as ui_builder
 from database.database import Database
 from core.log_handler import LogHandler
 
-from data.presets import BRIDGE_CONTRACT
+from data.presets import BRIDGE_CONTRACT, LOG
 
 
 class RogueInterface:
@@ -25,13 +25,12 @@ class RogueInterface:
 
         return await self._finalize(user_id, new_run_state, init_run_log)
 
-    # async def continue_run(self, user_id: int) -> dict:
-    #     active_run_state = await self.database.get_state(user_id)
-    #
-    #     test_log = {
-    #             type: "continue_run",
-    #
-    #             }
+    async def continue_run(self, user_id: int) -> dict:
+        active_run_state = await self.database.get_state(user_id)
+
+        continue_log = LOG["continue_run_log_template"].copy()
+
+        return await self._finalize(user_id, active_run_state, continue_log)
 
     async def move(self, user_id: int, direction: str) -> dict:
         active_run_state = await self.database.get_state(user_id)
@@ -60,16 +59,18 @@ class RogueInterface:
         return await self._finalize(user_id, active_run_state, log)
 
     async def _finalize(self, user_id: int, state: dict, log: dict) -> dict:
-        await self.database.save_state(user_id, state)
-
         text_from_log = self.log_handler.render(log)
 
         contract = BRIDGE_CONTRACT.copy()
         contract["text"] = text_from_log
 
-        state_type = ui_builder.get_state_type(log)
+        state_type = ui_builder.get_state_type(log, state)
         contract["state_type"] = state_type
         contract["buttons"] = ui_builder.get_buttons(log, state, state_type)
+
+        state["last_state_type"] = state_type
+
+        await self.database.save_state(user_id, state)
 
         # await self.database.close()
 

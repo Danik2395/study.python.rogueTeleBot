@@ -23,10 +23,13 @@ async def call(action: str, interface: "RogueInterface") -> dict:
 async def main() -> None:
     interface = await RogueInterface.create()
 
-    # USER_ID = int(input("user_id: ").strip())
-    # new = True if input("init new run: ").strip() else False
-    # if new:
-    pprint(await interface.init_run(USER_ID))
+    USER_ID = int(input("user_id: ").strip())
+    new = True if input("init new run [y/N]: ").strip() in ("y", "Y") else False
+    if new:
+        pprint(await interface.init_run(USER_ID))
+    else:
+        pprint(await interface.continue_run(USER_ID))
+
 
 
     while True:

@@ -1,4 +1,7 @@
 {
+    "continue_run_log_template": {
+	"type": "continue"
+    },
     "combat_log_template": {
 	"type": "combat",
 	"action": null,
@@ -34,6 +37,7 @@
     },
     "run_state_template": {
 	"active": true,
+	"last_state_type": null,
 	"player": {
 	    "base_health": 100,
 	    "current_health": 100,
