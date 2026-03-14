@@ -51,7 +51,8 @@
 		    "right": null,
 		    "down": null,
 		    "branch_power": null
-	    }
+	    },
+	    "valid_directions": ["forward", "backward", "left", "right", "down"]
 	}
     },
     "entrance_prompt": {

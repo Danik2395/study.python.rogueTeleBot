@@ -1,4 +1,4 @@
-from data.presets import LOG
+from data.presets import LOG, LAYOUT
 
 class MoveSystem:
     def __init__(

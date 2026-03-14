@@ -53,10 +53,33 @@ class RogueInterface:
 
         return await self._finalize(user_id, active_run_state, combat_log)
 
-    async def take_item(self, user_id: int, item_name: str) -> dict:
-        active_run_state = await  self.database.get_state(user_id)
-        log = engine.take_item(item_name, active_run_state)
-        return await self._finalize(user_id, active_run_state, log)
+    async def inventory_open(self, user_id: int, loot_source: str = "inventory") -> dict:
+        state = await self.database.get_state(user_id)
+
+        log = engine.inventory_open(loot_source, state)
+
+        return await self._finalize(user_id, state, log)
+
+    async def inventory_select_item(self, user_id: int, item_key_name: str, source: str) -> dict:
+        state = await self.database.get_state(user_id)
+
+        log = engine.inventory_select(item_key_name, source, state)
+
+        return await self._finalize(user_id, state, log)
+
+    async def inventory_move_item(self, user_id: int, destination_key_name: str) -> dict:
+        state = await self.database.get_state(user_id)
+
+        log = engine.inventory_move(destination_key_name, state)
+
+        return await self._finalize(user_id, state, log)
+
+    # async def inventory_use_item(self, user_id: int) -> dict:
+    #     state = await self.database.get_state(user_id)
+    #
+    #     log = engine.inventory_use(state)
+    #
+    #     return await self._finalize(user_id, state, log)
 
     async def _finalize(self, user_id: int, state: dict, log: dict) -> dict:
         text_from_log = self.log_handler.render(log)

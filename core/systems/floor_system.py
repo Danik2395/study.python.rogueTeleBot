@@ -4,9 +4,7 @@ from data.presets import LAYOUT, ITEMS, ENEMIES, RULES
 
 class FloorSystem:
     """Class for floor generation"""
-# TODO: а ещё у тебя нет 100% выпадения выхода на следующий этаж. в плане он просто может не выпасть
-# TODO: да и впринципе нет обработки выхода
-    pass
+
     def __init__(
             self,
             floor: dict
@@ -145,8 +143,9 @@ class FloorSystem:
         doors["branch_power"] = power
 
         # Set to not to get an error
+        valid_direction = set(self.biom["valid_directions"].copy())
         keys_to_remove = {backward_direction, "branch_power", "down"}
-        door_keys = set(doors.keys()) - keys_to_remove
+        door_keys = valid_direction - keys_to_remove
 
         for door_key in door_keys:
             if random.random() <= door_chance:
@@ -162,7 +161,6 @@ class FloorSystem:
         ):
             doors["down"] = True
             self.floor["down_in_room"] = prev_room_index + 1
-            breakpoint()
 
         return doors
 
@@ -197,6 +195,7 @@ class FloorSystem:
         loot_amount = random.choice(self.biom["loot_amount"])
         room_loot = self._get_room_content_pool(self.floor_loot_pool, loot_amount)
 
+        # TODO: убери это. всё должно из темплейтов браться
         new_room: dict[str, Any] = {
                 "index": room_index,
                 "type": "room",
@@ -205,7 +204,9 @@ class FloorSystem:
                 "mood": room_mood,
                 "cleared": True if not room_enemies else False,
                 "enemies": room_enemies,
-                "loot": room_loot,
+                "loot": {
+                    "room_loot": room_loot
+                    },
                 "doors": room_doors
                 }
         self.rooms.append(new_room)
@@ -227,7 +228,9 @@ class FloorSystem:
                 "mood": entrance_mood,
                 "cleared": True,
                 "enemies": None,
-                "loot": None,
+                "loot": {
+                    "room_loot": []
+                    },
                 "doors": self._gen_room_doors("entrance")
                 }
 

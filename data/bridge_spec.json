@@ -5,25 +5,34 @@
 	"state_type": null
     },
     "ui_lables": {
-	"start": "Начать игру",
+	"enter_game": "Войти в игру",
 	"help": "Помощь",
-	"menu_back": "Назад",
-	"init_run": "Начать новую игру",
+	"back_the_menu": "Назад",
+	"noop": "noop",
+	"buttons_splitter": "——————",
+
+	"init_new_run": "Начать новую игру",
 	"continue_run": "Продолжить игру",
 	"upgrades": "Улучшения",
-	"move_forward": "Двигаться вперёд",
-	"move_backward": "Двигаться назад",
-	"move_left": "Двигаться влево",
-	"move_right": "Двигаться вправо",
-	"move_down": "Перейти на нижний этаж",
-	"move_to_fork": "К развилке",
+
+	"move:forward": "Двигаться вперёд",
+	"move:backward": "Двигаться назад",
+	"move:left": "Двигаться влево",
+	"move:right": "Двигаться вправо",
+	"move:down": "Перейти на нижний этаж",
+	"move:to_fork": "К развилке",
+
 	"attack": "Атаковать",
 	"defence": "Повысить защиту",
-	"inventory": "Инвентарь",
+
+	"inventory_open:inventory": "Инвентарь",
+	"inventory_open:room_loot": "Вещи в комнате",
 	"use_item": "Использовать",
-	"drop_item": "Выбросить предмет",
-	"to_game_screen": "В меню",
-	"to_menu": "В главное меню",
-	"start_again": "Начать заново"
+	"move_item_to": "Переместить в",
+
+	"start_again": "Начать заново",
+
+	"inventory": "инвентарь",
+	"room_loot": "комнату"
     }
 }

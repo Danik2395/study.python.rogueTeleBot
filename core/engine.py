@@ -6,8 +6,9 @@ Operates systems
 from core.systems.floor_system import FloorSystem
 from core.systems.combat_system import CombatSystem
 from core.systems.move_system import MoveSystem
-from core.systems.loot_system import LootSystem
+from core.systems.inventory_system import InventorySystem
 # from core.log_handler import LogHandler
+from core.state_wrapper import StateWrapper
 from data.presets import LOG
 from data.presets import RULES
 
@@ -110,12 +111,36 @@ def attack(target_enemy_name: str, active_run_state: dict) -> dict:
 
     return combat_log
 
-def take_item(item_name: str, active_run_state: dict) -> dict:
-    floor = active_run_state["floor"]
-    room = floor["rooms"][floor["current_room_index"]]
+def inventory_open(loot_source: str, active_run_state: dict) -> dict:
+    log = LOG["inventory_log_template"].copy()
+    log["action"] = "open"
 
-    player = active_run_state["player"]
+    combat_state = active_run_state["combat_state"]
+    is_in_combat = combat_state["in_combat"]
 
-    loot_system = LootSystem(room, player)
+    source = loot_source if not is_in_combat else "inventory"
+    log["source"] = source
 
-    return loot_system.take_item(item_name)
+    inventory_state = active_run_state["inventory_state"]
+    inventory_state["loot_source"] = source
+
+    return log
+
+def inventory_select(item_key_name: str, selected_item_source: str, active_run_state: dict) -> dict:
+    log = LOG["inventory_log_template"].copy()
+    log["action"] = "select"
+    log["item_key_name"] = item_key_name
+    log["source"] = selected_item_source
+
+    inventory_state = active_run_state["inventory_state"]
+    inventory_state["selected_item_key_name"] = item_key_name
+    inventory_state["selected_item_source"] = selected_item_source
+
+    return log
+
+def inventory_move(destination_key_name: str, active_run_state: dict) -> dict:
+    inventory_state = active_run_state["inventory_state"]
+    state_wrapped = StateWrapper(active_run_state)
+
+    inventory_system = InventorySystem(state_wrapped.get_container, inventory_state)
+    return inventory_system.move_item(destination_key_name)

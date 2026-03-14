@@ -70,10 +70,6 @@ class CombatSystem:
 
     def proceed_action(self, action_type: str, target_enemy_name: str = "") -> dict:
         """Proceeds player actions and returns combat action log"""
-# TODO: сделать систему для логов, и туда уже передавать это всё
-# типа движок получает jsonы от интерфейса после sql запроса по id пользователя, системы их меняют и отдают логи
-# в систему логов, которая обрабатывает их, и движок отдаёт готовый текст с логом или без в интерфейс
-# который записывает всё обратно в бд и выводит текст в боте
 
         match action_type:
             case "attack":
@@ -129,6 +125,7 @@ class CombatSystem:
                 if not self.enemies_objects:
                     self.combat_state["in_combat"] = False
                     log["combat_ended"] = True
+                    self.combat_state["turns"] = None
 
                     return log
 

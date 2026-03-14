@@ -29,11 +29,12 @@
 	"is_new_room": false,
 	"event": null
     },
-    "item_transition_log_template": {
-	"type": "item",
-	"transition_item": null,
-	"transition_into": null,
-	"is_items_left": true
+    "inventory_log_template": {
+	"type": "inventory",
+	"action": null,
+	"item_key_name": null,
+	"source": null,
+	"move_destination": null
     },
     "run_state_template": {
 	"active": true,
@@ -54,6 +55,11 @@
 	    "in_combat": false,
 	    "turns": null,
 	    "enemies": null
+	},
+	"inventory_state": {
+	    "selected_item_key_name": null,
+	    "loot_source": null,
+	    "selected_item_source": null
 	},
 	"floor": {
 	    "index": null,
