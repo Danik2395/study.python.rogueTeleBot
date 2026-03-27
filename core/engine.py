@@ -7,6 +7,7 @@ from core.systems.floor_system import FloorSystem
 from core.systems.combat_system import CombatSystem
 from core.systems.move_system import MoveSystem
 from core.systems.inventory_system import InventorySystem
+from core.entities import Player
 # from core.log_handler import LogHandler
 from core.state_wrapper import StateWrapper
 from data.presets import LOG
@@ -14,6 +15,8 @@ from data.presets import RULES
 
 import copy
 from typing import Any
+
+player_dead_exception = Player.Dead
 
 
 def init_run() -> tuple[dict[str, Any], dict[str, Any]]:
@@ -103,7 +106,18 @@ def attack(target_enemy_name: str, active_run_state: dict) -> dict:
 
     combat_system = CombatSystem(player, room_enemies, combat_state)
 
-    combat_log = combat_system.proceed_action("attack", target_enemy_name)
+    combat_log: dict = {}
+    try:
+        combat_log = combat_system.proceed_action("attack", target_enemy_name)
+
+    except player_dead_exception:
+        combat_log["dead"] = True
+        active_run_state["active"] = False
+        # Set death overlay
+        active_run_state["menu_context"]["opened_menu"] = "dead"
+        active_run_state["menu_context"]["type"] = "dead"
+
+        return combat_log
 
     if combat_log["combat_ended"]:
         room_enemies.clear()
@@ -123,6 +137,9 @@ def inventory_open(loot_source: str, active_run_state: dict) -> dict:
 
     inventory_state = active_run_state["inventory_state"]
     inventory_state["loot_source"] = source
+
+    # Open inventory overlay
+    active_run_state["menu_context"]["opened_menu"] = "inventory"
 
     return log
 

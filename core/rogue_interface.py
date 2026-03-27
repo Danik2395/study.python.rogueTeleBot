@@ -81,6 +81,52 @@ class RogueInterface:
     #
     #     return await self._finalize(user_id, state, log)
 
+    async def goto_menu(self, user_id: int, menu: str) -> dict:
+        """Open a menu overlay"""
+
+        state = await self.database.get_state(user_id)
+        state["menu_context"]["opened_menu"] = menu
+
+        await self.database.save_state(user_id, state)
+
+        return await self.continue_run(user_id)
+
+    async def menu(self, user_id: int, menu: str, action: str) -> dict:
+        """Perform action within a menu"""
+
+        state = await self.database.get_state(user_id)
+        state["menu_context"]["opened_menu"] = menu
+
+        if menu == "main_menu" and action == "new_game":
+            return await self.init_run(user_id)
+
+        return await self.continue_run(user_id)
+
+    async def back_the_menu(self, user_id: int) -> dict:
+        """Close current overlay menu"""
+
+        state = await self.database.get_state(user_id)
+        opened_menu = state["menu_context"]["opened_menu"]
+
+        if opened_menu is not None:
+            # Reset inventory state if closing inventory
+            if opened_menu == "inventory":
+                state["inventory_state"] = {
+                    "selected_item_key_name": None,
+                    "loot_source": None,
+                    "selected_item_source": None
+                }
+            state["menu_context"]["opened_menu"] = None
+
+            await self.database.save_state(user_id, state)
+
+        return await self.continue_run(user_id)
+
+    async def start_again(self, user_id: int) -> dict:
+        """Start over after death"""
+
+        return await self.init_run(user_id)
+
     async def _finalize(self, user_id: int, state: dict, log: dict) -> dict:
         text_from_log = self.log_handler.render(log)
 
@@ -91,7 +137,7 @@ class RogueInterface:
         contract["state_type"] = state_type
         contract["buttons"] = ui_builder.get_buttons(log, state, state_type)
 
-        state["last_state_type"] = state_type
+        state["menu_context"]["type"] = state_type
 
         await self.database.save_state(user_id, state)
 

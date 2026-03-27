@@ -38,7 +38,10 @@
     },
     "run_state_template": {
 	"active": true,
-	"last_state_type": null,
+	"menu_context": {
+	    "type": null,
+	    "opened_menu": null
+	},
 	"player": {
 	    "base_health": 100,
 	    "current_health": 100,
