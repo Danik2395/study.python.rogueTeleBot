@@ -34,7 +34,7 @@ class FloorSystem:
             case 1:
                 self.biom_key = "cave"
             case 2:
-                self.biom_key = "not cave"
+                self.biom_key = "not_cave"
             case _:
                 self.biom_key = "void"
 
@@ -64,7 +64,7 @@ class FloorSystem:
                 enemy for enemy, data in ENEMIES.items()
 
                 if data.get("min_floor", 1) <= self.floor_index
-                and self.biom_key in data.get("biom", LAYOUT["bioms"])
+                and self.biom_key in data.get("biom", list(LAYOUT["bioms"]))
                 ]
 
     def _filter_loot_pool(self) -> None:

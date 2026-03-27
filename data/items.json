@@ -5,15 +5,15 @@
 	"damage": 5,
 	"defence": 0,
 	"weight": 4,
-	"min_foor": 1
+	"min_floor": 1
     },
    "apple": {
 	"type": "food",
 	"name": "яблоко",
 	"damage": 0,
-	"weight": 1, 
-	"heal": 6, 
+	"weight": 1,
+	"heal": 6,
 	"poison": 0,
-	"min_foor": 1
+	"min_floor": 1
     }
 }

@@ -21,4 +21,4 @@ with open("data/log_templates.json", "r", encoding="utf-8") as f:
 with open("data/bridge_spec.json", "r", encoding="utf-8") as f:
     BRIDGE_SPEC = json.load(f)
     BRIDGE_CONTRACT = BRIDGE_SPEC["contract"]
-    UI_LABELS = BRIDGE_SPEC["ui_lables"]
+    UI_LABELS = BRIDGE_SPEC["ui_labels"]

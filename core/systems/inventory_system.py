@@ -23,7 +23,8 @@ class InventorySystem:
         source = self.get_container(source_key_name)
         destination = self.get_container(destination_key_name)
 
-        source.remove(item_key_name)
+        if item_key_name in source:
+            source.remove(item_key_name)
         destination.append(item_key_name)
 
         self.inventory_state["selected_item_source"] = destination_key_name

@@ -58,16 +58,16 @@ def _explore_buttons(state: dict) -> list:
     room = floor["rooms"][room_index]
     doors = room.get("doors", {})
 
-    if doors.get("forward"):
+    if doors.get("forward") is not None:
         buttons.append({"label": UI_LABELS["move:forward"], "action": "move:forward"})
 
-    if doors.get("backward"):
+    if doors.get("backward") is not None:
         buttons.append({"label": UI_LABELS["move:backward"], "action": "move:backward"})
 
-    if doors.get("left"):
+    if doors.get("left") is not None:
         buttons.append({"label": UI_LABELS["move:left"], "action": "move:left"})
 
-    if doors.get("right"):
+    if doors.get("right") is not None:
         buttons.append({"label": UI_LABELS["move:right"], "action": "move:right"})
 
     if doors.get("down"):

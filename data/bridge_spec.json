@@ -4,7 +4,7 @@
 	"buttons": [],
 	"state_type": null
     },
-    "ui_lables": {
+    "ui_labels": {
 	"enter_game": "Войти в игру",
 	"help": "Помощь",
 	"back_the_menu": "Назад",

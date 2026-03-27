@@ -13,7 +13,7 @@ class StateWrapper:
     def current_room(self) -> dict:
         rooms = self.floor["rooms"]
         current_room_index = self.floor["current_room_index"]
-        current_room = self.floor["rooms"][current_room_index]
+        current_room = rooms[current_room_index]
         return current_room
 
     def get_container(self, source: str) -> list | dict:

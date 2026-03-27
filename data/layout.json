@@ -53,6 +53,58 @@
 		    "branch_power": null
 	    },
 	    "valid_directions": ["forward", "backward", "left", "right", "down"]
+	},
+	"not_cave": {
+	    "name": [],
+	    "mood": [],
+	    "loot": [],
+	    "loot_amount": [],
+	    "enemies_amount": [],
+	    "floor_scale": [],
+	    "branch_rules": {
+		"branch_power": 0.5,
+		"power_decrease": 0.12,
+		"door_chance": 0.45,
+		"down_threshold": 0.1,
+		"down_chance": 0.3,
+		"entrance_door_chance": 0.8,
+		"entrance_down_chance": -1
+	    },
+	    "doors_template": {
+		    "forward": null,
+		    "backward": null,
+		    "left": null,
+		    "right": null,
+		    "down": null,
+		    "branch_power": null
+	    },
+	    "valid_directions": ["forward", "backward", "left", "right", "down"]
+	},
+	"void": {
+	    "name": [],
+	    "mood": [],
+	    "loot": [],
+	    "loot_amount": [],
+	    "enemies_amount": [],
+	    "floor_scale": [],
+	    "branch_rules": {
+		"branch_power": 0.5,
+		"power_decrease": 0.12,
+		"door_chance": 0.45,
+		"down_threshold": 0.1,
+		"down_chance": 0.3,
+		"entrance_door_chance": 0.8,
+		"entrance_down_chance": -1
+	    },
+	    "doors_template": {
+		    "forward": null,
+		    "backward": null,
+		    "left": null,
+		    "right": null,
+		    "down": null,
+		    "branch_power": null
+	    },
+	    "valid_directions": ["forward", "backward", "left", "right", "down"]
 	}
     },
     "entrance_prompt": {

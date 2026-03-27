@@ -48,10 +48,10 @@ def move(direction: str, active_run_state: dict) -> dict[str, Any]:
     while True:
         move_log = move_system.move(direction)
 
-        if not move_log["is_new_room"] and not move_log["room_index"]:
+        if not move_log["is_new_room"] and move_log["room_index"] is None:
             return move_log
 
-        if move_log["is_new_room"] == True:
+        if move_log["is_new_room"]:
             floor_system = FloorSystem(floor)
             opposite_direction = RULES["opposite_direction"][direction]
             floor_system.gen_room(move_system.current_room, opposite_direction)
@@ -105,7 +105,7 @@ def attack(target_enemy_name: str, active_run_state: dict) -> dict:
 
     combat_log = combat_system.proceed_action("attack", target_enemy_name)
 
-    if combat_log["combat_ended"] == True:
+    if combat_log["combat_ended"]:
         room_enemies.clear()
         current_room["cleared"] = True
 
