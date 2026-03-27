@@ -2,70 +2,68 @@
 
 `command:arg_0:arg_1:arg_n`
 
-|Command|arg\_0|arg\_1|
+| Command | arg_0 | arg_1 |
 |---|---|---|
-|init_run|-|-|
-|continue_run|-|-|
-|move|forward,<br>backward,<br>left,<br>right,<br>down,<br>to_fork|-|
-|attack|{enemy_key_name}|-|
-|inventory_open|inventory (default, always enabled),<br>{source}|-|
-|inventory_select|{item_key_name}|{source}|
-|inventory_move_item|{destination}|-|
-|back_the_menu<br>(for now only works for overlay menu, and returns to the last state)|-|-|
+| init_run | — | — |
+| continue_run | — | — |
+| move | forward, backward, left, right, down, to_fork | — |
+| attack | {enemy_key_name} | — |
+| inventory_open | inventory (default), room_loot | — |
+| inventory_select | {item_key_name} | {source} |
+| move_item_to | {destination} | — |
+| goto_menu | main_menu, upgrades_menu, help_menu, dead | — |
+| menu | {menu_type} | {action} |
+| back_the_menu | — | — |
+| start_again | — | — |
 
 
 # Buttons layout
 
-## General mode
+## Menu mode (overlay)
 
-- help
+### Main menu (opened_menu: "main_menu")
+- menu:main_menu:new_game
+- menu:main_menu:continue
+- goto_menu:upgrades_menu
+- goto_menu:help_menu
 
-## Menu mode
+### Upgrades menu (opened_menu: "upgrades_menu")
+- menu:upgrades_menu:heal
+- menu:upgrades_menu:damage
+- menu:upgrades_menu:defence
+- goto_menu:main_menu
 
-### Start screen
-- enter_game
-
-### Game menu
-- init_new_run
-    - yes
-    - no
-    - back_the_menu:init_new_run
-- continue_run
-- upgrades
-    - some_upgrade_buttons
-    - back_the_menu:upgrades
+### Help menu (opened_menu: "help_menu")
+- goto_menu:main_menu
 
 ## Explore mode
 
 - move:{direction}
 - move:to_fork
 - inventory_open:inventory
-- inventory_open:{loot_source}
+- inventory_open:room_loot
+- goto_menu:main_menu
 
 ## Combat mode
 
 - attack:{enemy}
-- defence
-- heal
 - inventory_open:inventory
 
-## Inventory mode
+## Inventory mode (overlay)
 
-- back_the_menu:inventory_open
-- inventory_select:{item}:{source} (inventory)
+- back_the_menu
+- inventory_select:{item_key_name}:inventory (from player inventory)
+    - move_item_to:room_loot
     - use_item
-    - inventory_move_item:{destination}
-    - back_the_menu:inventory:select
 - `------`
-- inventory_select:{item}:{source} (optional loot_source)
+- inventory_select:{item_key_name}:{loot_source} (from room loot)
+    - move_item_to:inventory
     - use_item
-    - inventory_move_item:{destination}
-    - back_the_menu:inventory:select
 
-## Death mode
+## Death mode (overlay)
 
 - start_again
-- back_the_menu:death
+- goto_menu:main_menu
 
 
 # Inventory
