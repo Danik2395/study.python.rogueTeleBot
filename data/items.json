@@ -1,7 +1,7 @@
 {
   "sword":  {
 	"type": "weapon",
-	"name": "меч",
+	"text_name": "меч",
 	"damage": 5,
 	"defence": 0,
 	"weight": 4,
@@ -9,7 +9,7 @@
     },
    "apple": {
 	"type": "food",
-	"name": "яблоко",
+	"text_name": "яблоко",
 	"damage": 0,
 	"weight": 1,
 	"heal": 6,

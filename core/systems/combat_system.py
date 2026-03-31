@@ -53,29 +53,28 @@ class CombatSystem:
         # If its the first action take data from presets
         if self.enemies_data is None:
             self.enemies_data = {
-                    name: ENEMIES[name].copy() for name in self.room_enemies
+                    key_name: ENEMIES[key_name].copy() for key_name in self.room_enemies
                     }
             # Initialize combat_state["enemies"] on the first room visit
             self.combat_state["enemies"] = self.enemies_data
 
         # Then converting dict to the objects
         self.enemies_objects = {
-                # TODO: переделай все имена, которые по факту ключи на key_name, а все имена, которые текстовые имена на text_name
-                name: Enemy(name, enemy_data) for name, enemy_data in self.enemies_data.items()
+                key_name: Enemy(key_name, enemy_data) for key_name, enemy_data in self.enemies_data.items()
                 }
 
     def _set_turns(self) -> None:
        self.turns = self.player_object.speed // COMBAT_RULES["turn_delimiter"]
        self.combat_state["turns"] = self.turns
 
-    def proceed_action(self, action_type: str, target_enemy_name: str = "") -> dict:
+    def proceed_action(self, action_type: str, target_enemy_key_name: str = "") -> dict:
         """Proceeds player actions and returns combat action log"""
 
         match action_type:
             case "attack":
                 log = LOG["combat_log_template"].copy()
 
-                if target_enemy_name not in self.enemies_data:
+                if target_enemy_key_name not in self.enemies_data:
                     return log
 
                 log["action"] = action_type
@@ -83,7 +82,7 @@ class CombatSystem:
                 consequence = LOG["combat_consequence_log_template"].copy()
 
                 consequence["attacker"] = "player"
-                consequence["target"] = target_enemy_name
+                consequence["target"] = target_enemy_key_name
                 consequence["stat"] = "damage"
 
                 damage_scale = random.choice(COMBAT_RULES["damage_scale_limits"])
@@ -93,7 +92,7 @@ class CombatSystem:
                 player_damage = random.randint(int(self.player_object.damage * low_damage), int(self.player_object.damage * high_damage))
 
                 # Applying damage to the target
-                target_enemy = self.enemies_objects[target_enemy_name]
+                target_enemy = self.enemies_objects[target_enemy_key_name]
                 targ_enemy_health_before = target_enemy.current_health
                 target_enemy.take_damage(player_damage)
                 delta_damage = target_enemy.current_health - targ_enemy_health_before
@@ -106,18 +105,18 @@ class CombatSystem:
                 # Parcing all left alive enemies and rewriting enemies in the battle
                 # It is possible to leave enemies untouched but it require additional logic
                 self.enemies_objects = {
-                        name: enemy_object for name, enemy_object in self.enemies_objects.items()
+                        key_name: enemy_object for key_name, enemy_object in self.enemies_objects.items()
                         if enemy_object.current_health > 0
                     }
 
                 # Rewriting enemies in combat state for valid data
                 self.combat_state["enemies"] = {
-                        name: {
+                        key_name: {
                             "health": enemy_object.current_health,
                             "damage": enemy_object.base_damage,
                             "defence": enemy_object.base_defence,
                             "speed": enemy_object.base_speed
-                            } for name, enemy_object in self.enemies_objects.items()
+                            } for key_name, enemy_object in self.enemies_objects.items()
                         }
 
                 # self.room_enemies = [key_name for key_name in self.enemies_objects.keys()]
@@ -140,10 +139,11 @@ class CombatSystem:
                     log["enemies_turn_triggered"] = True
 
                     # enemy stands for enemy_object. To shorten typing
-                    for name, enemy in self.enemies_objects.items():
+                    for key_name, enemy in self.enemies_objects.items():
                         consequence = LOG["combat_consequence_log_template"].copy()
+                        # TODO: нужно сделать в системе логов, чтобы она доставала текстовые имена из темплейтов
 
-                        consequence["attacker"] = name
+                        consequence["attacker"] = key_name
                         consequence["target"] = "player"
                         consequence["stat"] = "damage"
 
@@ -157,7 +157,7 @@ class CombatSystem:
                         # If player dead transfering data to the upper structure
                         if self.player_object.current_health <= 0:
                             dead_log = LOG["dead_log_template"].copy()
-                            dead_log["enemy"] = name
+                            dead_log["enemy"] = key_name
                             dead_log["damage"] = enemy_damage
                             raise self.player_object.Dead(dead_log)
 

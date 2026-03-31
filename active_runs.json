@@ -28,7 +28,7 @@
 		    "index": 0,
 		    "type": "entrance",
 		    "room_type": "entrance",
-		    "name": null,
+		    "text_name": null,
 		    "mood": "вы ничего не помните",
 		    "cleared": true,
 		    "enemies": null,
@@ -46,7 +46,7 @@
 		    "index": 1,
 		    "type": "room",
 		    "room_type": "combat",
-		    "name": "пещера",
+		    "text_name": "пещера",
 		    "mood": [
 			"напряжённо",
 			"затхло"
@@ -69,7 +69,7 @@
 		    "index": 2,
 		    "type": "room",
 		    "room_type": "combat",
-		    "name": "пещера",
+		    "text_name": "пещера",
 		    "mood": [
 			"напряжённо",
 			"затхло"

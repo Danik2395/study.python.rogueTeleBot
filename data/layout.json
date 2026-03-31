@@ -8,7 +8,7 @@
     ],
     "bioms": {
 	"cave": {
-	    "name": [
+	    "text_name": [
 		"пещера",
 		"каменная комната"
 	    ],
@@ -55,7 +55,7 @@
 	    "valid_directions": ["forward", "backward", "left", "right", "down"]
 	},
 	"not_cave": {
-	    "name": [],
+	    "text_name": [],
 	    "mood": [],
 	    "loot": [],
 	    "loot_amount": [],
@@ -81,7 +81,7 @@
 	    "valid_directions": ["forward", "backward", "left", "right", "down"]
 	},
 	"void": {
-	    "name": [],
+	    "text_name": [],
 	    "mood": [],
 	    "loot": [],
 	    "loot_amount": [],

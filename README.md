@@ -11,8 +11,8 @@
 | inventory_open | inventory (default), room_loot | — |
 | inventory_select | {item_key_name} | {source} |
 | move_item_to | {destination} | — |
-| goto_menu | main_menu, upgrades_menu, help_menu, dead | — |
-| menu | {menu_type} | {action} |
+| goto_menu | {key_menu} | — |
+| menu | {key_menu} | {action} |
 | back_the_menu | — | — |
 | start_again | — | — |
 
@@ -21,20 +21,19 @@
 
 ## Menu mode (overlay)
 
-### Main menu (opened_menu: "main_menu")
-- menu:main_menu:new_game
-- menu:main_menu:continue
-- goto_menu:upgrades_menu
-- goto_menu:help_menu
+### Main menu (opened_menu: "menu_main")
+- menu:menu_main:new_game
+- menu:menu_main:continue
+- goto_menu:menu_upgrades
 
-### Upgrades menu (opened_menu: "upgrades_menu")
-- menu:upgrades_menu:heal
-- menu:upgrades_menu:damage
-- menu:upgrades_menu:defence
-- goto_menu:main_menu
+### Upgrades menu (opened_menu: "menu_upgrades")
+- menu:menu_upgrades:heal
+- menu:menu_upgrades:damage
+- menu:menu_upgrades:defence
+- goto_menu:menu_main
 
-### Help menu (opened_menu: "help_menu")
-- goto_menu:main_menu
+### Help menu (opened_menu: "menu_help")
+- goto_menu:menu_main
 
 ## Explore mode
 
@@ -42,7 +41,7 @@
 - move:to_fork
 - inventory_open:inventory
 - inventory_open:room_loot
-- goto_menu:main_menu
+- goto_menu:menu_main
 
 ## Combat mode
 
@@ -63,7 +62,7 @@
 ## Death mode (overlay)
 
 - start_again
-- goto_menu:main_menu
+- goto_menu:menu_main
 
 
 # Inventory

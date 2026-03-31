@@ -81,17 +81,17 @@ class RogueInterface:
     #
     #     return await self._finalize(user_id, state, log)
 
-    async def goto_menu(self, user_id: int, menu: str) -> dict:
+    async def goto_menu(self, user_id: int, key_menu: str) -> Contract:
         """Open a menu overlay"""
 
-        state = await self.database.get_state(user_id)
-        state["menu_context"]["opened_menu"] = menu
+        state = await self.database.get_user_run_state(user_id)
+        state["menu_context"]["opened_menu"] = key_menu
 
         await self.database.save_state(user_id, state)
 
         return await self.continue_run(user_id)
 
-    async def menu(self, user_id: int, menu: str, action: str) -> dict:
+    async def menu(self, user_id: int, key_menu: str, action: str) -> Contract:
         """Perform action within a menu"""
 
         state = await self.database.get_state(user_id)

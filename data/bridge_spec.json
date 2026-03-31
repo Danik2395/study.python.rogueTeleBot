@@ -10,8 +10,8 @@
 	"back_the_menu": {"args": []},
 	"move": {"args": ["direction"]},
 	"attack": {"args": ["target_enemy_name"]},
-	"goto_menu": {"args": ["menu"]},
-	"menu": {"args": ["menu_type", "action"]},
+	"goto_menu": {"args": ["key_menu"]},
+	"menu": {"args": ["key_menu", "action"]},
 	"start_again": {"args": []},
 	"inventory_open": {"args": ["loot_source"]},
 	"inventory_select": {"args": ["item_key_name", "source"]},
@@ -50,21 +50,15 @@
 	"inventory": "инвентарь",
 	"room_loot": "комнату",
 
-	"goto_menu:main_menu": "Главное меню",
-	"goto_menu:upgrades_menu": "Улучшения",
-	"goto_menu:help_menu": "Помощь",
+	"goto_menu:menu_main": "Главное меню",
+	"goto_menu:menu_upgrades": "Улучшения",
 	"goto_menu:dead": "Экран смерти",
 
-	"menu:main_menu:new_game": "Новая игра",
-	"menu:main_menu:continue": "Продолжить",
-	"menu:main_menu:upgrades": "Улучшения",
-	"menu:main_menu:help": "Помощь",
+	"menu:menu_upgrades:heal": "Увеличить здоровье",
+	"menu:menu_upgrades:damage": "Увеличить урон",
+	"menu:menu_upgrades:defence": "Увеличить защиту",
+	"menu:menu_upgrades:back": "Назад",
 
-	"menu:upgrades_menu:heal": "Увеличить здоровье",
-	"menu:upgrades_menu:damage": "Увеличить урон",
-	"menu:upgrades_menu:defence": "Увеличить защиту",
-	"menu:upgrades_menu:back": "Назад",
-
-	"menu:help_menu:back": "Назад"
+	"menu:menu_help:back": "Назад"
     }
 }

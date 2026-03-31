@@ -112,7 +112,7 @@ class Enemy(Dummy):
         # enemy_template = ENEMIES[enemy_name]
 
         rand_name = ["тень", "присутствие", "силуэт", "сущность"]
-        self.name = enemy_data.get("name", random.choice(rand_name))
+        self.name = enemy_data.get("text_name", random.choice(rand_name))
         base_health = ENEMIES[key_name]["health"]
         self.base_damage = enemy_data.get("damage", random.randint(1, 20))
         self.base_defence = enemy_data.get("defence", random.randint(3, 15))

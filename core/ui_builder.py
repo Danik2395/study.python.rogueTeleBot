@@ -96,12 +96,12 @@ def _combat_buttons(state: dict) -> list:
     combat_state = state.get("combat_state", {})
     enemies = combat_state.get("enemies") or {}
 
-    for name, data in enemies.items():
+    for key_name, data in enemies.items():
         if data.get("health", 0) > 0:
-            enemy_name = ENEMIES[name]["name"]
+            enemy_text_name = ENEMIES[key_name]["text_name"]
             enemy_hp = data["health"]
-            label = f"{UI_LABELS['attack']} {enemy_name} ({enemy_hp} HP)"
-            buttons.append({"label": label, "action": f"attack:{name}"})
+            label = f"{UI_LABELS['attack']} {enemy_text_name} ({enemy_hp} HP)"
+            buttons.append(Button(label=label, action=f"attack:{key_name}"))
 
     buttons.append({"label": UI_LABELS["inventory_open:inventory"], "action": "inventory_open:inventory"})
     # buttons.append({"label": UI_LABELS["defence"], "action": "defence"})
@@ -123,14 +123,14 @@ def _inventory_buttons(state: dict) -> list:
 
 
     for key_name in inventory:
-        text_name = ITEMS[key_name]["name"]
-        buttons.append({"label": text_name, "action": f"inventory_select:{key_name}:inventory"})
+        text_name = ITEMS[key_name]["text_name"]
+        buttons.append(Button(label=text_name, action=f"inventory_select:{key_name}:inventory"))
 
     buttons.append({"label": UI_LABELS["buttons_splitter"], "action": "noop"})
 
     for key_name in loot_source:
-        text_name = ITEMS[key_name]["name"]
-        buttons.append({"label": text_name, "action": f"inventory_select:{key_name}:{loot_source_key_name}"})
+        text_name = ITEMS[key_name]["text_name"]
+        buttons.append(Button(label=text_name, action=f"inventory_select:{key_name}:{loot_source_key_name}"))
 
     buttons.append({"label": UI_LABELS["back_the_menu"], "action": "back_the_menu"})
 
@@ -144,7 +144,7 @@ def _inventory_select_buttons(state: dict) -> list:
     selected_item_source = inventory_state["selected_item_source"]
     loot_source_key_name = inventory_state["loot_source"]
 
-    text_name = ITEMS[selected_item_key_name]["name"]
+    text_name = ITEMS[selected_item_key_name]["text_name"]
 
     destination = loot_source_key_name if selected_item_source == "inventory" else "inventory"
     buttons.append({"label": f"[ {text_name} ]",

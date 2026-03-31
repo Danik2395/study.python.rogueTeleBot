@@ -175,7 +175,7 @@ class FloorSystem:
 
         # ===SETTING===
         room_type = random.choice(LAYOUT["room_type"])
-        room_name = random.choice(self.biom["name"])
+        room_name = random.choice(self.biom["text_name"])
         room_mood = random.choice(self.biom["mood"])
 
         # ===DOORS===
@@ -200,7 +200,7 @@ class FloorSystem:
                 "index": room_index,
                 "type": "room",
                 "room_type": room_type,
-                "name": room_name,
+                "text_name": room_name,
                 "mood": room_mood,
                 "cleared": True if not room_enemies else False,
                 "enemies": room_enemies,
@@ -224,7 +224,7 @@ class FloorSystem:
                 "index": 0,
                 "type": "entrance",
                 "room_type": "entrance",
-                "name": None,
+                "text_name": None,
                 "mood": entrance_mood,
                 "cleared": True,
                 "enemies": None,

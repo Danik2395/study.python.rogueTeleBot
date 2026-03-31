@@ -1,7 +1,7 @@
 {
     "enemies": {
 	"dragon": {
-	    "name": "Дракон",
+	    "text_name": "Дракон",
 	    "health": 20,
 	    "damage": 4,
 	    "defence": 5,
@@ -10,7 +10,7 @@
 	    "biom": ["cave"]
 	},
 	"lizard": {
-	    "name": "Ящерица",
+	    "text_name": "Ящерица",
 	    "health": 10,
 	    "damage": 2,
 	    "defence": 3,
@@ -21,7 +21,7 @@
     },
     "npcs": {
 	"npc": {
-	    "name": "noname"
+	    "text_name": "noname"
 	}
     }
 }
