@@ -2,7 +2,7 @@
     "command_schemas": {
 	"init_run": {"args": []},
 	"continue_run": {"args": []},
-	"back_the_menu": {"args": []},
+	"back_from_menu": {"args": ["source_key_menu"]},
 	"move": {"args": ["direction"]},
 	"attack": {"args": ["target_enemy_name"]},
 	"goto_menu": {"args": ["key_menu"]},
@@ -12,16 +12,21 @@
 	"inventory_select": {"args": ["item_key_name", "source"]},
 	"move_item_to": {"args": ["destination"]}
     },
+    "parent_menu": {
+	"inventory": null,
+	"inventory_select": "inventory",
+	"menu_upgrades": "menu_main",
+	"menu_help": "menu_main",
+	"dead": null
+    },
     "ui_labels": {
-	"enter_game": "Войти в игру",
 	"help": "Помощь",
-	"back_the_menu": "Назад",
+	"back_from_menu": "Назад",
 	"noop": "noop",
 	"buttons_splitter": "——————",
 
-	"init_new_run": "Начать новую игру",
-	"continue_run": "Продолжить игру",
-	"upgrades": "Улучшения",
+	"menu:menu_main:new_game": "Новая игра",
+	"menu:menu_main:continue": "Продолжить",
 
 	"move:forward": "Двигаться вперёд",
 	"move:backward": "Двигаться назад",

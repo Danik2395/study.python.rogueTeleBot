@@ -13,7 +13,7 @@
 | move_item_to | {destination} | — |
 | goto_menu | {key_menu} | — |
 | menu | {key_menu} | {action} |
-| back_the_menu | — | — |
+| back_from_menu | {source_key_menu} | — |
 | start_again | — | — |
 
 
@@ -30,7 +30,7 @@
 - menu:menu_upgrades:heal
 - menu:menu_upgrades:damage
 - menu:menu_upgrades:defence
-- goto_menu:menu_main
+- back_from_menu:menu_updrades
 
 ### Help menu (opened_menu: "menu_help")
 - goto_menu:menu_main
@@ -41,7 +41,6 @@
 - move:to_fork
 - inventory_open:inventory
 - inventory_open:room_loot
-- goto_menu:menu_main
 
 ## Combat mode
 
@@ -50,7 +49,7 @@
 
 ## Inventory mode (overlay)
 
-- back_the_menu
+- back_from_menu:inventory
 - inventory_select:{item_key_name}:inventory (from player inventory)
     - move_item_to:room_loot
     - use_item

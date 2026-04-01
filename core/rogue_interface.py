@@ -114,11 +114,17 @@ class RogueInterface:
     async def menu(self, user_id: int, key_menu: str, action: str) -> Contract:
         """Perform action within a menu"""
 
-        state["menu_context"]["opened_menu"] = menu
         state = await self.database.get_user_run_state(user_id)
 
-        if menu == "main_menu" and action == "new_game":
-            return await self.init_run(user_id)
+        match key_menu:
+            case "menu_main":
+                if action == "new_game":
+                    return await self.init_run(user_id)
+                if action == "continue":
+                    state["menu_context"]["opened_menu"] = None
+                    return await self.continue_run(user_id)
+
+        state["menu_context"]["opened_menu"] = key_menu
 
         return await self.continue_run(user_id)
 
@@ -128,15 +134,15 @@ class RogueInterface:
         state = await self.database.get_user_run_state(user_id)
         # opened_menu = state["menu_context"]["opened_menu"]
 
-        if opened_menu is not None:
+        if source_key_menu is not None:
             # Reset inventory state if closing inventory
-            if opened_menu == "inventory":
-                state["inventory_state"] = {
-                    "selected_item_key_name": None,
-                    "loot_source": None,
-                    "selected_item_source": None
-                }
-            state["menu_context"]["opened_menu"] = None
+            if source_key_menu == "inventory" or "inventory_select":
+                inventory_state = state["inventory_state"]
+
+                inventory_state["selected_item_key_name"] =  None
+                inventory_state["selected_item_source"] = None
+                if source_key_menu != "inventory_select":
+                    inventory_state["loot_source"] = None
 
             state["menu_context"]["opened_menu"] = PARENT_MENU[source_key_menu]
 

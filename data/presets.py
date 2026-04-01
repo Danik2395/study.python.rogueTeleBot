@@ -22,6 +22,11 @@ with open("data/log_templates.json", "r", encoding="utf-8") as f:
 with open("data/bridge_spec.json", "r", encoding="utf-8") as f:
     BRIDGE_SPEC = json.load(f)
     UI_LABELS = BRIDGE_SPEC["ui_labels"]
+    PARENT_MENU = BRIDGE_SPEC["parent_menu"]
+
+with open("data/forged_text.json", "r", encoding="utf-8") as f:
+    FTEXT = json.load(f)
+
 @dataclass
 class Button:
     label: str = ""
