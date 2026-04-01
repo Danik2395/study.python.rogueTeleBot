@@ -8,16 +8,18 @@ Terminal runner (`runner.py`) used for debugging without the bot.
 ## Stack
 
 - Python 3.11+
-- aiogram (Telegram bot, not yet implemented)
+- aiogram (Telegram bot – handlers, keyboards, message editing/fallback)
 - aiosqlite (async SQLite)
 - JSON files for all game data (presets, templates, rules, layout)
 
 ## Architecture layers
 
 ```
-TelegramUI (bot/) — not yet implemented
+TelegramUI (bot/) — implemented (UserController, keyboards, message editing/fallback)
     ↓
 runner.py — terminal debug entrypoint
+    ↓
+bot/user_handler.py (UserController) — command handlers, callback processing, message editing
     ↓
 RogueInterface (core/rogue_interface.py) — async facade, single entry point
     ↓
@@ -39,18 +41,19 @@ Database (database/database.py) — aiosqlite, get/save JSON state per user_id
 ## Transaction flow (button press → output)
 
 1. User presses button → `action` string sent (format: `command:arg0:arg1`)
-2. `runner.py` / bot handler parses action, calls `RogueInterface` method
-3. Interface calls `database.get_state(user_id)` → `active_run_state: dict`
-4. Interface calls `engine.{action}(args, active_run_state)` → `log: dict`
-5. Engine instantiates relevant System(s), passes state slices, systems mutate state in-place
-6. Engine returns log
-7. Interface calls `_finalize(user_id, state, log)`:
+2. `runner.py` / bot handler receives action
+3. Handler calls `process_action` which parses the action string and calls the appropriate `RogueInterface` method
+4. Interface calls `database.get_user_run_state(user_id)` → `state: dict` (always initialized with `run_state_template`, `active: false` on first `/start`)
+5. Interface calls `engine.{action}(args, state)` → `log: dict`
+6. Engine instantiates relevant System(s), passes state slices, systems mutate state in-place
+7. Engine returns log
+8. Interface calls `_finalize_game(user_id, state, log)`:
    - `log_handler.render(log)` → `text: str`
    - `ui_builder.get_state_type(log, state)` → `state_type: str`
-   - `ui_builder.get_buttons(log, state, state_type)` → `buttons: list`
+   - `ui_builder.get_game_buttons(log, state, state_type)` → `buttons: list[Button]`
    - writes `state["menu_context"]["type"] = state_type`
-   - `database.save_state(user_id, state)`
-   - returns contract: `{"text": str, "buttons": list, "state_type": str}`
+   - `database.save_user_run_state(user_id, state)`
+   - returns `Contract(text, buttons, state_type)`
 
 ## Button action format
 
@@ -59,25 +62,24 @@ Database (database/database.py) — aiosqlite, get/save JSON state per user_id
 | command | arg0 | arg1 |
 |---|---|---|
 | init_run | — | — |
-| continue_run | — | — |
-| back_the_menu | — | — |
+| back_from_menu | source_key_menu | — |
 | move | forward / backward / left / right / down / to_fork | — |
 | attack | {enemy_key_name} | — |
 | inventory_open | inventory / room_loot | — |
 | inventory_select | {item_key_name} | {source} |
 | move_item_to | {destination} | — |
 | use_item | — | — |
-| goto_menu | {menu} | — |
-| menu | {menu} | {action} |
+| goto_menu | {key_menu} | — |
+| menu | {key_menu} | {action} |
 | start_again | — | — |
 
-`back_the_menu` sets `opened_menu: null` and calls `continue_run`. If `opened_menu` is already `null`, does nothing.
+`back_from_menu` accepts a `source_key_menu` argument and navigates to its parent using the `parent_menu` mapping. If `source_key_menu` is `inventory` or `inventory_select`, resets inventory state. Sets `opened_menu = PARENT_MENU[source_key_menu]` (may be `null` to close overlay) and calls `continue_run`.
 
 **Examples**:
-- `goto_menu:main_menu` — open main menu
-- `menu:main_menu:new_game` — start new game from main menu
-- `menu:upgrades_menu:heal` — buy health upgrade
-- `back_the_menu` — return to game from any menu
+- `goto_menu:menu_main` — open main menu
+- `menu:menu_main:new_game` — start new game from main menu
+- `menu:menu_upgrades:heal` — buy health upgrade
+- `back_from_menu:inventory` — close inventory overlay
 - `start_again` — start over after death
 
 ## State types
@@ -92,19 +94,23 @@ Computed from log in `ui_builder.get_state_type`, never stored (except `menu_con
 
 ## Menu system
 
-For menu navigation, `menu_context` in `active_run_state` is used:
+For menu navigation, `menu_context` in `run_state` is used:
 
 | Field | Description |
 |---|---|
 | `type` | Primary game type (`explore`/`combat`/`dead`/`entrance`), computed from log |
-| `opened_menu` | Currently open menu (`null`/`inventory`/`main_menu`/`upgrades_menu`/`help_menu`/`dead`) |
+| `opened_menu` | Currently open menu (`null`/`inventory`/`menu_main`/`menu_upgrades`/`menu_help`/`dead`) |
 
 - **Overlay menus** do not change `type`. Inventory (`inventory`) is a special case of an overlay.
 - **Death screen** is an overlay with `opened_menu: "dead"`, `type: "dead"`.
 - **Navigation**: `goto_menu:{menu}` buttons change `opened_menu`. `menu:{menu}:{action}` buttons perform actions within a menu.
-- **Closing**: `back_the_menu` sets `opened_menu: null` and calls `continue_run`.
+- **Closing**: `back_from_menu` sets `opened_menu = PARENT_MENU[source_key_menu]` (may be `null` to close overlay) and calls `continue_run`.
 
-**Backward compatibility**: `RogueInterface` will migrate existing states with `last_state_type` to `menu_context` on load. If `last_state_type` is present, it becomes `menu_context["type"]` and `opened_menu` is set to `null`. After migration, `last_state_type` is removed from the state.
+**Parent menu hierarchy**: Navigation “Назад” uses explicit `parent_menu` mapping (`data/bridge_spec.json`):
+  - `inventory_select` → `inventory`
+  - `menu_upgrades` → `menu_main`
+  - `menu_help` → `menu_main`
+  - `inventory`, `dead` → `null` (close overlay)
 
 ## Naming
 
@@ -112,9 +118,10 @@ For menu navigation, `menu_context` in `active_run_state` is used:
 - `text_name` — human-readable name from preset (e.g. `"яблоко"`, `"Дракон"`)
 - `source` / `destination` — container key name: `"inventory"` or `"room_loot"`
 - `log` — dict returned by engine/system describing what happened
-- `state` — full `active_run_state` dict
+- `state` — full `run_state_template` dict
 - `contract` — dict returned to UI: `{text, buttons, state_type}`
 - `menu_context` — dict with `type` (primary game state) and `opened_menu` (current overlay)
+- `parent_menu` — mapping of child menu to parent menu for back navigation (`data/bridge_spec.json`)
 
 ## JSON file structure
 
@@ -123,7 +130,7 @@ Contains log templates (copied with `.copy()` before mutation) and `run_state_te
 
 Key templates: `move_log_template`, `combat_log_template`, `combat_consequence_log_template`, `dead_log_template`, `inventory_log_template`, `continue_run_log_template`, `run_state_template`.
 
-### run_state_template (active_run_state shape)
+### run_state (run_state_template shape)
 ```json
 {
   "active": true,
@@ -165,12 +172,14 @@ Biom config: name pool, mood pool, loot pool, enemies_amount limits, loot_amount
 ### data/bridge_spec.json
 `contract`: shape of the return contract.
 `ui_labels`: action string → Russian label mapping for ui_builder.
+`parent_menu`: mapping of child menu to parent menu for back navigation (e.g., `"inventory_select" → "inventory"`).
+`command_schemas`: argument definitions for each command (does not include `continue_run`).
 
 ### Room shape (inside floor.rooms)
 ```json
 {
   "index": 0, "type": "room", "room_type": "combat",
-  "name": "пещера", "mood": "затхло",
+  "text_name": "пещера", "mood": "затхло",
   "cleared": false,
   "enemies": ["dragon", "lizard"],
   "loot": {"room_loot": ["apple"]},
@@ -189,11 +198,14 @@ Door values: `null` = no door, `int` = room index, `"NEW"` = exists but not gene
 - [x] ui_builder (buttons + state_type)
 - [x] log_handler (Russian text render)
 - [x] Terminal runner with full action parsing
-- [ ] Telegram bot (aiogram handlers, FSM, keyboards)
+- [x] Telegram bot (aiogram handlers, keyboards, message editing/fallback)
+- [x] Database UPSERT fixes (no NULL overwrites)
+- [x] Button standardization (dataclass Button across codebase)
+- [x] Parent‑menu navigation (`back_from_menu` uses `parent_menu` mapping)
+- [x] Death handling (state cleanup, start_again)
+- [x] Floor transition (down door handling)
 - [ ] LLM text generation with hash cache
 - [ ] use_item (food heal, weapon equip)
-- [ ] Floor transition (down door handling)
-- [ ] Death handling (state cleanup, start_again)
 
 ## AGENT DIRECTIVES & RESPONSE RULES
 
@@ -218,11 +230,28 @@ You are an elite, pragmatic Python architect. Your code is brutally minimal, str
 - **ONE SOLUTION:** Propose exactly ONE optimal approach. Do not provide alternatives unless explicitly asked by the user. If the answer is one line of code, your entire response must be one line of code.
 - **LANGUAGE:** Code, comments, variable names, and READMEs must be in **English**. All discussions, planning, reasoning summaries, and TODOs must be in **Russian**.
 
-### 4. Proposed Solution Structure
-When proposing a new feature or fixing a complex bug, use this ultra-short format:
-1. **What:**[Action]
-2. **Where:** [File / Class / Function]
-3. **I/O:**[Input -> Output / State Mutation]
-4. **Code:** [The Python snippet]
+### 4. Output Modes & Structure
+
+You operate in two strict modes depending on the user's prompt: **PLAN** (designing, proposing, analyzing) and **BUILD** (writing actual code, fixing bugs).
+
+#### MODE A: PLAN (Used for new features, complex bug analysis, or when asked to plan)
+Your goal is to prove the architectural fit before writing the full implementation. Follow this strict structure:
+
+1. **Для чего:** One sentence summarizing what will be done.
+2. **Где (Locations):** Exact files, classes, or engine layers to be touched.
+3. **Почему (Architectural Justification):** Explain *why* this approach is chosen. Prove that it respects the Layered Architecture (Engine vs. Systems vs. UI), doesn't duplicate JSON data, and integrates cleanly with the existing `run_state`.
+4. **Концепт (Concept Snippet):** A minimal, simplified Python snippet demonstrating the core mechanic, data shape, or function signature. DO NOT write the full implementation here.
+
+#### MODE B: BUILD (Used for executing code, fixing errors, or when asked to write)
+Your goal is to provide seamless, drop-in code modifications. Follow this strict structure:
+
+1. **Что изменено (Changes):** Bulleted list of modifications.
+2. **Где (Target):** `file_path -> ClassName -> function_name`.
+3. **Как работает (Mechanics):** One concise sentence explaining the logic of the change.
+4. **Код (Implementation):**
+   - For modifying existing code: Use markdown "```diff" blocks with `+` for additions and `-` for removals. Provide enough surrounding context lines so the change is easy to locate.
+        - Make it so the TUI environment could colorize it
+   - For entirely new functions/classes: Use standard "```python" blocks.
+   - **DO NOT** rewrite the entire file. Provide only the relevant blocks.
 
 **CRITICAL:** Do not leak your internal reasoning/thinking process into the final output. Give me only the raw, direct result.

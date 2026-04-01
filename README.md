@@ -99,7 +99,7 @@ When item is moved to the other place menu remains the same letting select anoth
 - [x] Set up core codebase
 - [x] Enable terminal debugging
 - [x] Create  an asynchronous database
-- [ ] Develop an asynchronous bot
+- [x] Develop an asynchronous bot
 - [ ] Develop an user interface in bot
 - [ ] Integrate LLM
 - [ ] Add new features
