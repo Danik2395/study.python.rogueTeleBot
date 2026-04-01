@@ -4,6 +4,7 @@
 
 | Command | arg_0 | arg_1 |
 |---|---|---|
+| cmd_start | — | — |
 | init_run | — | — |
 | continue_run | — | — |
 | move | forward, backward, left, right, down, to_fork | — |
