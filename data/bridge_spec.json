@@ -1,9 +1,4 @@
 {
-    "contract": {
-	"text": null,
-	"buttons": [],
-	"state_type": null
-    },
     "command_schemas": {
 	"init_run": {"args": []},
 	"continue_run": {"args": []},

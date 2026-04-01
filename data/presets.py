@@ -1,4 +1,5 @@
 import json
+from dataclasses import dataclass, field
 
 with open("data/creatures.json", "r", encoding="utf-8") as f:
     CREATURES = json.load(f)
@@ -20,5 +21,14 @@ with open("data/log_templates.json", "r", encoding="utf-8") as f:
 
 with open("data/bridge_spec.json", "r", encoding="utf-8") as f:
     BRIDGE_SPEC = json.load(f)
-    BRIDGE_CONTRACT = BRIDGE_SPEC["contract"]
     UI_LABELS = BRIDGE_SPEC["ui_labels"]
+@dataclass
+class Button:
+    label: str = ""
+    action: str = ""
+
+@dataclass
+class Contract():
+    text: str = ""
+    buttons: list[Button] = field(default_factory=list[Button])
+    state_type: str = ""

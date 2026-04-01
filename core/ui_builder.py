@@ -1,4 +1,4 @@
-from data.presets import UI_LABELS, ENEMIES, ITEMS
+from data.presets import UI_LABELS, ENEMIES, ITEMS, Button
 from core.state_wrapper import StateWrapper
 
 
@@ -32,7 +32,7 @@ def get_state_type(log: dict, state: dict) -> str:
 
     return state["menu_context"]["type"]
 
-def get_buttons(log: dict, state: dict, state_type: str) -> list:
+def get_game_buttons(log: dict, state: dict, state_type: str) -> list[Button]:
     menu_context = state["menu_context"]
     opened_menu = menu_context["opened_menu"]
 
@@ -46,7 +46,7 @@ def get_buttons(log: dict, state: dict, state_type: str) -> list:
                     return _inventory_select_buttons(state)
             # Fallback for inventory
             return _inventory_buttons(state)
-        return _menu_buttons(state, opened_menu)
+        return menu_buttons(state, opened_menu)
 
     match state_type:
         case "dead":
@@ -58,7 +58,7 @@ def get_buttons(log: dict, state: dict, state_type: str) -> list:
         case _:
             return _explore_buttons(state)
 
-def _explore_buttons(state: dict) -> list:
+def _explore_buttons(state: dict) -> list[Button]:
     buttons = []
 
     floor = state["floor"]
@@ -67,30 +67,30 @@ def _explore_buttons(state: dict) -> list:
     doors = room.get("doors", {})
 
     if doors.get("forward") is not None:
-        buttons.append({"label": UI_LABELS["move:forward"], "action": "move:forward"})
+        buttons.append(Button(label=UI_LABELS["move:forward"], action="move:forward"))
 
     if doors.get("backward") is not None:
-        buttons.append({"label": UI_LABELS["move:backward"], "action": "move:backward"})
+        buttons.append(Button(label=UI_LABELS["move:backward"], action="move:backward"))
 
     if doors.get("left") is not None:
-        buttons.append({"label": UI_LABELS["move:left"], "action": "move:left"})
+        buttons.append(Button(label=UI_LABELS["move:left"], action="move:left"))
 
     if doors.get("right") is not None:
-        buttons.append({"label": UI_LABELS["move:right"], "action": "move:right"})
+        buttons.append(Button(label=UI_LABELS["move:right"], action="move:right"))
 
     if doors.get("down"):
-        buttons.append({"label": UI_LABELS["move:down"], "action": "move:down"})
+        buttons.append(Button(label=UI_LABELS["move:down"], action="move:down"))
 
     if floor.get("fork_stack"):
-        buttons.append({"label": UI_LABELS["move:to_fork"], "action": "move:to_fork"})
+        buttons.append(Button(label=UI_LABELS["move:to_fork"], action="move:to_fork"))
 
-    buttons.append({"label": UI_LABELS["inventory_open:inventory"], "action": "inventory_open:inventory"})
-    buttons.append({"label": UI_LABELS["inventory_open:room_loot"], "action": "inventory_open:room_loot"})
+    buttons.append(Button(label=UI_LABELS["inventory_open:inventory"], action="inventory_open:inventory"))
+    buttons.append(Button(label=UI_LABELS["inventory_open:room_loot"], action="inventory_open:room_loot"))
 
     return buttons
 
 
-def _combat_buttons(state: dict) -> list:
+def _combat_buttons(state: dict) -> list[Button]:
     buttons = []
 
     combat_state = state.get("combat_state", {})
@@ -103,13 +103,13 @@ def _combat_buttons(state: dict) -> list:
             label = f"{UI_LABELS['attack']} {enemy_text_name} ({enemy_hp} HP)"
             buttons.append(Button(label=label, action=f"attack:{key_name}"))
 
-    buttons.append({"label": UI_LABELS["inventory_open:inventory"], "action": "inventory_open:inventory"})
+    buttons.append(Button(label=UI_LABELS["inventory_open:inventory"], action="inventory_open:inventory"))
     # buttons.append({"label": UI_LABELS["defence"], "action": "defence"})
 
     return buttons
 
 
-def _inventory_buttons(state: dict) -> list:
+def _inventory_buttons(state: dict) -> list[Button]:
     state_wrapped = StateWrapper(state)
     buttons = []
 
@@ -126,17 +126,17 @@ def _inventory_buttons(state: dict) -> list:
         text_name = ITEMS[key_name]["text_name"]
         buttons.append(Button(label=text_name, action=f"inventory_select:{key_name}:inventory"))
 
-    buttons.append({"label": UI_LABELS["buttons_splitter"], "action": "noop"})
+    buttons.append(Button(label=UI_LABELS["buttons_splitter"], action="noop"))
 
     for key_name in loot_source:
         text_name = ITEMS[key_name]["text_name"]
         buttons.append(Button(label=text_name, action=f"inventory_select:{key_name}:{loot_source_key_name}"))
 
-    buttons.append({"label": UI_LABELS["back_the_menu"], "action": "back_the_menu"})
+    buttons.append(Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:inventory"))
 
     return buttons
 
-def _inventory_select_buttons(state: dict) -> list:
+def _inventory_select_buttons(state: dict) -> list[Button]:
     buttons = []
 
     inventory_state = state["inventory_state"]
@@ -147,52 +147,44 @@ def _inventory_select_buttons(state: dict) -> list:
     text_name = ITEMS[selected_item_key_name]["text_name"]
 
     destination = loot_source_key_name if selected_item_source == "inventory" else "inventory"
-    buttons.append({"label": f"[ {text_name} ]",
-                    "action": "noop"})
+    buttons.append(Button(label=f"[ {text_name} ]", action="noop"))
 
-    buttons.append({"label": f"{UI_LABELS["move_item_to"]} {UI_LABELS[destination]}",
-                    "action": f"move_item_to:{destination}"})
+    buttons.append(Button(label=f"{UI_LABELS['move_item_to']} {UI_LABELS[destination]}", action=f"move_item_to:{destination}"))
 
-    buttons.append({"label": f"{UI_LABELS["use_item"]}",
-                    "action": "use_item"})
+    buttons.append(Button(label=f"{UI_LABELS['use_item']}", action="use_item"))
 
-    buttons.append({"label": UI_LABELS["back_the_menu"],
-                    "action": "back_the_menu"})
+    buttons.append(Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:inventory_select"))
 
     return buttons
 
-def _dead_buttons() -> list:
+def _dead_buttons() -> list[Button]:
     return [
-        {"label": UI_LABELS["start_again"], "action": "start_again"},
-        {"label": UI_LABELS["goto_menu:main_menu"], "action": "goto_menu:main_menu"}
+        Button(label=UI_LABELS["start_again"], action="start_again"),
+        Button(label=UI_LABELS["goto_menu:menu_main"], action="goto_menu:menu_main")
     ]
 
-def _menu_buttons(state: dict, menu: str) -> list:
+def menu_buttons(state: dict, key_menu: str) -> list[Button]:
     buttons = []
 
-    if menu == "main_menu":
+    if key_menu == "menu_main":
+            buttons.append(Button(label=UI_LABELS["menu:menu_main:new_game"], action="menu:menu_main:new_game"))
+            if state.get("active"):
+                buttons.append(Button(label=UI_LABELS["menu:menu_main:continue"], action="menu:menu_main:continue"))
+            buttons.append(Button(label=UI_LABELS["goto_menu:menu_upgrades"], action="goto_menu:menu_upgrades"))
+            # Button(label=UI_LABELS["menu:menu_main:help"], action="goto_menu:menu_help")
+    elif key_menu == "menu_upgrades":
         buttons = [
-            {"label": UI_LABELS["menu:main_menu:new_game"], "action": "menu:main_menu:new_game"},
-            {"label": UI_LABELS["menu:main_menu:continue"], "action": "menu:main_menu:continue"},
-            {"label": UI_LABELS["menu:main_menu:upgrades"], "action": "goto_menu:upgrades_menu"},
-            {"label": UI_LABELS["menu:main_menu:help"], "action": "goto_menu:help_menu"}
+            Button(label=UI_LABELS["menu:menu_upgrades:heal"], action="menu:menu_upgrades:heal"),
+            Button(label=UI_LABELS["menu:menu_upgrades:damage"], action="menu:menu_upgrades:damage"),
+            Button(label=UI_LABELS["menu:menu_upgrades:defence"], action="menu:menu_upgrades:defence"),
+            Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:menu_upgrades")
+            # Button(label=UI_LABELS["menu:menu_upgrades:back"], action="goto_menu:menu_main")
         ]
-    elif menu == "upgrades_menu":
+    elif key_menu == "menu_help":
         buttons = [
-            {"label": UI_LABELS["menu:upgrades_menu:heal"], "action": "menu:upgrades_menu:heal"},
-            {"label": UI_LABELS["menu:upgrades_menu:damage"], "action": "menu:upgrades_menu:damage"},
-            {"label": UI_LABELS["menu:upgrades_menu:defence"], "action": "menu:upgrades_menu:defence"},
-            {"label": UI_LABELS["menu:upgrades_menu:back"], "action": "goto_menu:main_menu"}
+            Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:menu_help")
         ]
-    elif menu == "help_menu":
-        buttons = [
-            {"label": UI_LABELS["menu:help_menu:back"], "action": "goto_menu:main_menu"}
-        ]
-    elif menu == "dead":
+    elif key_menu == "dead":
         return _dead_buttons()
-
-    # Add back button for all menus except main and dead
-    if menu not in ("main_menu", "dead"):
-        buttons.append({"label": UI_LABELS["back_the_menu"], "action": "back_the_menu"})
 
     return buttons
