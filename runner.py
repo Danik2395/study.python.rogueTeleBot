@@ -26,7 +26,7 @@ async def main() -> None:
         if action in ("q", "quit"):
             break
         if action in ("show run", "sh run", "show rn", "sh rn"):
-            pprint(await interface.database.get_state(user_id))
+            pprint(await interface.database.get_user_run_state(user_id))
             continue
 
         action_log = await process_action(user_id, action, interface)

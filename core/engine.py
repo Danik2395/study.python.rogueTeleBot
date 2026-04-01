@@ -19,11 +19,22 @@ from typing import Any
 player_dead_exception = Player.Dead
 
 
-def init_run() -> tuple[dict[str, Any], dict[str, Any]]:
+def init_data() -> dict[str, Any]:
+    """
+    return user_data inited template
+    """
+
+    new_user_data = copy.deepcopy(LOG["user_data_template"])
+
+    return new_user_data
+
+
+def init_run(user_data: dict) -> tuple[dict[str, Any], dict[str, Any]]:
     """
     return tuple[gen_entrance_log, new_run_state]
     """
 
+    # Run state logic
     new_run_state = copy.deepcopy(LOG["run_state_template"])
 
     floor = new_run_state["floor"]
@@ -35,6 +46,20 @@ def init_run() -> tuple[dict[str, Any], dict[str, Any]]:
     floor_system = FloorSystem(floor)
 
     gen_entrance_log = floor_system.gen_entrance()
+
+    # User data logic
+    progress = user_data["progress"]
+    progress["total_runs"] += 1
+
+    global_upgrades = user_data["global_upgrades"]
+    player = new_run_state["player"]
+
+    stats = ["health", "damage", "defence", "speed"]
+    for s in stats:
+        player[f"base_{s}"] += global_upgrades[f"plus_{s}"]
+
+    player["current_health"] = player["base_health"]
+
 
     return gen_entrance_log, new_run_state
 
