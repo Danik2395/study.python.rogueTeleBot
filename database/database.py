@@ -1,10 +1,10 @@
 import aiosqlite
 import json
-from os import getenv
+from os import environ
 from dotenv import load_dotenv
 
 load_dotenv()
-DATABASE = getenv("DATABASE_PATH")
+DATABASE = environ["DATABASE_PATH"]
 
 class Database:
     def __init__(self, db, cur):

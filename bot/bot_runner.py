@@ -1,14 +1,15 @@
 import asyncio
 import logging
 import sys
-from os import getenv
+from os import environ
+from aiogram.methods import set_my_commands
 from dotenv import load_dotenv
 
 from aiogram import Bot, Dispatcher, Router, html
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
-# from aiogram.types import Message
+from aiogram.types import BotCommand
 # from aiogram.fsm.context import FSMContext
 # from aiogram.fsm.state import State, StatesGroup
 
@@ -16,11 +17,19 @@ from bot.user_handler import UserController
 from core.rogue_interface import RogueInterface
 
 load_dotenv()
-TOKEN = getenv("BOT_TOKEN") or ""
+TOKEN = environ["BOT_TOKEN"]
 
+
+async def set_commands(bot: Bot) -> None:
+    commands = [
+        BotCommand(command="menu", description="Главное меню"),
+        BotCommand(command="help", description="Помощь")
+    ]
+    await bot.set_my_commands(commands)
 
 async def main() -> None:
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    await set_commands(bot)
 
     dp = Dispatcher()
 

@@ -33,6 +33,7 @@ class UserController:
 
         # Need to be highier then ignore command
         self.router.message(Command("start"))(self.cmd_start)
+        self.router.message(Command("menu"))(self.cmd_menu)
         self.router.message(Command("help"))(self.cmd_help)
         self.router.message(~Command("start"))(self.cmd_ignore)
         self.router.callback_query()(self.callback_handler)
@@ -91,18 +92,28 @@ class UserController:
         cmd_start_text = FTEXT["cmd_start"]
 
         # await message.answer(cmd_start_text, reply_markup=keyboard)
-        await self._delete_object_message(message=message,)
+        await self._delete_object_message(message=message, delay=5)
         await self._update_bot_message(user_id, cmd_start_text, keyboard)
 
+    async def cmd_menu(self, message: types.Message) -> None:
+        if message.from_user is None: return
+        user_id = message.from_user.id
+        contract = await self.interface.goto_menu_main(user_id)
+
+        keyboard = get_keyboard(contract.buttons)
+        menu_text = contract.text
+
+        await self._delete_object_message(message=message)
+        await self._update_bot_message(user_id, menu_text, keyboard)
+
     async def cmd_help(self, message: types.Message) -> None:
-        # await message.answer(FTEXT["help_message"])
 
         if message.from_user is None: return
         user_id = message.from_user.id
         contract = await self.interface.goto_menu_help(user_id)
 
         keyboard = get_keyboard(contract.buttons)
-        help_text = FTEXT["help_message"]
+        help_text = FTEXT["help_message"] # TODO: убрать, когда сделаешь log_system
 
         await self._delete_object_message(message=message)
         await self._update_bot_message(user_id, help_text, keyboard)

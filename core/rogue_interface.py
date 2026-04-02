@@ -145,6 +145,10 @@ class RogueInterface:
 
         return await self.goto_menu(user_id, "menu_help")
 
+    async def goto_menu_main(self, user_id: int) -> Contract:
+        """Open a main menu overlay"""
+
+        return await self.goto_menu(user_id, "menu_main")
 
     async def menu(self, user_id: int, key_menu: str, action: str) -> Contract:
         """Perform action within a menu"""

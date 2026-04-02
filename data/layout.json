@@ -18,9 +18,6 @@
 		"напряжённо",
 		"затхло"
 	    ],
-	    "loot": [
-		"apple"
-	    ],
 	    "loot_amount": [
 		[0, 2],
 		[1, 2],
@@ -55,9 +52,8 @@
 	    "valid_directions": ["forward", "backward", "left", "right", "down"]
 	},
 	"not_cave": {
-	    "text_name": [],
-	    "mood": [],
-	    "loot": [],
+	    "text_name": ["dkdk"],
+	    "mood": ["djdj"],
 	    "loot_amount": [],
 	    "enemies_amount": [],
 	    "floor_scale": [],
@@ -83,7 +79,6 @@
 	"void": {
 	    "text_name": [],
 	    "mood": [],
-	    "loot": [],
 	    "loot_amount": [],
 	    "enemies_amount": [],
 	    "floor_scale": [],
