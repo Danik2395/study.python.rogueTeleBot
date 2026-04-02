@@ -1,3 +1,5 @@
+import copy
+
 import core.engine as engine
 import core.ui_builder as ui_builder
 from database.database import Database
@@ -28,7 +30,8 @@ class RogueInterface:
             state = await self.database.get_user_run_state(user_id)
         else:
             user_data = engine.init_data()
-            state = {}
+            state = copy.deepcopy(LOG["run_state_template"])
+            state["menu_context"]["opened_menu"] = "menu_main"
             await self.database.save_user_global_data(user_id, user_data)
             await self.database.save_user_run_state(user_id, state)
 
@@ -36,6 +39,16 @@ class RogueInterface:
 
         return Contract(buttons=buttons)
 
+    async def get_ui_message_id(self, user_id: int) -> int:
+        ui_message_id =  await self.database.get_ui_message_id(user_id)
+
+        if ui_message_id == 0:
+            raise ValueError("no message in database")
+
+        return ui_message_id
+
+    async def save_ui_message_id(self, user_id: int, ui_message_id: int) -> None:
+       await self.database.save_ui_message_id(user_id, ui_message_id)
 
     async def init_run(self, user_id: int) -> Contract:
         user_data = await self.database.get_user_global_data(user_id)
@@ -45,33 +58,34 @@ class RogueInterface:
 
         return await self._finalize_game(user_id, new_run_state, init_run_log)
 
-    async def continue_run(self, user_id: int) -> Contract:
-        active_run_state = await self.database.get_user_run_state(user_id)
+    async def continue_run(self, user_id: int, run_state: dict | None = None) -> Contract:
+        if run_state is None:
+            run_state = await self.database.get_user_run_state(user_id)
 
         continue_log = LOG["continue_run_log_template"].copy()
 
-        return await self._finalize_game(user_id, active_run_state, continue_log)
+        return await self._finalize_game(user_id, run_state, continue_log)
 
     async def move(self, user_id: int, direction: str) -> Contract:
-        active_run_state = await self.database.get_user_run_state(user_id)
+        run_state = await self.database.get_user_run_state(user_id)
 
-        move_log = engine.move(direction, active_run_state)
+        move_log = engine.move(direction, run_state)
 
-        return await self._finalize_game(user_id, active_run_state, move_log)
+        return await self._finalize_game(user_id, run_state, move_log)
 
     async def move_to_fork(self, user_id: int) -> Contract:
-        active_run_state = await self.database.get_user_run_state(user_id)
+        run_state = await self.database.get_user_run_state(user_id)
 
-        move_log = engine.move_to_fork(active_run_state)
+        move_log = engine.move_to_fork(run_state)
 
-        return await self._finalize_game(user_id, active_run_state, move_log)
+        return await self._finalize_game(user_id, run_state, move_log)
 
     async def attack(self, user_id: int, target_enemy_name: str) -> Contract:
-        active_run_state = await self.database.get_user_run_state(user_id)
+        run_state = await self.database.get_user_run_state(user_id)
 
-        combat_log = engine.attack(target_enemy_name, active_run_state)
+        combat_log = engine.attack(target_enemy_name, run_state)
 
-        return await self._finalize_game(user_id, active_run_state, combat_log)
+        return await self._finalize_game(user_id, run_state, combat_log)
 
     async def inventory_open(self, user_id: int, loot_source: str = "inventory") -> Contract:
         state = await self.database.get_user_run_state(user_id)
@@ -106,10 +120,21 @@ class RogueInterface:
 
         state = await self.database.get_user_run_state(user_id)
         state["menu_context"]["opened_menu"] = key_menu
+        # TODO: крч, что нужно сделать. чётко по плану иди:
+        # 3. подумать над
+           # - Глобальные меню (menu_main, menu_upgrades, menu_help) работают без активного забега.
+           # - Игровые меню (inventory, dead) требуют state["active"] == True.
+           # - В goto_menu добавить проверку: если key_menu глобальный, разрешать доступ даже при пустом state.
 
         await self.database.save_user_run_state(user_id, state)
 
         return await self.continue_run(user_id)
+
+    async def goto_menu_help(self, user_id: int) -> Contract:
+        """Open a help menu overlay"""
+
+        return await self.goto_menu(user_id, "menu_help")
+
 
     async def menu(self, user_id: int, key_menu: str, action: str) -> Contract:
         """Perform action within a menu"""
@@ -122,10 +147,9 @@ class RogueInterface:
                     return await self.init_run(user_id)
                 if action == "continue":
                     state["menu_context"]["opened_menu"] = None
-                    return await self.continue_run(user_id)
+                    return await self.continue_run(user_id, state)
 
         state["menu_context"]["opened_menu"] = key_menu
-
         return await self.continue_run(user_id)
 
     async def back_from_menu(self, user_id: int, source_key_menu: str) -> Contract:
@@ -164,13 +188,22 @@ class RogueInterface:
         contract.state_type = state_type
         contract.buttons = ui_builder.get_game_buttons(log, state, state_type)
 
-        state["menu_context"]["type"] = state_type
+        menu_context = state["menu_context"]
+        menu_context["type"] = state_type
+        # menu_context["opened_menu"] = state_type
 
         await self.database.save_user_run_state(user_id, state)
 
         # await self.database.close()
 
         return contract
+
+class NoAction(Exception):
+    """Exception to do nothing on empty button"""
+
+    def __init__(self) -> None:
+        super().__init__("no action")
+
 
 async def process_action(user_id: int, action: str | None, rogue_interface: "RogueInterface") -> Contract:
     if action is None:
@@ -218,5 +251,8 @@ async def process_action(user_id: int, action: str | None, rogue_interface: "Rog
 
         case "start_again":
             return await rogue_interface.start_again(user_id)
+
+        case "noop":
+            raise NoAction
 
     return Contract(text=f"unknown: {action}")

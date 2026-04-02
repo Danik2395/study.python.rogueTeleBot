@@ -74,7 +74,7 @@ class Player(Dummy):
 
         def __init__(self, log: dict):
             super().__init__("player_dead")
-            self.log = log
+            self.dead_log = log
 
 
     def __init__(self, health: int, defence: int, damage: int, speed: int, equipped_items: dict) -> None:

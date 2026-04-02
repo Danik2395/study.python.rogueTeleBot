@@ -12,7 +12,7 @@ from aiogram.filters import CommandStart
 # from aiogram.fsm.context import FSMContext
 # from aiogram.fsm.state import State, StatesGroup
 
-from bot.user_handler import urt
+from bot.user_handler import UserController
 from core.rogue_interface import RogueInterface
 
 load_dotenv()
@@ -23,12 +23,14 @@ async def main() -> None:
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
     dp = Dispatcher()
-    dp.include_router(urt)
 
     rogue_interface = await RogueInterface.create()
+    user_controller = UserController(bot, rogue_interface)
 
-    # The RogueInterface instance would be available in the rogue_interface kwarg
-    await dp.start_polling(bot, rogue_interface=rogue_interface)
+    user_router = user_controller.router
+    dp.include_router(user_router)
+
+    await dp.start_polling(bot)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)

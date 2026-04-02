@@ -37,7 +37,7 @@
 	"move_destination": null
     },
     "run_state_template": {
-	"active": true,
+	"active": false,
 	"menu_context": {
 	    "type": null,
 	    "opened_menu": null

@@ -1,7 +1,7 @@
 {
     "command_schemas": {
+	"noop": {"args": []},
 	"init_run": {"args": []},
-	"continue_run": {"args": []},
 	"back_from_menu": {"args": ["source_key_menu"]},
 	"move": {"args": ["direction"]},
 	"attack": {"args": ["target_enemy_name"]},

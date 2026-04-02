@@ -35,7 +35,6 @@ def get_state_type(log: dict, state: dict) -> str:
 def get_game_buttons(log: dict, state: dict, state_type: str) -> list[Button]:
     menu_context = state["menu_context"]
     opened_menu = menu_context["opened_menu"]
-
     if opened_menu is not None:
         if opened_menu == "inventory":
             # Current inventory logic
@@ -182,7 +181,8 @@ def menu_buttons(state: dict, key_menu: str) -> list[Button]:
         ]
     elif key_menu == "menu_help":
         buttons = [
-            Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:menu_help")
+            # Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:menu_help")
+            Button(label=UI_LABELS["goto_menu:menu_main"], action="goto_menu:menu_main")
         ]
     elif key_menu == "dead":
         return _dead_buttons()

@@ -18,26 +18,49 @@ class Database:
 
         instance = cls(db, cur)
         await instance._create_users_table()
+        await instance._create_ui_message_table()
 
         return instance
 
+    async def close(self) -> None:
+        await self.db.close()
+
+    # === Getters ===
+
+    async def is_user_exists(self, user_id: int) -> bool:
+        await self.cur.execute(
+                "select 1 from Users_data where user_id = ?", # Only check wheather user exists
+                (user_id,)
+                )
+        row = await self.cur.fetchone()
+        return True if row else False
+
     async def get_user_run_state(self, user_id: int) -> dict:
         await self.cur.execute(
-            "SELECT user_active_run FROM users_data WHERE user_id = ?", (user_id,)
+            "SELECT user_active_run FROM Users_data WHERE user_id = ?", (user_id,)
         )
         row = await self.cur.fetchone()
         return json.loads(row[0]) if row else {}
 
     async def get_user_global_data(self, user_id: int) -> dict:
         await self.cur.execute(
-            "SELECT user_global_data FROM users_data WHERE user_id = ?", (user_id,)
+            "SELECT user_global_data FROM Users_data WHERE user_id = ?", (user_id,)
         )
         row = await self.cur.fetchone()
         return json.loads(row[0]) if row else {}
 
+    async def get_ui_message_id(self, user_id: int) -> int:
+        await self.cur.execute(
+            "SELECT ui_message_id FROM UI_messages WHERE user_id = ?", (user_id,)
+        )
+        row = await self.cur.fetchone()
+        return row[0] if row else 0
+
+    # === Setters ===
+
     async def save_user_run_state(self, user_id: int, state: dict) -> None:
         await self.cur.execute("""
-            INSERT INTO users_data (user_id, user_active_run)
+            INSERT INTO Users_data (user_id, user_active_run)
             VALUES (?, ?)
             ON CONFLICT(user_id) DO UPDATE SET user_active_run = excluded.user_active_run
         """, (user_id, json.dumps(state)))
@@ -45,23 +68,25 @@ class Database:
 
     async def save_user_global_data(self, user_id: int, data: dict) -> None:
         await self.cur.execute("""
-            INSERT INTO users_data (user_id, user_global_data)
+            INSERT INTO Users_data (user_id, user_global_data)
             VALUES (?, ?)
             ON CONFLICT(user_id) DO UPDATE SET user_global_data = excluded.user_global_data
         """, (user_id, json.dumps(data)))
         await self.db.commit()
 
-    async def is_user_exists(self, user_id: int) -> bool:
-        await self.cur.execute(
-                "select 1 from users_data where user_id = ?", # Only check wheather user exists
-                (user_id,)
-                )
-        row = await self.cur.fetchone()
-        return True if row else False
+    async def save_ui_message_id(self, user_id: int, ui_message_id: int) -> None:
+        await self.cur.execute("""
+            INSERT INTO UI_messages (user_id, ui_message_id)
+            VALUES (?, ?)
+            ON CONFLICT(user_id) DO UPDATE SET ui_message_id = excluded.ui_message_id
+        """, (user_id, ui_message_id))
+        await self.db.commit()
+
+    # === Definitions ===
 
     async def _create_users_table(self) -> None:
         table = """
-        create table if not exists users_data (
+        create table if not exists Users_data (
                 user_id integer primary key,
                 user_active_run json,
                 user_global_data json
@@ -71,5 +96,13 @@ class Database:
         await self.cur.execute(table)
         await self.db.commit()
 
-    async def close(self) -> None:
-        await self.db.close()
+    async def _create_ui_message_table(self) -> None:
+        table = """
+        create table if not exists UI_messages (
+                user_id integer primary key,
+                ui_message_id int
+                );
+        """
+
+        await self.cur.execute(table)
+        await self.db.commit()
