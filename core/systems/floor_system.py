@@ -1,6 +1,6 @@
 import random
 from typing import Any
-from data.presets import LAYOUT, ITEMS, ENEMIES, RULES
+from data.presets import LAYOUT, ITEMS, ENEMIES, RULES, LOG
 
 class FloorSystem:
     """Class for floor generation"""
@@ -216,8 +216,12 @@ class FloorSystem:
         """Generate entrance room"""
 
         # Setting prompt for the entrance
-        entr_prompt = LAYOUT["entrance_prompt"]
-        entrance_mood = random.choice(entr_prompt[str(self.floor_index)])
+        floor_entrance_log = LOG["floor_entrance_log_template"]
+
+        entrance_prompt = LAYOUT["entrance_prompt"]
+        entrance_chosen_prompt = random.choice(entrance_prompt[str(self.floor_index)])
+        floor_entrance_log["prompt"] = entrance_chosen_prompt
+
 
         # TODO: нужно сделать проверку, чтобы логхэндлер отличал начало на этаже от входа повтороного в начальную комнату
         entrance: dict[str, Any] = {
@@ -225,7 +229,8 @@ class FloorSystem:
                 "type": "entrance",
                 "room_type": "entrance",
                 "text_name": None,
-                "mood": entrance_mood,
+                # "mood": entrance_mood,
+                "mood": None,
                 "cleared": True,
                 "enemies": None,
                 "loot": {
@@ -238,4 +243,5 @@ class FloorSystem:
 
         self.fork_stack.append(0)
 
-        return entrance
+        # return entrance
+        return floor_entrance_log

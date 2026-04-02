@@ -80,6 +80,16 @@ class RogueInterface:
 
         return await self._finalize_game(user_id, run_state, move_log)
 
+    async def move_down(self, user_id: int) -> Contract:
+        run_state = await self.database.get_user_run_state(user_id)
+        user_data = await self.database.get_user_global_data(user_id)
+
+        log = engine.move_down(run_state, user_data)
+
+        await self.database.save_user_global_data(user_id, user_data)
+
+        return await self._finalize_game(user_id, run_state, log)
+
     async def attack(self, user_id: int, target_enemy_name: str) -> Contract:
         run_state = await self.database.get_user_run_state(user_id)
 
@@ -221,6 +231,8 @@ async def process_action(user_id: int, action: str | None, rogue_interface: "Rog
             direction = parsed.params["direction"]
             if direction == "to_fork":
                 return await rogue_interface.move_to_fork(user_id)
+            if direction == "down":
+                return await rogue_interface.move_down(user_id)
             return await rogue_interface.move(user_id, direction)
 
         case "attack":

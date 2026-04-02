@@ -41,12 +41,13 @@ def init_run(user_data: dict) -> tuple[dict[str, Any], dict[str, Any]]:
     floor = new_run_state["floor"]
 
     # Because door generation method needs floor index
-    floor["index"] = 1
+    floor_index = floor["index"] = 1
     floor["current_room_index"] = 0
 
     floor_system = FloorSystem(floor)
 
     gen_entrance_log = floor_system.gen_entrance()
+    gen_entrance_log["current_floor_index"] = floor_index
 
     # User data logic
     progress = user_data["progress"]
@@ -115,6 +116,47 @@ def move_to_fork(run_state: dict) -> dict[str, Any]:
     move_log = move_system.move_to_fork()
 
     return move_log
+
+
+def move_down(run_state: dict, user_data: dict) -> dict[str, Any]:
+    """
+    return floor_entrance_log
+    """
+
+    floor = run_state["floor"]
+    current_room_index = floor["current_room_index"]
+    current_room = floor["rooms"][current_room_index]
+
+    if current_room["doors"].get("down") is not True:
+        move_log = LOG["move_log_template"].copy()
+        move_log["direction"] = "down"
+        return move_log
+
+    floor["index"] += 1
+    floor["current_room_index"] = 0
+    floor["fork_stack"] = []
+    floor["down_in_room"] = -1
+    floor["rooms"] = []
+
+    floor_system = FloorSystem(floor)
+    floor_entrance_log = floor_system.gen_entrance()
+    floor_entrance_log["current_floor_index"] = floor["index"]
+
+    progress = user_data["progress"]
+    if floor["index"] > progress["max_floor_reached"]:
+        progress["max_floor_reached"] = floor["index"]
+
+    combat_state = run_state["combat_state"]
+    combat_state["in_combat"] = False
+    combat_state["enemies"] = None
+    combat_state["turns"] = None
+
+    inventory_state = run_state["inventory_state"]
+    inventory_state["selected_item_key_name"] = None
+    inventory_state["selected_item_source"] = None
+    inventory_state["loot_source"] = None
+
+    return floor_entrance_log
 
 
 def attack(target_enemy_name: str, run_state: dict) -> dict:

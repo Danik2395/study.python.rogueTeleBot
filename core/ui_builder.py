@@ -54,6 +54,8 @@ def get_game_buttons(log: dict, state: dict, state_type: str) -> list[Button]:
             return _combat_buttons(state)
         case "explore":
             return _explore_buttons(state)
+        case "entrance":
+            return _explore_buttons(state)
         case _:
             return _explore_buttons(state)
 

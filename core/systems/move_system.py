@@ -24,6 +24,7 @@ class MoveSystem:
         """
 
         move_log = LOG["move_log_template"].copy()
+        move_log["direction"] = direction
 
         new_current_room_index = self.current_room_doors.get(direction)
 

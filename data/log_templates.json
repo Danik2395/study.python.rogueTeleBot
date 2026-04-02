@@ -24,10 +24,16 @@
     },
     "move_log_template": {
 	"type": "move",
+	"direction": null,
 	"room_index": null,
 	"is_fork": false,
 	"is_new_room": false,
 	"event": null
+    },
+    "floor_entrance_log_template": {
+	"type": "entrance",
+	"current_floor_index": null,
+	"prompt": null
     },
     "inventory_log_template": {
 	"type": "inventory",
