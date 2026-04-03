@@ -21,6 +21,9 @@ class LogHandler:
         if log_type == "continue":
             return "Вы находитесь всё там же"
 
+        if log_type == "inventory":
+            return self._render_inventory(log)
+
         return "Событие произошло, но текст для него пока не готов."
 
     def _render_move(self, log: dict[str, Any]) -> str:
@@ -92,3 +95,22 @@ class LogHandler:
             text += " Бой окончен."
 
         return text
+
+    def _render_inventory(self, log: dict[str, Any]) -> str:
+        action = log.get("action")
+        item_key_name = log.get("item_key_name", "предмет")
+        source = log.get("source")
+        move_destination = log.get("move_destination")
+        slot = log.get("slot")
+
+        if action == "open":
+            return f"Ты открываешь {source}."
+        if action == "select":
+            return f"Ты выбираешь {item_key_name}."
+        if action == "move":
+            return f"Ты перемещаешь {item_key_name} из {source} в {move_destination}."
+        if action == "use":
+            return f"Ты используешь {item_key_name}."
+        if action == "equip":
+            return f"Ты экипируешь {item_key_name} в слот {slot}."
+        return f"Действие с предметом {item_key_name}."

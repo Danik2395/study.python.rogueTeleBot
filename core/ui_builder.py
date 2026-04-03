@@ -122,16 +122,37 @@ def _inventory_buttons(state: dict) -> list[Button]:
     inventory = state_wrapped.get_container("inventory")
     loot_source = state_wrapped.get_container(loot_source_key_name)
 
+    # === Equipped items ===
 
-    for key_name in inventory:
-        text_name = ITEMS[key_name]["text_name"]
-        buttons.append(Button(label=text_name, action=f"inventory_select:{key_name}:inventory"))
+    buttons.append(Button(label=UI_LABELS["inventory_splitter:equipped"], action="noop"))
 
-    buttons.append(Button(label=UI_LABELS["buttons_splitter"], action="noop"))
+    equipped_items = state["player"]["equipped_items"]
+    emojis = UI_LABELS["emojis"]
+    for slot, key_name in equipped_items.items():
+        if key_name:
+            text_name = ITEMS[key_name]["text_name"]
+            buttons.append(Button(label=f"{emojis[slot]} [ {text_name} ]", action=f"inventory_select:{key_name}:equipped_items"))
+        else:
+            buttons.append(Button(label=UI_LABELS[f"slot:{slot}:empty"], action="noop"))
 
-    for key_name in loot_source:
-        text_name = ITEMS[key_name]["text_name"]
-        buttons.append(Button(label=text_name, action=f"inventory_select:{key_name}:{loot_source_key_name}"))
+    # === Inventory items ===
+
+    if inventory:
+        buttons.append(Button(label=UI_LABELS["inventory_splitter:inventory"], action="noop"))
+
+        for key_name in inventory:
+            text_name = ITEMS[key_name]["text_name"]
+            buttons.append(Button(label=text_name, action=f"inventory_select:{key_name}:inventory"))
+
+
+    # === Loot source items ===
+
+    if loot_source:
+        buttons.append(Button(label=UI_LABELS["inventory_splitter:loot_source"], action="noop"))
+
+        for key_name in loot_source:
+            text_name = ITEMS[key_name]["text_name"]
+            buttons.append(Button(label=text_name, action=f"inventory_select:{key_name}:{loot_source_key_name}"))
 
     buttons.append(Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:inventory"))
 
@@ -152,7 +173,16 @@ def _inventory_select_buttons(state: dict) -> list[Button]:
 
     buttons.append(Button(label=f"{UI_LABELS['move_item_to']} {UI_LABELS[destination]}", action=f"move_item_to:{destination}"))
 
-    buttons.append(Button(label=f"{UI_LABELS['use_item']}", action="use_item"))
+    item_type = ITEMS[selected_item_key_name]["type"]
+
+    if selected_item_source == "equipped_items":
+        action_btn = Button(label=UI_LABELS["unequip"], action=f"move_item_to:inventory")
+    elif item_type in ("weapon", "armour"):
+        action_btn = Button(label=UI_LABELS["equip"], action=f"equip:{selected_item_key_name}:{selected_item_source}")
+    else:
+        action_btn = Button(label=UI_LABELS["use_item"], action="use_item")
+
+    buttons.append(action_btn)
 
     buttons.append(Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:inventory_select"))
 

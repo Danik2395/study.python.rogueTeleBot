@@ -40,7 +40,8 @@
 	"action": null,
 	"item_key_name": null,
 	"source": null,
-	"move_destination": null
+	"move_destination": null,
+	"slot": null
     },
     "run_state_template": {
 	"active": false,

@@ -10,7 +10,9 @@
 	"start_again": {"args": []},
 	"inventory_open": {"args": ["loot_source"]},
 	"inventory_select": {"args": ["item_key_name", "source"]},
-	"move_item_to": {"args": ["destination"]}
+	"move_item_to": {"args": ["destination"]},
+	"use_item": {"args": []},
+	"equip": {"args": ["item_key_name", "source"]}
     },
     "parent_menu": {
 	"inventory": null,
@@ -49,6 +51,13 @@
 
 	"inventory": "инвентарь",
 	"room_loot": "комнату",
+	"equip": "Экипировать",
+	"unequip": "Снять",
+	"slot:weapon:empty": "🛡 [    ]",
+	"slot:armour:empty": "🗡 [    ]",
+	"inventory_splitter:equipped": "--- Экипировка ---",
+	"inventory_splitter:inventory": "--- Инвентарь ---",
+	"inventory_splitter:loot_source": "--- Комната ---",
 
 	"goto_menu:menu_main": "Главное меню",
 	"goto_menu:menu_upgrades": "Улучшения",
@@ -58,7 +67,11 @@
 	"menu:menu_upgrades:damage": "Увеличить урон",
 	"menu:menu_upgrades:defence": "Увеличить защиту",
 	"menu:menu_upgrades:back": "Назад",
+	"menu:menu_help:back": "Назад",
 
-	"menu:menu_help:back": "Назад"
+	"emojis": {
+	    "armour": "🛡",
+	    "weapon": "🗡"
+	}
     }
 }

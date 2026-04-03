@@ -69,6 +69,7 @@ Database (database/database.py) — aiosqlite, get/save JSON state per user_id
 | inventory_select | {item_key_name} | {source} |
 | move_item_to | {destination} | — |
 | use_item | — | — |
+| equip | {item_key_name} | {source} |
 | goto_menu | {key_menu} | — |
 | menu | {key_menu} | {action} |
 | start_again | — | — |
@@ -91,6 +92,13 @@ Computed from log in `ui_builder.get_state_type`, never stored (except `menu_con
 | explore | move log, combat_ended, continue |
 | combat | move with enemies, attack without combat_ended |
 | dead | death log |
+
+## Inventory system
+
+- `equipped_items` — dict‑container `{"weapon": key|null, "armour": key|null}`. Addressable as `source`/`destination` in `StateWrapper.get_container`. Slot determined automatically via `ITEMS[key_name]["type"]`.
+- `equip` action: moves item from `inventory`/`room_loot` → `equipped_items`, displacing current item in slot back to `inventory`.
+- `unequip`: implemented via `move_item_to:inventory` with `source=equipped_items`.
+- `use_item`: consumes food (restores health) or triggers equip for weapon/armour.
 
 ## Menu system
 
@@ -204,8 +212,8 @@ Door values: `null` = no door, `int` = room index, `"NEW"` = exists but not gene
 - [x] Parent‑menu navigation (`back_from_menu` uses `parent_menu` mapping)
 - [x] Death handling (state cleanup, start_again)
 - [x] Floor transition (down door handling)
+- [x] use_item (food heal, weapon equip) & equip system
 - [ ] LLM text generation with hash cache
-- [ ] use_item (food heal, weapon equip)
 
 ## AGENT DIRECTIVES & RESPONSE RULES
 

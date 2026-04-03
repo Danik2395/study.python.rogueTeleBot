@@ -118,20 +118,30 @@ class RogueInterface:
 
         return await self._finalize_game(user_id, state, log)
 
-    # async def inventory_use_item(self, user_id: int) -> dict:
-    #     state = await self.database.get_state(user_id)
-    #
-    #     log = engine.inventory_use(state)
-    #
-    #     return await self._finalize(user_id, state, log)
+    async def inventory_use_item(self, user_id: int) -> Contract:
+        state = await self.database.get_user_run_state(user_id)
+        log = engine.inventory_use(state)
+        return await self._finalize_game(user_id, state, log)
+
+    async def inventory_equip_item(self, user_id: int) -> Contract:
+        state = await self.database.get_user_run_state(user_id)
+        log = engine.inventory_equip(state)
+        return await self._finalize_game(user_id, state, log)
+
+    async def equip(self, user_id: int, item_key_name: str, source: str) -> Contract:
+        state = await self.database.get_user_run_state(user_id)
+        inventory_state = state["inventory_state"]
+        inventory_state["selected_item_key_name"] = item_key_name
+        inventory_state["selected_item_source"] = source
+        await self.database.save_user_run_state(user_id, state)
+        return await self.inventory_equip_item(user_id)
 
     async def goto_menu(self, user_id: int, key_menu: str) -> Contract:
         """Open a menu overlay"""
 
         state = await self.database.get_user_run_state(user_id)
         state["menu_context"]["opened_menu"] = key_menu
-        # TODO: крч, что нужно сделать. чётко по плану иди:
-        # 3. подумать над
+        # TODO: подумать над
            # - Глобальные меню (menu_main, menu_upgrades, menu_help) работают без активного забега.
            # - Игровые меню (inventory, dead) требуют state["active"] == True.
            # - В goto_menu добавить проверку: если key_menu глобальный, разрешать доступ даже при пустом state.
@@ -174,7 +184,7 @@ class RogueInterface:
 
         if source_key_menu is not None:
             # Reset inventory state if closing inventory
-            if source_key_menu == "inventory" or "inventory_select":
+            if source_key_menu in ("inventory", "inventory_select"):
                 inventory_state = state["inventory_state"]
 
                 inventory_state["selected_item_key_name"] =  None
@@ -255,6 +265,14 @@ async def process_action(user_id: int, action: str | None, rogue_interface: "Rog
         case "move_item_to":
             destination = parsed.params["destination"]
             return await rogue_interface.inventory_move_item(user_id, destination)
+
+        case "use_item":
+            return await rogue_interface.inventory_use_item(user_id)
+
+        case "equip":
+            item_key_name = parsed.params["item_key_name"]
+            source = parsed.params["source"]
+            return await rogue_interface.equip(user_id, item_key_name, source)
 
         case "goto_menu":
             key_menu = parsed.params["key_menu"]

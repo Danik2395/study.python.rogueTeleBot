@@ -6,12 +6,13 @@
 |---|---|---|
 | cmd_start | — | — |
 | init_run | — | — |
-| continue_run | — | — |
 | move | forward, backward, left, right, down, to_fork | — |
 | attack | {enemy_key_name} | — |
 | inventory_open | inventory (default), room_loot | — |
 | inventory_select | {item_key_name} | {source} |
 | move_item_to | {destination} | — |
+| use_item | — | — |
+| equip | {item_key_name} | {source} |
 | goto_menu | {key_menu} | — |
 | menu | {key_menu} | {action} |
 | back_from_menu | {source_key_menu} | — |
@@ -50,14 +51,18 @@
 
 ## Inventory mode (overlay)
 
-- back_from_menu:inventory
+- inventory_select:{item_key_name}:equipped_items (from equipped slots)
+    - move_item_to:inventory (unequip)
+- equipped slots: weapon, armour (displayed as empty if not equipped)
+- `------`
 - inventory_select:{item_key_name}:inventory (from player inventory)
     - move_item_to:room_loot
-    - use_item
+    - use_item (if food) / equip (if weapon/armour)
 - `------`
 - inventory_select:{item_key_name}:{loot_source} (from room loot)
     - move_item_to:inventory
-    - use_item
+    - use_item (if food) / equip (if weapon/armour)
+- back_from_menu:inventory
 
 ## Death mode (overlay)
 

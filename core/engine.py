@@ -228,3 +228,19 @@ def inventory_move(destination_key_name: str, run_state: dict) -> dict:
 
     inventory_system = InventorySystem(state_wrapped.get_container, inventory_state)
     return inventory_system.move_item(destination_key_name)
+
+
+def inventory_use(run_state: dict) -> dict:
+    inventory_state = run_state["inventory_state"]
+    player = run_state["player"]
+    state_wrapped = StateWrapper(run_state)
+    inventory_system = InventorySystem(state_wrapped.get_container, inventory_state)
+    return inventory_system.use_item(player)
+
+
+def inventory_equip(run_state: dict) -> dict:
+    inventory_state = run_state["inventory_state"]
+    player = run_state["player"]
+    state_wrapped = StateWrapper(run_state)
+    inventory_system = InventorySystem(state_wrapped.get_container, inventory_state)
+    return inventory_system.use_item(player)

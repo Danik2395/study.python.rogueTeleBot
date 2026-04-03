@@ -22,5 +22,7 @@ class StateWrapper:
                 return self.player["inventory"]
             case "room_loot":
                 return self.current_room["loot"]["room_loot"]
+            case "equipped_items":
+                return self.player["equipped_items"]
             case _:
                 return []
