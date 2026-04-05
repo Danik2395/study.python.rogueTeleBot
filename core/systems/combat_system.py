@@ -20,11 +20,21 @@ class CombatSystem:
         self.enemies_objects: dict[str, Enemy]
 
         self.player = player
+
+        # equipped_dict = {}
+        # for container_key, container in player["equipped_items"].items():
+        #     slot = container_key.replace("equipped_", "")
+        #     if container:
+        #         item_key_name, = container
+        #         equipped_dict[slot] = item_key_name
+        #     else:
+        #         equipped_dict[slot] = None
         self.player_object = Player(
                 player["current_health"],
                 player["base_defence"],
                 player["base_damage"],
                 player["base_speed"],
+                # equipped_dict
                 player["equipped_items"]
                 )
         self.turns = combat_state["turns"]
@@ -169,7 +179,7 @@ class CombatSystem:
                         "base_damage": self.player_object.base_damage,
                         "base_defence": self.player_object.base_defence,
                         "base_speed": self.player_object.base_speed,
-                        "equipped_items": self.player_object.equipped_items.copy()
+                        # "equipped_items": self.player_object.equipped_items.copy()
                     })
                     self._set_turns()
 

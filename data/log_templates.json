@@ -41,7 +41,10 @@
 	"item_key_name": null,
 	"source": null,
 	"move_destination": null,
-	"slot": null
+	"slot": null,
+	"count_delta": null,
+	"count_in_source": null,
+	"count_in_destination": null
     },
     "run_state_template": {
 	"active": false,
@@ -56,10 +59,10 @@
 	    "base_defence": 0,
 	    "base_speed": 8,
 	    "equipped_items": {
-		"weapon": null,
-		"armour": null
+		"equipped_weapon": {},
+		"equipped_armour": {}
 	    },
-	    "inventory": []
+            "inventory": {}
 	},
 	"combat_state": {
 	    "in_combat": false,

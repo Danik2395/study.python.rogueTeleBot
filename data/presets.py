@@ -7,7 +7,9 @@ with open("data/creatures.json", "r", encoding="utf-8") as f:
     NPCS = CREATURES["npcs"]
 
 with open("data/items.json", "r", encoding="utf-8") as f:
-    ITEMS = json.load(f)
+    _ITEMS_RAW = json.load(f)
+    ITEMS = _ITEMS_RAW["items"]
+    ITEM_TEMPLATE = _ITEMS_RAW["item_template"]
 
 with open("data/layout.json", "r", encoding="utf-8") as f:
     LAYOUT = json.load(f)

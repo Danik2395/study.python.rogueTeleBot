@@ -76,27 +76,30 @@ class FloorSystem:
                 if data.get("min_floor", 1) <= self.floor_index
                 ]
 
-    @staticmethod
-    def _get_room_content_pool(dirty_pool: list, pool_amount_limits: list) -> list:
-        """Returns list of "pool" limited by amount"""
-
-        if not dirty_pool: return []
-
-        pool = []
-
-        if not pool_amount_limits: pool_amount_limits = [0, 2]
+    def _gen_room_enemy_pool(self, pool_amount_limits: list) -> list:
+        if not self.floor_enemies_pool:
+            return []
+        if not pool_amount_limits:
+            pool_amount_limits = [0, 2]
         low, high, *buff = pool_amount_limits
-        pool_amount = random.randint(low, high)
+        amount = random.randint(low, high)
+        if amount <= 0:
+            return []
+        amount = min(amount, len(self.floor_enemies_pool))
+        return random.sample(self.floor_enemies_pool, k=amount)
 
-        if pool_amount == 0 or pool_amount < 0:
-            return pool
-
-        dirty_pool_len = len(dirty_pool)
-        if pool_amount > dirty_pool_len:
-            pool_amount = dirty_pool_len
-
-        pool = random.sample(dirty_pool, k=pool_amount)
-        return pool
+    def _gen_room_loot_pool(self, pool_amount_limits: list) -> dict:
+        if not self.floor_loot_pool:
+            return {}
+        if not pool_amount_limits:
+            pool_amount_limits = [0, 2]
+        low, high, *buff = pool_amount_limits
+        amount = random.randint(low, high)
+        if amount <= 0:
+            return {}
+        amount = min(amount, len(self.floor_loot_pool))
+        keys = random.sample(self.floor_loot_pool, k=amount)
+        return {k: {"count": 1} for k in keys} # TODO: сделать темплейты для генерации количества рандомного для предметов
 
     def _gen_room_doors(
             self,
@@ -189,11 +192,11 @@ class FloorSystem:
         room_enemies = {}
         if room_type == "combat":
             enemies_amount = random.choice(self.biom["enemies_amount"])
-            room_enemies = self._get_room_content_pool(self.floor_enemies_pool, enemies_amount)
+            room_enemies = self._gen_room_enemy_pool(enemies_amount)
 
         # ===LOOT===
         loot_amount = random.choice(self.biom["loot_amount"])
-        room_loot = self._get_room_content_pool(self.floor_loot_pool, loot_amount)
+        room_loot = self._gen_room_loot_pool(loot_amount)
 
         # TODO: убери это. всё должно из темплейтов браться
         new_room: dict[str, Any] = {
@@ -234,7 +237,7 @@ class FloorSystem:
                 "cleared": True,
                 "enemies": None,
                 "loot": {
-                    "room_loot": []
+                    "room_loot": {}
                     },
                 "doors": self._gen_room_doors("entrance")
                 }

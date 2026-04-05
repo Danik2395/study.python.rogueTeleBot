@@ -16,13 +16,17 @@ class StateWrapper:
         current_room = rooms[current_room_index]
         return current_room
 
-    def get_container(self, source: str) -> list | dict:
+    def get_container(self, source: str) -> dict:
         match source:
             case "inventory":
                 return self.player["inventory"]
             case "room_loot":
                 return self.current_room["loot"]["room_loot"]
+            case "equipped_weapon":
+                return self.player["equipped_items"]["equipped_weapon"]
+            case "equipped_armour":
+                return self.player["equipped_items"]["equipped_armour"]
             case "equipped_items":
                 return self.player["equipped_items"]
             case _:
-                return []
+                return {}

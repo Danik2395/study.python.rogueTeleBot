@@ -11,12 +11,14 @@
 	"inventory_open": {"args": ["loot_source"]},
 	"inventory_select": {"args": ["item_key_name", "source"]},
 	"move_item_to": {"args": ["destination"]},
+	"move_item_count_to": {"args": ["count", "destination"]},
 	"use_item": {"args": []},
 	"equip": {"args": ["item_key_name", "source"]}
     },
     "parent_menu": {
 	"inventory": null,
 	"inventory_select": "inventory",
+	"move_item_count_to": "inventory_select",
 	"menu_upgrades": "menu_main",
 	"menu_help": "menu_main",
 	"dead": null
@@ -46,15 +48,18 @@
 	"inventory_open:room_loot": "Вещи в комнате",
 	"use_item": "Использовать",
 	"move_item_to": "Переместить в",
+	"move_item_count_to:1": "Переместить один",
+	"move_item_count_to:2": "Переместить два",
+	"move_item_count_to:half": "Переместить половину",
 
 	"start_again": "Начать заново",
 
 	"inventory": "инвентарь",
 	"room_loot": "комнату",
 	"equip": "Экипировать",
-	"unequip": "Снять",
-	"slot:weapon:empty": "🛡 [    ]",
-	"slot:armour:empty": "🗡 [    ]",
+	"unequip": "Снять в инвентарь",
+	"slot:armour:empty": "🛡 [    ]",
+	"slot:weapon:empty": "🗡 [    ]",
 	"inventory_splitter:equipped": "--- Экипировка ---",
 	"inventory_splitter:inventory": "--- Инвентарь ---",
 	"inventory_splitter:loot_source": "--- Комната ---",

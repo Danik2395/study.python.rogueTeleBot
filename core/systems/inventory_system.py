@@ -1,35 +1,45 @@
-from data.presets import LOG, ITEMS
+import copy
+from data.presets import LOG, ITEMS, ITEM_TEMPLATE
 
 class InventorySystem:
     def __init__(self, container_getter, inventory_state: dict):
         self.inventory_state = inventory_state
         self.get_container = container_getter
 
-    def move_item(self, destination_key_name: str) -> dict:
+    @staticmethod
+    def _increment_item_count(container: dict, item_key_name: str, count: int) -> None:
+        if item_key_name in container:
+            container[item_key_name]["count"] += count
+        else:
+            container[item_key_name] = copy.deepcopy(ITEM_TEMPLATE)
+            container[item_key_name]["count"] = count
+
+    @staticmethod
+    def _decrement_item_count(container: dict, item_key_name: str, count: int) -> None:
+        container[item_key_name]["count"] -= count
+        if container[item_key_name]["count"] <= 0:
+            del container[item_key_name]
+
+    def move_item(self, destination_key_name: str, count: int | None = None) -> dict:
         item_key_name = self.inventory_state["selected_item_key_name"]
         source_key_name = self.inventory_state["selected_item_source"]
-        # TODO: у тебя несколько одинаковых предметов не может выпасть в комнате, но их несколько одинаковых можено подобрать, и они будут уже в инвенторе.
-        # исправь это
 
+        source = self.get_container(source_key_name)
+        destination = self.get_container(destination_key_name)
+
+        actual_count = count if count is not None else source[item_key_name]["count"]
         log = LOG["inventory_log_template"].copy()
         log["action"] = "move"
         log["source"] = source_key_name
         log["item_key_name"] = item_key_name
         log["move_destination"] = destination_key_name
+        log["count_delta"] = actual_count
+        log["count_in_source"] = source[item_key_name]["count"]
 
-        source = self.get_container(source_key_name)
-        destination = self.get_container(destination_key_name)
+        self._decrement_item_count(source, item_key_name, actual_count)
+        self._increment_item_count(destination, item_key_name, actual_count)
 
-        if isinstance(source, list):
-            if item_key_name in source:
-                source.remove(item_key_name)
-        elif isinstance(source, dict):
-            self._remove_from_dict_container(source, item_key_name)
-
-        if isinstance(destination, list):
-            destination.append(item_key_name)
-        else:
-            self._move_to_dict_container(destination, item_key_name)
+        log["count_in_destination"] = destination[item_key_name]["count"]
 
         self.inventory_state["selected_item_source"] = destination_key_name
 
@@ -59,8 +69,7 @@ class InventorySystem:
 
         source_key_name = self.inventory_state["selected_item_source"]
         source = self.get_container(source_key_name)
-        if isinstance(source, list):
-            source.remove(key_name)
+        self._decrement_item_count(source, key_name, 1)
 
         log = LOG["inventory_log_template"].copy()
         log["action"] = "use"
@@ -69,20 +78,20 @@ class InventorySystem:
         return log
 
     def _equip(self, item_key_name: str, slot: str, player: dict) -> dict:
-        equipped = player["equipped_items"]
-        current = equipped[slot]
-        if current is not None:
-            player["inventory"].append(current)
+        destination_key = f"equipped_{slot}"
+        destination = self.get_container(destination_key)
 
-        equipped[slot] = item_key_name
+        if destination:
+            old_item_key_name, = destination
+            self._increment_item_count(player["inventory"], old_item_key_name, 1)
+            destination.clear()
+
+        destination[item_key_name] = copy.deepcopy(ITEM_TEMPLATE)
+        destination[item_key_name]["count"] = 1
 
         source_key_name = self.inventory_state["selected_item_source"]
         source = self.get_container(source_key_name)
-        if isinstance(source, list):
-            source.remove(item_key_name)
-
-        elif isinstance(source, dict):
-            self._remove_from_dict_container(source, item_key_name)
+        self._decrement_item_count(source, item_key_name, 1)
 
         log = LOG["inventory_log_template"].copy()
         log["action"] = "equip"
@@ -91,10 +100,4 @@ class InventorySystem:
         log["slot"] = slot
         return log
 
-    def _move_to_dict_container(self, dest: dict, key_name: str) -> None:
-        slot = ITEMS[key_name]["type"]
-        dest[slot] = key_name
 
-    def _remove_from_dict_container(self, src: dict, key_name: str) -> None:
-        slot = ITEMS[key_name]["type"]
-        src[slot] = None

@@ -62,7 +62,6 @@ def init_run(user_data: dict) -> tuple[dict[str, Any], dict[str, Any]]:
 
     player["current_health"] = player["base_health"]
 
-
     return gen_entrance_log, new_run_state
 
 
@@ -222,12 +221,12 @@ def inventory_select(item_key_name: str, selected_item_source: str, run_state: d
 
     return log
 
-def inventory_move(destination_key_name: str, run_state: dict) -> dict:
+def inventory_move(destination_key_name: str, run_state: dict, count: int | None = None) -> dict:
     inventory_state = run_state["inventory_state"]
     state_wrapped = StateWrapper(run_state)
 
     inventory_system = InventorySystem(state_wrapped.get_container, inventory_state)
-    return inventory_system.move_item(destination_key_name)
+    return inventory_system.move_item(destination_key_name, count)
 
 
 def inventory_use(run_state: dict) -> dict:

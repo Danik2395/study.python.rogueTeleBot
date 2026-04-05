@@ -79,7 +79,15 @@ class Player(Dummy):
 
     def __init__(self, health: int, defence: int, damage: int, speed: int, equipped_items: dict) -> None:
         super().__init__("Player", health, defence, damage, speed)
-        self.equipped_items = equipped_items
+        # self.equipped_items = equipped_items
+        self.equipped_items = {}
+        for container_key, container in equipped_items.items():
+            slot = container_key.replace("equipped_", "")
+            if container:
+                item_key_name, = container
+                self.equipped_items[slot] = item_key_name
+            else:
+                self.equipped_items[slot] = None
         # self._set_stats()
 
     # def _set_stats(self) -> None:

@@ -126,12 +126,14 @@ def _inventory_buttons(state: dict) -> list[Button]:
 
     buttons.append(Button(label=UI_LABELS["inventory_splitter:equipped"], action="noop"))
 
-    equipped_items = state["player"]["equipped_items"]
+    equipped_containers = state["player"]["equipped_items"]
     emojis = UI_LABELS["emojis"]
-    for slot, key_name in equipped_items.items():
-        if key_name:
-            text_name = ITEMS[key_name]["text_name"]
-            buttons.append(Button(label=f"{emojis[slot]} [ {text_name} ]", action=f"inventory_select:{key_name}:equipped_items"))
+    for container_key, container in equipped_containers.items():
+        slot = container_key.replace("equipped_", "")
+        if container:
+            item_key_name, = container
+            text_name = ITEMS[item_key_name]["text_name"]
+            buttons.append(Button(label=f"{emojis[slot]} [ {text_name} ]", action=f"inventory_select:{item_key_name}:{container_key}"))
         else:
             buttons.append(Button(label=UI_LABELS[f"slot:{slot}:empty"], action="noop"))
 
@@ -147,7 +149,7 @@ def _inventory_buttons(state: dict) -> list[Button]:
 
     # === Loot source items ===
 
-    if loot_source:
+    if loot_source_key_name != "inventory" and loot_source:
         buttons.append(Button(label=UI_LABELS["inventory_splitter:loot_source"], action="noop"))
 
         for key_name in loot_source:
@@ -169,13 +171,31 @@ def _inventory_select_buttons(state: dict) -> list[Button]:
     text_name = ITEMS[selected_item_key_name]["text_name"]
 
     destination = loot_source_key_name if selected_item_source == "inventory" else "inventory"
+    # destination = loot_source_key_name
     buttons.append(Button(label=f"[ {text_name} ]", action="noop"))
 
-    buttons.append(Button(label=f"{UI_LABELS['move_item_to']} {UI_LABELS[destination]}", action=f"move_item_to:{destination}"))
+    state_wrapped = StateWrapper(state)
+    source_container = state_wrapped.get_container(selected_item_source)
+    item_count = source_container[selected_item_key_name].get("count", 1)
+
+    # buttons.append(Button(label=f"{UI_LABELS['move_item_to']} {UI_LABELS[destination]}", action=f"move_item_to:{destination}"))
+    if destination == selected_item_source:
+        pass
+    elif selected_item_source.startswith("equipped_"):
+        pass
+    else:
+        buttons.append(Button(label=f"{UI_LABELS['move_item_to']} {UI_LABELS[destination]}", action=f"move_item_to:{destination}"))
+
+    if item_count >= 2:
+        buttons.append(Button(label=UI_LABELS["move_item_count_to:1"], action=f"move_item_count_to:1:{destination}"))
+        buttons.append(Button(label=UI_LABELS["move_item_count_to:2"], action=f"move_item_count_to:2:{destination}"))
+    if item_count >= 3:
+        half = item_count // 2
+        buttons.append(Button(label=UI_LABELS["move_item_count_to:half"], action=f"move_item_count_to:{half}:{destination}"))
 
     item_type = ITEMS[selected_item_key_name]["type"]
 
-    if selected_item_source == "equipped_items":
+    if selected_item_source.startswith("equipped_"):
         action_btn = Button(label=UI_LABELS["unequip"], action=f"move_item_to:inventory")
     elif item_type in ("weapon", "armour"):
         action_btn = Button(label=UI_LABELS["equip"], action=f"equip:{selected_item_key_name}:{selected_item_source}")
@@ -201,7 +221,8 @@ def menu_buttons(state: dict, key_menu: str) -> list[Button]:
             buttons.append(Button(label=UI_LABELS["menu:menu_main:new_game"], action="menu:menu_main:new_game"))
             if state.get("active"):
                 buttons.append(Button(label=UI_LABELS["menu:menu_main:continue"], action="menu:menu_main:continue"))
-            buttons.append(Button(label=UI_LABELS["goto_menu:menu_upgrades"], action="goto_menu:menu_upgrades"))
+            if not state.get("active"):
+                buttons.append(Button(label=UI_LABELS["goto_menu:menu_upgrades"], action="goto_menu:menu_upgrades"))
             # Button(label=UI_LABELS["menu:menu_main:help"], action="goto_menu:menu_help")
     elif key_menu == "menu_upgrades":
         buttons = [
