@@ -36,7 +36,7 @@ Database (database/database.py) — aiosqlite, get/save JSON state per user_id
 - **Engine** imports systems, wires them together, handles cross-system logic (e.g. move → detect enemies → set combat_state).
 - **RogueInterface** calls engine functions, calls `_finalize`, never contains game logic.
 - **ui_builder** reads state and log to produce buttons and state_type. No mutations.
-- **log_handler** renders log dicts to human-readable Russian text.
+- **log_handler** renders log dicts to human-readable Russian text using LLM with hash‑based caching. For `continue` logs with `menu` field, first checks `FTEXT["{menu}"]`; if not found, generates via LLM.
 
 ## Transaction flow (button press → output)
 
@@ -95,9 +95,9 @@ Computed from log in `ui_builder.get_state_type`, never stored (except `menu_con
 
 ## Inventory system
 
-- `equipped_items` — dict‑container `{"weapon": key|null, "armour": key|null}`. Addressable as `source`/`destination` in `StateWrapper.get_container`. Slot determined automatically via `ITEMS[key_name]["type"]`.
-- `equip` action: moves item from `inventory`/`room_loot` → `equipped_items`, displacing current item in slot back to `inventory`.
-- `unequip`: implemented via `move_item_to:inventory` with `source=equipped_items`.
+- `equipped_items` — dict‑container `{"equipped_weapon": {}, "equipped_armour": {}}`. Each slot is a separate container addressable as `source`/`destination` in `StateWrapper.get_container`. Slot determined automatically via `ITEMS[key_name]["type"]`.
+- `equip` action: moves item from `inventory`/`room_loot` → `equipped_weapon`/`equipped_armour`, displacing current item in slot back to `inventory`.
+- `unequip`: implemented via `move_item_to:inventory` with `source=equipped_weapon`/`equipped_armour`.
 - `use_item`: consumes food (restores health) or triggers equip for weapon/armour.
 
 ## Menu system
@@ -124,7 +124,7 @@ For menu navigation, `menu_context` in `run_state` is used:
 
 - `key_name` — dict key used in JSON files (e.g. `"apple"`, `"dragon"`)
 - `text_name` — human-readable name from preset (e.g. `"яблоко"`, `"Дракон"`)
-- `source` / `destination` — container key name: `"inventory"` or `"room_loot"`
+- `source` / `destination` — container key name: `"inventory"`, `"room_loot"`, `"equipped_weapon"`, `"equipped_armour"`
 - `log` — dict returned by engine/system describing what happened
 - `state` — full `run_state_template` dict
 - `contract` — dict returned to UI: `{text, buttons, state_type}`
@@ -146,11 +146,11 @@ Key templates: `move_log_template`, `combat_log_template`, `combat_consequence_l
     "type": null,
     "opened_menu": null
   },
-  "player": {
-    "base_health", "current_health", "base_damage", "base_defence", "base_speed",
-    "equipped_items": {"weapon": null, "armour": null},
-    "inventory": []
-  },
+    "player": {
+        "base_health", "current_health", "base_damage", "base_defence", "base_speed",
+        "equipped_items": {"equipped_weapon": {}, "equipped_armour": {}},
+        "inventory": {}
+    },
   "combat_state": {"in_combat": false, "turns": null, "enemies": null},
   "inventory_state": {
     "selected_item_key_name": null,
@@ -176,12 +176,12 @@ Biom config: name pool, mood pool, loot pool, enemies_amount limits, loot_amount
 ### data/rules.json
 `combat`: turn_delimiter, actions, damage_scale_limits.
 `opposite_direction`: direction → opposite mapping.
+`parent_menu`: mapping of child menu to parent menu for back navigation (e.g., `"inventory_select" → "inventory"`).
+`command_schemas`: argument definitions for each command (does not include `continue_run`).
 
 ### data/bridge_spec.json
 `contract`: shape of the return contract.
 `ui_labels`: action string → Russian label mapping for ui_builder.
-`parent_menu`: mapping of child menu to parent menu for back navigation (e.g., `"inventory_select" → "inventory"`).
-`command_schemas`: argument definitions for each command (does not include `continue_run`).
 
 ### Room shape (inside floor.rooms)
 ```json
@@ -213,7 +213,7 @@ Door values: `null` = no door, `int` = room index, `"NEW"` = exists but not gene
 - [x] Death handling (state cleanup, start_again)
 - [x] Floor transition (down door handling)
 - [x] use_item (food heal, weapon equip) & equip system
-- [ ] LLM text generation with hash cache
+- [x] LLM text generation with hash cache
 
 ## AGENT DIRECTIVES & RESPONSE RULES
 

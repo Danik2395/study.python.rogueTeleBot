@@ -3,7 +3,6 @@ from core.state_wrapper import StateWrapper
 
 
 def get_state_type(log: dict, state: dict) -> str:
-    # TODO: сделай обработку смерти. в комбате поставь проверку и делай просто забег "active": False
     log_type = log["type"]
 
     if log_type == "death":

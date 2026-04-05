@@ -1,7 +1,6 @@
 from data.presets import LOG, LAYOUT
 
 class MoveSystem:
-    # TODO: нужно сделать переход на этажи. и сделать на user_data, чтоб оно прибавляло этаж максимальный
     def __init__(
             self,
             floor: dict

@@ -226,7 +226,6 @@ class FloorSystem:
         floor_entrance_log["prompt"] = entrance_chosen_prompt
 
 
-        # TODO: нужно сделать проверку, чтобы логхэндлер отличал начало на этаже от входа повтороного в начальную комнату
         entrance: dict[str, Any] = {
                 "index": 0,
                 "type": "entrance",
