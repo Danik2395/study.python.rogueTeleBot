@@ -1,4 +1,4 @@
-from data.presets import BRIDGE_SPEC
+from data.presets import COMMAND_SCHEMAS
 from dataclasses import dataclass
 
 @dataclass
@@ -12,13 +12,13 @@ class ActionParser:
     Returns
     """
 
-    def __init__(self):
-        self.schemas = BRIDGE_SPEC["command_schemas"]
-
+    # def __init__(self):
+    #     self.schemas = BRIDGE_SPEC["command_schemas"]
+    #
     def parse(self, action_str: str) -> "ParsedAction":
         command, *args = action_str.split(":")
 
-        schema = self.schemas[command]
+        schema = COMMAND_SCHEMAS[command]
         arg_names = schema["args"]
 
         params = {}

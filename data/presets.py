@@ -17,6 +17,8 @@ with open("data/layout.json", "r", encoding="utf-8") as f:
 with open("data/rules.json", "r", encoding="utf-8") as f:
     RULES = json.load(f)
     COMBAT_RULES = RULES["combat"]
+    PARENT_MENU = RULES["parent_menu"]
+    COMMAND_SCHEMAS = RULES["command_schemas"]
 
 with open("data/log_templates.json", "r", encoding="utf-8") as f:
     LOG = json.load(f)
@@ -24,7 +26,6 @@ with open("data/log_templates.json", "r", encoding="utf-8") as f:
 with open("data/bridge_spec.json", "r", encoding="utf-8") as f:
     BRIDGE_SPEC = json.load(f)
     UI_LABELS = BRIDGE_SPEC["ui_labels"]
-    PARENT_MENU = BRIDGE_SPEC["parent_menu"]
 
 with open("data/forged_text.json", "r", encoding="utf-8") as f:
     FTEXT = json.load(f)
