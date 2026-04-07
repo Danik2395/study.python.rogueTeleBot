@@ -61,19 +61,19 @@ class FloorSystem:
         """Filter all enemies to lower scope of the floor"""
 
         self.floor_enemies_pool = [
-                enemy for enemy, data in ENEMIES.items()
+                enemy_key_name for enemy_key_name, enemy_data in ENEMIES.items()
 
-                if data.get("min_floor", 1) <= self.floor_index
-                and self.biom_key in data.get("biom", list(LAYOUT["bioms"]))
+                if enemy_data.get("min_floor", 1) <= self.floor_index
+                and self.biom_key in enemy_data.get("biom", list(LAYOUT["bioms"]))
                 ]
 
     def _filter_loot_pool(self) -> None:
         """Filter items"""
 
         self.floor_loot_pool = [
-                item for item, data in ITEMS.items()
+                item_key_name for item_key_name, item_data in ITEMS.items()
 
-                if data.get("min_floor", 1) <= self.floor_index
+                if item_data.get("min_floor", 1) <= self.floor_index
                 ]
 
     def _gen_room_enemy_pool(self, pool_amount_limits: list) -> list:

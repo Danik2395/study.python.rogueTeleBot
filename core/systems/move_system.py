@@ -56,7 +56,7 @@ class MoveSystem:
 
     def move_to_fork(self) -> dict:
         """
-        Handles "movement" to the last fork (room with more then one door)
+        Handles "movement" to the last fork (room with more one or more new doors)
         """
 
         log = LOG["move_log_template"].copy()

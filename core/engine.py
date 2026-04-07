@@ -74,8 +74,10 @@ def move(direction: str, run_state: dict) -> dict[str, Any]:
 
     move_system = MoveSystem(floor)
 
+    move_log: dict = {}
+    is_new_room: bool = False # For now it's like this. Idk how to do it other way
     while True:
-        move_log = move_system.move(direction)
+        move_log.update(move_system.move(direction))
 
         if not move_log["is_new_room"] and move_log["room_index"] is None:
             return move_log
@@ -84,8 +86,10 @@ def move(direction: str, run_state: dict) -> dict[str, Any]:
             floor_system = FloorSystem(floor)
             opposite_direction = RULES["opposite_direction"][direction]
             floor_system.gen_room(move_system.current_room, opposite_direction)
+            is_new_room = True
 
             continue
+        move_log["is_new_room"] = is_new_room
 
         current_room_index = floor["current_room_index"]
         current_room = floor["rooms"][current_room_index]
