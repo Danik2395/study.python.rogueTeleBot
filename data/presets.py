@@ -26,9 +26,16 @@ with open("data/log_templates.json", "r", encoding="utf-8") as f:
 with open("data/bridge_spec.json", "r", encoding="utf-8") as f:
     BRIDGE_SPEC = json.load(f)
     UI_LABELS = BRIDGE_SPEC["ui_labels"]
+    LOG_LABELS = BRIDGE_SPEC["ui_labels"]["log_labels"]
 
 with open("data/forged_text.json", "r", encoding="utf-8") as f:
     FTEXT = json.load(f)
+
+with open("data/prompts.json", "r", encoding="utf-8") as f:
+    PROMPTS = json.load(f)
+
+
+    # TODO: проставь типы dict[str, Any]
 
 @dataclass
 class Button:

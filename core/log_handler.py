@@ -1,116 +1,265 @@
+import json
+import hashlib
+
 from typing import Any
+from openai import AsyncOpenAI
+from os import environ
+from dotenv import load_dotenv
+
+from database.database import Database
+from data.presets import PROMPTS, ITEMS, ENEMIES, LOG_LABELS, FTEXT
+
+load_dotenv()
 
 
 class LogHandler:
     """
-     Plug for the LogSystem
+     Class that converts action log into text via LLM.
+     Return already generated action if hash in database.
     """
 
-    def render(self, log: dict[str, Any]) -> str:
+    def __init__(self, database: Database):
+        self.database = database
+        self.client = AsyncOpenAI(api_key=environ['DEEPSEEK_API_KEY'], base_url="https://api.deepseek.com")
+        self.state: dict
+
+    async def render(self, log: dict[str, Any], state: dict) -> str:
+        self.state = state
+
         log_type = log.get("type")
+        log_hash = self._hash_log(log)
 
-        if log_type == "move":
-            return self._render_move(log)
+        if await self.database.is_log_cash_exists(log_hash):
+            return await self.database.get_log_cash(log_hash)
 
-        if log_type == "death":
-            return self._render_death(log)
+        match log_type:
+            case "move":
+                text = await self._render_move(log)
+            case "death":
+                text = await self._render_death(log)
+            case "combat":
+                text = await self._render_combat(log)
+            case "inventory":
+                text = await self._render_inventory(log)
+            case "entrance":
+                text = await self._render_entrance(log)
+            case "continue":
+                text = await self._render_continue(log)
+            case _:
+                text =  "Событие произошло, но текст для него пока не готов."
 
-        if log_type == "combat":
-            return self._render_combat(log)
+        await self.database.save_log_cash(log_hash, text)
 
-        if log_type == "continue":
-            return "Вы находитесь всё там же"
+        return text
 
-        if log_type == "inventory":
-            return self._render_inventory(log)
+    def _hash_log(self, log: dict[str, Any]) -> str:
+        log_str = json.dumps(log, sort_keys=True, ensure_ascii=False)
+        return hashlib.sha256(log_str.encode('utf-8')).hexdigest()
 
-        return "Событие произошло, но текст для него пока не готов."
+    async def _generate_text(self, specified_system_content: str, user_content: str) -> str | None:
+        """
+        Returns LLM generated text
+        """
 
-    def _render_move(self, log: dict[str, Any]) -> str:
+        system_content = f"{PROMPTS["general_system_prompt"]}\n{specified_system_content}"
+
+        completion = await self.client.chat.completions.create(
+            model="deepseek-chat",
+            messages=[
+                {"role": "system", "content": system_content},
+                {"role": "user", "content": user_content}
+            ],
+            temperature=0.7
+        )
+        return completion.choices[0].message.content
+
+    async def _render_move(self, log: dict[str, Any]) -> str:
         room_index = log.get("room_index")
+        direction = log.get("direction", "в неизвестном направлении")
         is_fork = log.get("is_fork", False)
         is_new_room = log.get("is_new_room", False)
+        event = log.get("event", None)
 
-        if room_index is None:
-            return "Ты не смог пройти дальше."
+        floor = self.state["floor"]
+        rooms = floor["rooms"]
+        room = rooms[room_index]
 
-        if is_new_room and is_fork:
-            return f"Ты входишь в новую комнату {room_index}. Здесь несколько путей."
+        room_text_name = room["text_name"]
+        room_mood = room["mood"]
+        is_cleared = room["cleared"]
+        room_enemies = room["enemies"]
+        room_loot = room["loot"]
+        room_doors = room["doors"]
 
-        if is_new_room:
-            return f"Ты входишь в новую комнату {room_index}."
+        user_content = f"""
+            Movement direction: {direction}
+            Room by count: {room_index}
+            Is the room new: {is_new_room}
+            Moved to fork (more one or more unexplored rooms): {is_fork}
+            Room name: {room_text_name}
+            How it is in the room: {room_mood}
+            If room cleared form enemies: {is_cleared}
+            Room Enemies: {room_enemies}
+            What loot is in room: {room_loot}
+            Event that happened: {event}
+            Room doors: {room_doors}
+        """
 
-        if is_fork:
-            return f"Ты возвращаешься в комнату {room_index}. Перед тобой снова развилка."
+        system_content = PROMPTS["move"]
+        text = await self._generate_text(system_content, user_content)
 
-        return f"Ты переходишь в комнату {room_index}."
+        if not text:
+            text = f"Вы переходите в {room_text_name}"
 
-    def _render_death(self, log: dict[str, Any]) -> str:
-        enemy = log.get("enemy", "враг")
-        damage = log.get("damage", 0)
-        return f"{enemy} наносит {damage} урона. Ты погибаешь."
+        return text
 
-    def _render_item(self, log: dict[str, Any]) -> str:
-        item = log.get("transition_item", "предмет")
-        target = log.get("transition_into", "инвентарь")
-        is_items_left = log.get("is_items_left", True)
 
-        if is_items_left:
-            return f"Ты берёшь {item} и переносишь в {target}."
+    async def _render_death(self, log: dict[str, Any]) -> str:
+        enemy_key = log.get("enemy")
+        damage = log.get("damage")
 
-        return f"Ты берёшь {item} и переносишь в {target}. Больше предметов здесь нет."
+        enemy = ENEMIES[enemy_key].get("text_name", enemy_key)
 
-    def _render_combat(self, log: dict[str, Any]) -> str:
-        consequences = log.get("consequence")
+        user_content = f"""
+            Last attacked enemy: {enemy}
+            Damage taken: {damage}
+        """
 
-        if not consequences:
-            text = "Схватка продолжается."
-        else:
-            if isinstance(consequences, dict):
-                consequences = [consequences]
+        system_content = PROMPTS["death"]
+        text = await self._generate_text(system_content, user_content)
 
-            parts: list[str] = []
-            for c in consequences:
-                attacker = c.get("attacker", "кто-то")
-                target = c.get("target", "кого-то")
+        if not text:
+            text = f"Ты погибаешь."
+        return text
+
+    async def _render_combat(self, log: dict[str, Any]) -> str:
+        action = log.get("action")
+        turns = log.get("turns")
+        enemies_turn_triggered = log.get("enemies_turn_triggered")
+        combat_ended = log.get("combat_ended", False)
+        consequence = log.get("consequence")
+
+        consequence_str = ""
+        if consequence:
+            if isinstance(consequence, dict):
+                consequence = [consequence]
+            parts = []
+            for c in consequence:
+                attacker_key = c.get("attacker")
+                target_key = c.get("target")
                 stat = c.get("stat", "health")
                 delta = c.get("delta", 0)
                 dead = c.get("dead", False)
+
+                if attacker_key is None:
+                    attacker_key = "кто-то"
+                if target_key is None:
+                    target_key = "кого-то"
+
+                attacker = attacker_key
+                target = target_key
+                if attacker_key == "player":
+                    attacker = "Игрок"
+                else:
+                    attacker = ENEMIES[attacker_key].get("text_name", attacker_key)
+
+                if target_key == "player":
+                    target = "тебя"
+                else:
+                    target = ENEMIES[target_key].get("text_name", target_key)
 
                 line = f"{attacker} изменяет {stat} у {target} на {delta}."
                 if dead:
                     line += f" {target} погибает."
                 parts.append(line)
 
-            text = " ".join(parts)
+            consequence_str = " ".join(parts)
 
-        turns = log.get("turns")
-        if turns is not None:
-            text += f" Ходов осталось: {turns}."
+        user_content = f"""
+            Players action: {action}
+            Turns remaining: {turns}
+            Enemies turn triggered: {enemies_turn_triggered}
+            Combat ended: {combat_ended}
+            Consequence of the combat: {consequence_str}
+        """
 
-        if log.get("enemies_turn_triggered"):
-            text += " Враги отвечают."
+        system_content = PROMPTS["combat"]
+        text = await self._generate_text(system_content, user_content)
 
-        if log.get("combat_ended"):
-            text += " Бой окончен."
-
+        if not text:
+            text = "Бой продолжается."
         return text
 
-    def _render_inventory(self, log: dict[str, Any]) -> str:
+    async def _render_inventory(self, log: dict[str, Any]) -> str:
         action = log.get("action")
         item_key_name = log.get("item_key_name", "предмет")
         source = log.get("source")
         move_destination = log.get("move_destination")
         slot = log.get("slot")
+        count_delta = log.get("count_delta")
+        count_in_source = log.get("count_in_source")
+        count_in_destination = log.get("count_in_destination")
 
-        if action == "open":
-            return f"Ты открываешь {source}."
-        if action == "select":
-            return f"Ты выбираешь {item_key_name}."
-        if action == "move":
-            return f"Ты перемещаешь {item_key_name} из {source} в {move_destination}."
-        if action == "use":
-            return f"Ты используешь {item_key_name}."
-        if action == "equip":
-            return f"Ты экипируешь {item_key_name} в слот {slot}."
-        return f"Действие с предметом {item_key_name}."
+        # Преобразуем ключи в читаемые названия
+        source_readable = source
+        destination_readable = move_destination
+        if source is None:
+            source_readable = "неизвестно"
+        else:
+            source_readable = LOG_LABELS[source]
+
+        if move_destination is None:
+            destination_readable = "неизвестно"
+        else:
+            destination_readable = LOG_LABELS[move_destination]
+
+        item_text_name = ITEMS.get(item_key_name, {}).get("text_name", item_key_name)
+
+        user_content = f"""
+            Action in inventory: {action}
+            Item: {item_text_name} (key: {item_key_name})
+            Source: {source_readable} ({source})
+            Destination: {destination_readable} ({move_destination})
+            Slot: {slot}
+            Count delta: {count_delta}
+            Count in source: {count_in_source}
+            Count in destination: {count_in_destination}
+        """
+
+        system_content = PROMPTS["inventory"]
+        text = await self._generate_text(system_content, user_content)
+
+        if not text:
+            text = f"Действие с предметом {item_text_name}."
+        return text
+
+    async def _render_entrance(self, log: dict[str, Any]) -> str:
+        current_floor_index = log.get("current_floor_index")
+        prompt = log.get("prompt")
+
+        user_content = f"""
+            Current floor index: {current_floor_index}
+            Prompt of the room: {prompt}
+        """
+
+        system_content = PROMPTS["entrance"]
+        text = await self._generate_text(system_content, user_content)
+
+        if not text:
+            text = f"Вы спускаетесь на этаж {current_floor_index}."
+        return text
+
+    async def _render_continue(self, log: dict[str, Any]) -> str:
+        menu_key_name = log.get("menu")
+        if menu_key_name is not None and menu_key_name in FTEXT:
+            menu_text = FTEXT[menu_key_name]
+            return menu_text
+
+        user_content = "Continue of the game."
+
+        system_content = PROMPTS["continue"]
+        text = await self._generate_text(system_content, user_content)
+
+        if not text:
+            text = "Вы находитесь всё там же."
+        return text

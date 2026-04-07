@@ -113,7 +113,7 @@ class UserController:
         contract = await self.interface.goto_menu_help(user_id)
 
         keyboard = get_keyboard(contract.buttons)
-        help_text = FTEXT["help_message"] # TODO: убрать, когда сделаешь log_system
+        help_text = contract.text
 
         await self._delete_object_message(message=message)
         await self._update_bot_message(user_id, help_text, keyboard)

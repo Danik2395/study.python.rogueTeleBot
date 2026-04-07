@@ -1,3 +1,4 @@
+from asyncio import run
 import copy
 
 import core.engine as engine
@@ -17,7 +18,7 @@ class RogueInterface:
     @classmethod
     async def create(cls) -> "RogueInterface":
         database = await Database.create()
-        log_handler = LogHandler()
+        log_handler = LogHandler(database)
 
         interface = RogueInterface(database, log_handler)
 
@@ -58,11 +59,15 @@ class RogueInterface:
 
         return await self._finalize_game(user_id, new_run_state, init_run_log)
 
-    async def continue_run(self, user_id: int, run_state: dict | None = None) -> Contract:
+    async def continue_run(self, user_id: int, *, run_state: dict | None = None, show_menu: bool = False) -> Contract:
         if run_state is None:
             run_state = await self.database.get_user_run_state(user_id)
 
         continue_log = LOG["continue_run_log_template"].copy()
+        if show_menu:
+            menu_context = run_state["menu_context"]
+            opened_menu = menu_context["opened_menu"]
+            continue_log["menu"] = opened_menu
 
         return await self._finalize_game(user_id, run_state, continue_log)
 
@@ -138,9 +143,9 @@ class RogueInterface:
         state = await self.database.get_user_run_state(user_id)
         state["menu_context"]["opened_menu"] = key_menu
 
-        await self.database.save_user_run_state(user_id, state)
+        # await self.database.save_user_run_state(user_id, state)
 
-        return await self.continue_run(user_id)
+        return await self.continue_run(user_id, run_state=state, show_menu=True)
 
     async def goto_menu_help(self, user_id: int) -> Contract:
         """Open a help menu overlay"""
@@ -163,10 +168,10 @@ class RogueInterface:
                     return await self.init_run(user_id)
                 if action == "continue":
                     state["menu_context"]["opened_menu"] = None
-                    return await self.continue_run(user_id, state)
+                    return await self.continue_run(user_id, run_state=state)
 
         state["menu_context"]["opened_menu"] = key_menu
-        return await self.continue_run(user_id)
+        return await self.continue_run(user_id, run_state=state, show_menu=True)
 
     async def back_from_menu(self, user_id: int, source_key_menu: str) -> Contract:
         """Goes back from menu depends on the prewritten links"""
@@ -186,9 +191,10 @@ class RogueInterface:
 
             state["menu_context"]["opened_menu"] = PARENT_MENU[source_key_menu]
 
-            await self.database.save_user_run_state(user_id, state)
+            return await self.continue_run(user_id, run_state=state, show_menu=True)
+            # await self.database.save_user_run_state(user_id, state)
 
-        return await self.continue_run(user_id)
+        return await self.continue_run(user_id, run_state=state)
 
     async def start_again(self, user_id: int) -> Contract:
         """Start over after death"""
@@ -196,7 +202,7 @@ class RogueInterface:
         return await self.init_run(user_id)
 
     async def _finalize_game(self, user_id: int, state: dict, log: dict) -> Contract:
-        text_from_log = self.log_handler.render(log)
+        text_from_log = await self.log_handler.render(log, state)
 
         contract = Contract(text=text_from_log)
 

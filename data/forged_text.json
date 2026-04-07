@@ -1,5 +1,9 @@
 {
-    "cmd_start": "to see commands type /help.",
     "ignore_message": "use buttons",
-    "help_message": "help message"
+
+    "cmd_start": "to see commands type /help.",
+    "inventory": "Инвенарь меню",
+    "menu_main": "Главное меню",
+    "menu_help": "Помощь",
+    "menu_upgrades": "Улучшения"
 }

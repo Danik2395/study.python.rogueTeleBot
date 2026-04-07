@@ -19,6 +19,7 @@ class Database:
         instance = cls(db, cur)
         await instance._create_users_table()
         await instance._create_ui_message_table()
+        await instance._create_cash_table()
 
         return instance
 
@@ -31,6 +32,14 @@ class Database:
         await self.cur.execute(
                 "select 1 from Users_data where user_id = ?", # Only check wheather user exists
                 (user_id,)
+                )
+        row = await self.cur.fetchone()
+        return True if row else False
+
+    async def is_log_cash_exists(self, log_hash: str) -> bool:
+        await self.cur.execute(
+                "select 1 from Log_cash where log_hash = ?",
+                (log_hash,)
                 )
         row = await self.cur.fetchone()
         return True if row else False
@@ -55,6 +64,13 @@ class Database:
         )
         row = await self.cur.fetchone()
         return row[0] if row else 0
+
+    async def get_log_cash(self, log_hash: str) -> str:
+        await self.cur.execute(
+            "SELECT log_text FROM Log_cash WHERE log_hash = ?", (log_hash,)
+        )
+        row = await self.cur.fetchone()
+        return row[0] if row else ""
 
     # === Setters ===
 
@@ -82,6 +98,14 @@ class Database:
         """, (user_id, ui_message_id))
         await self.db.commit()
 
+    async def save_log_cash(self,log_hash: str, log_text: str) -> None:
+        await self.cur.execute("""
+            INSERT INTO Log_cash (log_hash, log_text)
+            VALUES (?, ?)
+            ON CONFLICT(log_hash) DO UPDATE SET log_text = excluded.log_text
+        """, (log_hash, log_text))
+        await self.db.commit()
+
     # === Definitions ===
 
     async def _create_users_table(self) -> None:
@@ -101,6 +125,18 @@ class Database:
         create table if not exists UI_messages (
                 user_id integer primary key,
                 ui_message_id int
+                );
+        """
+
+        await self.cur.execute(table)
+        await self.db.commit()
+
+    async def _create_cash_table(self) -> None:
+        table = """
+        create table if not exists Log_cash (
+                log_hash text primary key,
+                log_text text not null,
+                created_time Timestamp default current_timestamp
                 );
         """
 

@@ -1,6 +1,7 @@
 {
     "continue_run_log_template": {
-	"type": "continue"
+	"type": "continue",
+	"menu": null
     },
     "combat_log_template": {
 	"type": "combat",
