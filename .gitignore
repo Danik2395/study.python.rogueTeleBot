@@ -8,3 +8,5 @@ pyvenv.cfg
 pyrightconfig.json
 .env
 llm_test.py
+runner.py
+active_runs.json

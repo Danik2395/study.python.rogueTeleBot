@@ -106,6 +106,6 @@ When item is moved to the other place menu remains the same letting select anoth
 - [x] Create  an asynchronous database
 - [x] Develop an asynchronous bot
 - [ ] Develop an user interface in bot
-- [ ] Integrate LLM
+- [x] Integrate LLM
 - [ ] Add new features
 - [ ] Neat the balance
