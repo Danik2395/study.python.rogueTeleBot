@@ -77,9 +77,9 @@ Database (database/database.py) — aiosqlite, get/save JSON state per user_id
 `back_from_menu` accepts a `source_key_menu` argument and navigates to its parent using the `parent_menu` mapping. If `source_key_menu` is `inventory` or `inventory_select`, resets inventory state. Sets `opened_menu = PARENT_MENU[source_key_menu]` (may be `null` to close overlay) and calls `continue_run`.
 
 **Examples**:
-- `goto_menu:menu_main` — open main menu
-- `menu:menu_main:new_game` — start new game from main menu
-- `menu:menu_upgrades:heal` — buy health upgrade
+- `goto_menu:menu_expanse` — open main menu
+- `menu:menu_expanse:new_game` — start new game from main menu
+- `menu:menu_recall:heal` — buy health upgrade
 - `back_from_menu:inventory` — close inventory overlay
 - `start_again` — start over after death
 
@@ -107,7 +107,7 @@ For menu navigation, `menu_context` in `run_state` is used:
 | Field | Description |
 |---|---|
 | `type` | Primary game type (`explore`/`combat`/`dead`/`entrance`), computed from log |
-| `opened_menu` | Currently open menu (`null`/`inventory`/`menu_main`/`menu_upgrades`/`menu_help`/`dead`) |
+| `opened_menu` | Currently open menu (`null`/`inventory`/`menu_expanse`/`menu_recall`/`menu_help`/`dead`) |
 
 - **Overlay menus** do not change `type`. Inventory (`inventory`) is a special case of an overlay.
 - **Death screen** is an overlay with `opened_menu: "dead"`, `type: "dead"`.
@@ -116,8 +116,8 @@ For menu navigation, `menu_context` in `run_state` is used:
 
 **Parent menu hierarchy**: Navigation “Назад” uses explicit `parent_menu` mapping (`data/bridge_spec.json`):
   - `inventory_select` → `inventory`
-  - `menu_upgrades` → `menu_main`
-  - `menu_help` → `menu_main`
+  - `menu_recall` → `menu_expanse`
+  - `menu_help` → `menu_expanse`
   - `inventory`, `dead` → `null` (close overlay)
 
 ## Naming
@@ -243,10 +243,10 @@ You are an elite, pragmatic Python architect. Your code is brutally minimal, str
 You operate in two strict modes depending on the user's prompt: **PLAN** (designing, proposing, analyzing) and **BUILD** (writing actual code, fixing bugs).
 
 #### MODE A: PLAN (Used for new features, complex bug analysis, or when asked to plan)
-Your goal is to prove the architectural fit before writing the full implementation. Follow this strict structure:
+Your goal is to prove the architectural fit before writing the full implementation. Follow this strict structure sorted by files:
 
-1. **Для чего:** One sentence summarizing what will be done.
-2. **Где (Locations):** Exact files, classes, or engine layers to be touched.
+1. **Где (Locations):** Exact file, class, or engine layer to be touched.
+2. **Для чего:** One sentence summarizing what will be done.
 3. **Почему (Architectural Justification):** Explain *why* this approach is chosen. Prove that it respects the Layered Architecture (Engine vs. Systems vs. UI), doesn't duplicate JSON data, and integrates cleanly with the existing `run_state`.
 4. **Концепт (Concept Snippet):** A minimal, simplified Python snippet demonstrating the core mechanic, data shape, or function signature. DO NOT write the full implementation here.
 
@@ -257,9 +257,8 @@ Your goal is to provide seamless, drop-in code modifications. Follow this strict
 2. **Где (Target):** `file_path -> ClassName -> function_name`.
 3. **Как работает (Mechanics):** One concise sentence explaining the logic of the change.
 4. **Код (Implementation):**
-   - For modifying existing code: Use markdown "```diff" blocks with `+` for additions and `-` for removals. Provide enough surrounding context lines so the change is easy to locate.
-        - Make it so the TUI environment could colorize it
-   - For entirely new functions/classes: Use standard "```python" blocks.
+   - For modifying existing code provide enough surrounding context lines so the change is easy to locate.
+   - For entirely new functions/classes just write new code.
    - **DO NOT** rewrite the entire file. Provide only the relevant blocks.
 
 **CRITICAL:** Do not leak your internal reasoning/thinking process into the final output. Give me only the raw, direct result.

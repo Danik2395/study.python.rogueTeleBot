@@ -23,19 +23,19 @@
 
 ## Menu mode (overlay)
 
-### Main menu (opened_menu: "menu_main")
-- menu:menu_main:new_game
-- menu:menu_main:continue
-- goto_menu:menu_upgrades
+### Main menu (opened_menu: "menu_expanse")
+- menu:menu_expanse:new_game
+- menu:menu_expanse:continue
+- goto_menu:menu_recall
 
-### Upgrades menu (opened_menu: "menu_upgrades")
-- menu:menu_upgrades:heal
-- menu:menu_upgrades:damage
-- menu:menu_upgrades:defence
+### Recall menu (opened_menu: "menu_recall")
+- menu:menu_recall:heal
+- menu:menu_recall:damage
+- menu:menu_recall:defence
 - back_from_menu:menu_updrades
 
 ### Help menu (opened_menu: "menu_help")
-- goto_menu:menu_main
+- goto_menu:menu_expanse
 
 ## Explore mode
 
@@ -67,7 +67,7 @@
 ## Death mode (overlay)
 
 - start_again
-- goto_menu:menu_main
+- goto_menu:menu_expanse
 
 
 # Inventory
@@ -98,6 +98,33 @@ When item is moved to the other place menu remains the same letting select anoth
 - `selected_item_source`
     Source of the selected item
 
+# Meta Progression (Expanse & Recall)
+
+## Core Navigation & States
+
+- **Expanse** (formerly `menu_main`)
+    The primary hub. A metaphysical void devoid of physical forms, existing purely as a space of consciousness.
+- **Recall** (formerly `menu_upgtrades`)
+    The upgrade and progression system. Represents the act of recovering lost personality fragments.
+
+## Notes & Reality Interruption
+
+- **Interruption Logic**
+    Discovering a Note acts as a reality trigger. It forces a full-screen overlay, interrupting the game flow and compelling the player to read the text.
+- **Lore & Keys**
+    Notes serve a dual purpose:
+    - Reveal narrative lore.
+    - Act as permanent memory fragments added to recall (upgrade) in the Expanse.
+
+## Progression Flow
+
+- **Delayed Activation**
+    Stats and skills cannot be improved immediately upon discovering a Note.
+- **Recall Cycle**
+    1. **Discover**: Find a Note while exploring the Labyrinth or gain memory fragments in the combat.
+    2. **Return**: Transition back to the Expanse by death. Memory fragments only transfered in the entrance rooms.
+    3. **Recall**: Spend accumulated memory fragments in the Recall menu to activate the specific stats.
+
 
 # TODO
 
@@ -105,7 +132,10 @@ When item is moved to the other place menu remains the same letting select anoth
 - [x] Enable terminal debugging
 - [x] Create  an asynchronous database
 - [x] Develop an asynchronous bot
-- [ ] Develop an user interface in bot
 - [x] Integrate LLM
 - [ ] Add new features
+    - [x] Add meta progression
+    - [ ] Add camp room
+    - [ ] Add flee chance
+    - [ ] Develop an user interface in bot
 - [ ] Neat the balance
