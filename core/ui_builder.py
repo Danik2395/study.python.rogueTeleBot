@@ -210,31 +210,29 @@ def _inventory_select_buttons(state: dict) -> list[Button]:
 def _dead_buttons() -> list[Button]:
     return [
         Button(label=UI_LABELS["start_again"], action="start_again"),
-        Button(label=UI_LABELS["goto_menu:menu_main"], action="goto_menu:menu_main")
+        Button(label=UI_LABELS["goto_menu:menu_expanse"], action="goto_menu:menu_expanse")
     ]
 
 def menu_buttons(state: dict, key_menu: str) -> list[Button]:
     buttons = []
 
-    if key_menu == "menu_main":
-            buttons.append(Button(label=UI_LABELS["menu:menu_main:new_game"], action="menu:menu_main:new_game"))
+    if key_menu == "menu_expanse":
+            buttons.append(Button(label=UI_LABELS["menu:menu_expanse:new_game"], action="menu:menu_expanse:new_game"))
             if state.get("active"):
-                buttons.append(Button(label=UI_LABELS["menu:menu_main:continue"], action="menu:menu_main:continue"))
+                buttons.append(Button(label=UI_LABELS["menu:menu_expanse:continue"], action="menu:menu_expanse:continue"))
             if not state.get("active"):
-                buttons.append(Button(label=UI_LABELS["goto_menu:menu_upgrades"], action="goto_menu:menu_upgrades"))
-            # Button(label=UI_LABELS["menu:menu_main:help"], action="goto_menu:menu_help")
-    elif key_menu == "menu_upgrades":
+                buttons.append(Button(label=UI_LABELS["goto_menu:menu_recall"], action="goto_menu:menu_recall"))
+    elif key_menu == "menu_recall":
         buttons = [
-            Button(label=UI_LABELS["menu:menu_upgrades:heal"], action="menu:menu_upgrades:heal"),
-            Button(label=UI_LABELS["menu:menu_upgrades:damage"], action="menu:menu_upgrades:damage"),
-            Button(label=UI_LABELS["menu:menu_upgrades:defence"], action="menu:menu_upgrades:defence"),
-            Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:menu_upgrades")
-            # Button(label=UI_LABELS["menu:menu_upgrades:back"], action="goto_menu:menu_main")
+            Button(label=UI_LABELS["menu:menu_recall:health"], action="menu:menu_recall:health"),
+            Button(label=UI_LABELS["menu:menu_recall:damage"], action="menu:menu_recall:damage"),
+            Button(label=UI_LABELS["menu:menu_recall:defence"], action="menu:menu_recall:defence"),
+            Button(label=UI_LABELS["menu:menu_recall:speed"], action="menu:menu_recall:speed"),
+            Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:menu_recall")
         ]
     elif key_menu == "menu_help":
         buttons = [
-            # Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:menu_help")
-            Button(label=UI_LABELS["goto_menu:menu_main"], action="goto_menu:menu_main")
+            Button(label=UI_LABELS["goto_menu:menu_expanse"], action="goto_menu:menu_expanse")
         ]
     elif key_menu == "dead":
         return _dead_buttons()

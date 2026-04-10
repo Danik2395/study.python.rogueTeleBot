@@ -1,5 +1,6 @@
 import json
 import hashlib
+import random
 
 from typing import Any
 from openai import AsyncOpenAI
@@ -45,6 +46,8 @@ class LogHandler:
                 text = await self._render_entrance(log)
             case "continue":
                 text = await self._render_continue(log)
+            case "recall":
+                text = await self._render_recall(log)
             case _:
                 text =  "Событие произошло, но текст для него пока не готов."
 
@@ -249,10 +252,30 @@ class LogHandler:
             text = f"Вы спускаетесь на этаж {current_floor_index}."
         return text
 
+    async def _render_recall(self, log: dict[str, Any]) -> str:
+        action = log["action"]
+        stat = log["stat"]
+        memory_fragments_delta = log["memory_fragments_delta"]
+        recall_attempt_status = "failed" if action is None else "success"
+
+        user_content = f"""
+            Action in recall menu: {action}
+            Recall attempt status: {recall_attempt_status}
+            On what stat is action: {stat}
+            Memory fragments delta: {memory_fragments_delta}
+        """
+
+        system_content = PROMPTS["recall"]
+        text = await self._generate_text(system_content, user_content)
+
+        if not text:
+            text = f"Вы что-то вспомнили"
+        return text
+
     async def _render_continue(self, log: dict[str, Any]) -> str:
         menu_key_name = log.get("menu")
-        if menu_key_name is not None and menu_key_name in FTEXT:
-            menu_text = FTEXT[menu_key_name]
+        if menu_key_name is not None:
+            menu_text = random.choice(FTEXT[menu_key_name])
             return menu_text
 
         user_content = "Continue of the game."

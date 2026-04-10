@@ -7,7 +7,8 @@
 	    "defence": 5,
 	    "speed": 10,
 	    "min_floor": 1,
-	    "biom": ["cave"]
+	    "biom": ["cave"],
+	    "memory_fragments": 3
 	},
 	"lizard": {
 	    "text_name": "Ящерица",
@@ -16,7 +17,8 @@
 	    "defence": 3,
 	    "speed": 15,
 	    "min_floor": 1,
-	    "biom": ["cave"]
+	    "biom": ["cave"],
+	    "memory_fragments": 2
 	}
     },
     "npcs": {

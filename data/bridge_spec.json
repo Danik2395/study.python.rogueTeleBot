@@ -5,8 +5,8 @@
 	"noop": "noop",
 	"buttons_splitter": "——————",
 
-	"menu:menu_main:new_game": "Новая игра",
-	"menu:menu_main:continue": "Продолжить",
+	"menu:menu_expanse:new_game": "Новая игра",
+	"menu:menu_expanse:continue": "Продолжить",
 
 	"move:forward": "Двигаться вперёд",
 	"move:backward": "Двигаться назад",
@@ -40,14 +40,15 @@
 	"inventory_splitter:inventory": "--- Инвентарь ---",
 	"inventory_splitter:loot_source": "--- Комната ---",
 
-	"goto_menu:menu_main": "Главное меню",
-	"goto_menu:menu_upgrades": "Улучшения",
+	"goto_menu:menu_expanse": "Главное меню",
+	"goto_menu:menu_recall": "Улучшения",
 	"goto_menu:dead": "Экран смерти",
 
-	"menu:menu_upgrades:heal": "Увеличить здоровье",
-	"menu:menu_upgrades:damage": "Увеличить урон",
-	"menu:menu_upgrades:defence": "Увеличить защиту",
-	"menu:menu_upgrades:back": "Назад",
+	"menu:menu_recall:health": "Увеличить здоровье",
+	"menu:menu_recall:damage": "Увеличить урон",
+	"menu:menu_recall:defence": "Увеличить защиту",
+	"menu:menu_recall:speed": "Увеличить скорость",
+	"menu:menu_recall:back": "Назад",
 	"menu:menu_help:back": "Назад",
 
 	"emojis": {

@@ -47,6 +47,12 @@
 	"count_in_source": null,
 	"count_in_destination": null
     },
+    "recall_log_template": {
+	"type": "recall",
+	"action": null,
+	"stat": null,
+	"memory_fragments_delta": null
+    },
     "run_state_template": {
 	"active": false,
 	"menu_context": {
@@ -59,6 +65,7 @@
 	    "base_damage": 15,
 	    "base_defence": 0,
 	    "base_speed": 8,
+	    "memory_fragments": 0,
 	    "equipped_items": {
 		"equipped_weapon": {},
 		"equipped_armour": {}
@@ -89,7 +96,14 @@
 	    "total_runs": 0,
 	    "max_floor_reached": 0
 	},
-	"global_upgrades": {
+	"global_recalls": {
+	    "recall_cost": {
+		"health": 50,
+		"damage": 60,
+		"defence": 40,
+		"speed": 55
+	    },
+	    "memory_fragments": 0,
 	    "plus_health": 0,
 	    "plus_damage": 0,
 	    "plus_defence": 0,

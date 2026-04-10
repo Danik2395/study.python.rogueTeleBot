@@ -35,8 +35,20 @@
 	"inventory": null,
 	"inventory_select": "inventory",
 	"move_item_count_to": "inventory_select",
-	"menu_upgrades": "menu_main",
-	"menu_help": "menu_main",
+	"menu_recall": "menu_expanse",
+	"menu_help": "menu_expanse",
 	"dead": null
+    },
+    "recall_cost_multiplier": {
+	"health": 1.6,
+	"damage": 1.4,
+	"defence": 1.4,
+	"speed": 1.3
+    },
+    "recall_stat_value": {
+	"health": 2,
+	"damage": 4,
+	"defence": 4,
+	"speed": 3
     }
 }

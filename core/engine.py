@@ -7,11 +7,11 @@ from core.systems.floor_system import FloorSystem
 from core.systems.combat_system import CombatSystem
 from core.systems.move_system import MoveSystem
 from core.systems.inventory_system import InventorySystem
+from core.systems.recall_system import RecallSystem
 from core.entities import Player
 # from core.log_handler import LogHandler
 from core.state_wrapper import StateWrapper
-from data.presets import LOG
-from data.presets import RULES
+from data.presets import RULES, LOG, ENEMIES
 
 import copy
 from typing import Any
@@ -53,12 +53,12 @@ def init_run(user_data: dict) -> tuple[dict[str, Any], dict[str, Any]]:
     progress = user_data["progress"]
     progress["total_runs"] += 1
 
-    global_upgrades = user_data["global_upgrades"]
+    global_recalls = user_data["global_recalls"]
     player = new_run_state["player"]
 
     stats = ["health", "damage", "defence", "speed"]
     for s in stats:
-        player[f"base_{s}"] += global_upgrades[f"plus_{s}"]
+        player[f"base_{s}"] += global_recalls[f"plus_{s}"]
 
     player["current_health"] = player["base_health"]
 
@@ -149,6 +149,11 @@ def move_down(run_state: dict, user_data: dict) -> dict[str, Any]:
     if floor["index"] > progress["max_floor_reached"]:
         progress["max_floor_reached"] = floor["index"]
 
+    player = run_state["player"]
+    global_recalls = user_data["global_recalls"]
+    global_recalls["memory_fragments"] += player["memory_fragments"]
+    player["memory_fragments"] = 0
+
     combat_state = run_state["combat_state"]
     combat_state["in_combat"] = False
     combat_state["enemies"] = None
@@ -177,7 +182,7 @@ def attack(target_enemy_name: str, run_state: dict) -> dict:
 
     combat_system = CombatSystem(player, room_enemies, combat_state)
 
-    combat_log: dict = {}
+    combat_log: dict# = {}
     try:
         combat_log = combat_system.proceed_action("attack", target_enemy_name)
 
@@ -188,6 +193,13 @@ def attack(target_enemy_name: str, run_state: dict) -> dict:
         run_state["menu_context"]["type"] = "dead"
 
         return d.dead_log
+
+    consequence = combat_log["consequence"]
+    for c in consequence:
+        if c["dead"]:
+            enemy_key_name = c["target"]
+            player["memory_fragments"] += ENEMIES[enemy_key_name]["memory_fragments"]
+
 
     if combat_log["combat_ended"]:
         room_enemies.clear()
@@ -247,3 +259,8 @@ def inventory_equip(run_state: dict) -> dict:
     state_wrapped = StateWrapper(run_state)
     inventory_system = InventorySystem(state_wrapped.get_container, inventory_state)
     return inventory_system.use_item(player)
+
+def recall_stat(user_data: dict, stat: str) -> dict:
+    recall_system = RecallSystem(user_data)
+
+    return recall_system.recall_stat(stat)

@@ -33,7 +33,7 @@ class UserController:
 
         # Need to be highier then ignore command
         self.router.message(Command("start"))(self.cmd_start)
-        self.router.message(Command("menu"))(self.cmd_menu)
+        self.router.message(Command("expanse"))(self.cmd_expanse)
         self.router.message(Command("help"))(self.cmd_help)
         self.router.message(~Command("start"))(self.cmd_ignore)
         self.router.callback_query()(self.callback_handler)
@@ -53,14 +53,14 @@ class UserController:
             return
 
         except (ValueError, exceptions.TelegramBadRequest, exceptions.TelegramForbiddenError):
+            new_ui_message = await self.bot.send_message(
+                    chat_id=user_id,
+                    text=text,
+                    reply_markup=keyboard
+                    )
+
             await self._delete_bot_message(message_id=ui_message, chat_id=user_id)
             pass
-
-        new_ui_message = await self.bot.send_message(
-                chat_id=user_id,
-                text=text,
-                reply_markup=keyboard
-                )
 
         await self.interface.save_ui_message_id(user_id, new_ui_message.message_id)
 
@@ -82,23 +82,23 @@ class UserController:
 
     # === Commands ===
 
-    async def cmd_start(self, message: types.Message) -> None:
+    async def cmd_start(self, message: types.Message) -> None: # TODO: нужно переделать, чтобы оно сразу показывало стартовое сообщение, а через пару секунд только кнопки
         if message.from_user is None: return
         user_id = message.from_user.id
 
         contract = await self.interface.cmd_start(user_id)
 
         keyboard = get_keyboard(contract.buttons)
-        cmd_start_text = FTEXT["cmd_start"]
+        cmd_start_text = random.choice(FTEXT["cmd_start"])
 
         # await message.answer(cmd_start_text, reply_markup=keyboard)
         await self._delete_object_message(message=message, delay=5)
         await self._update_bot_message(user_id, cmd_start_text, keyboard)
 
-    async def cmd_menu(self, message: types.Message) -> None:
+    async def cmd_expanse(self, message: types.Message) -> None:
         if message.from_user is None: return
         user_id = message.from_user.id
-        contract = await self.interface.goto_menu_main(user_id)
+        contract = await self.interface.goto_menu_expanse(user_id)
 
         keyboard = get_keyboard(contract.buttons)
         menu_text = contract.text
@@ -119,7 +119,8 @@ class UserController:
         await self._update_bot_message(user_id, help_text, keyboard)
 
     async def cmd_ignore(self, message: types.Message) -> None:
-        warning_message = await message.answer(FTEXT["ignore_message"])
+        ignore_message = random.choice(FTEXT["ignore_message"])
+        warning_message = await message.answer(ignore_message)
         await self._delete_object_message(message=message, delay=2, warning_message=warning_message)
 
 

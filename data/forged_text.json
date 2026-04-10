@@ -1,9 +1,37 @@
 {
-    "ignore_message": "use buttons",
+    "ignore_message": [
+	"use buttons",
+	"use buttons",
+	"use buttons"
+    ],
 
-    "cmd_start": "to see commands type /help.",
-    "inventory": "Инвенарь меню",
-    "menu_main": "Главное меню",
-    "menu_help": "Помощь",
-    "menu_upgrades": "Улучшения"
+    "cmd_start": [
+	"start",
+	"start",
+	"start"
+    ],
+    "inventory": [
+	"inventory menu",
+	"inventory menu",
+	"inventory menu",
+	"inventory menu"
+    ],
+
+    "menu_expanse": [
+	"main",
+	"main",
+	"main",
+	"main"
+    ],
+    "menu_help": [
+	"help",
+	"help",
+	"help"
+    ],
+    "menu_recall": [
+	"recall",
+	"recall",
+	"recall",
+	"recall"
+    ]
 }

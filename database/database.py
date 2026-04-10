@@ -46,7 +46,7 @@ class Database:
 
     async def get_user_run_state(self, user_id: int) -> dict:
         await self.cur.execute(
-            "SELECT user_active_run FROM Users_data WHERE user_id = ?", (user_id,)
+            "SELECT user_run_state FROM Users_data WHERE user_id = ?", (user_id,)
         )
         row = await self.cur.fetchone()
         return json.loads(row[0]) if row else {}
@@ -76,9 +76,9 @@ class Database:
 
     async def save_user_run_state(self, user_id: int, state: dict) -> None:
         await self.cur.execute("""
-            INSERT INTO Users_data (user_id, user_active_run)
+            INSERT INTO Users_data (user_id, user_run_state)
             VALUES (?, ?)
-            ON CONFLICT(user_id) DO UPDATE SET user_active_run = excluded.user_active_run
+            ON CONFLICT(user_id) DO UPDATE SET user_run_state = excluded.user_run_state
         """, (user_id, json.dumps(state)))
         await self.db.commit()
 
@@ -112,7 +112,7 @@ class Database:
         table = """
         create table if not exists Users_data (
                 user_id integer primary key,
-                user_active_run json,
+                user_run_state json,
                 user_global_data json
                 );
         """

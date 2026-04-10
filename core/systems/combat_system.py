@@ -122,15 +122,15 @@ class CombatSystem:
 
                 # self.room_enemies = [key_name for key_name in self.enemies_objects.keys()]
 
+                # Appending consequence to the log after players attack
+                log["consequence"].append(consequence)
+
                 if not self.enemies_objects:
                     self.combat_state["in_combat"] = False
                     log["combat_ended"] = True
                     self.combat_state["turns"] = None
 
                     return log
-
-                # Appending consequence to the log after players attack
-                log["consequence"].append(consequence)
 
                 self.combat_state["turns"] -= 1
 

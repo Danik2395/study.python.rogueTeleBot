@@ -32,11 +32,11 @@ class RogueInterface:
         else:
             user_data = engine.init_data()
             state = copy.deepcopy(LOG["run_state_template"])
-            state["menu_context"]["opened_menu"] = "menu_main"
+            state["menu_context"]["opened_menu"] = "menu_expanse"
             await self.database.save_user_global_data(user_id, user_data)
             await self.database.save_user_run_state(user_id, state)
 
-        buttons = ui_builder.menu_buttons(state, "menu_main") # If state == {} wont show continue button
+        buttons = ui_builder.menu_buttons(state, "menu_expanse") # If state == {} wont show continue button
 
         return Contract(buttons=buttons)
 
@@ -152,10 +152,10 @@ class RogueInterface:
 
         return await self.goto_menu(user_id, "menu_help")
 
-    async def goto_menu_main(self, user_id: int) -> Contract:
+    async def goto_menu_expanse(self, user_id: int) -> Contract:
         """Open a main menu overlay"""
 
-        return await self.goto_menu(user_id, "menu_main")
+        return await self.goto_menu(user_id, "menu_expanse")
 
     async def menu(self, user_id: int, key_menu: str, action: str) -> Contract:
         """Perform action within a menu"""
@@ -163,12 +163,18 @@ class RogueInterface:
         state = await self.database.get_user_run_state(user_id)
 
         match key_menu:
-            case "menu_main":
+            case "menu_expanse":
                 if action == "new_game":
                     return await self.init_run(user_id)
                 if action == "continue":
                     state["menu_context"]["opened_menu"] = None
                     return await self.continue_run(user_id, run_state=state)
+
+            case "menu_recall":
+                user_data = await self.database.get_user_global_data(user_id)
+                log = engine.recall_stat(user_data, action)
+                await self.database.save_user_global_data(user_id, user_data)
+                return await self._finalize_game(user_id, state, log)
 
         state["menu_context"]["opened_menu"] = key_menu
         return await self.continue_run(user_id, run_state=state, show_menu=True)
@@ -192,7 +198,6 @@ class RogueInterface:
             state["menu_context"]["opened_menu"] = PARENT_MENU[source_key_menu]
 
             return await self.continue_run(user_id, run_state=state, show_menu=True)
-            # await self.database.save_user_run_state(user_id, state)
 
         return await self.continue_run(user_id, run_state=state)
 
