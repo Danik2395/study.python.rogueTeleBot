@@ -1,10 +1,13 @@
 {
     "room_type": [
 	"combat",
-	"combat",
-	"combat",
 	"loot",
 	"camp"
+    ],
+    "room_type_weights": [
+	60,
+	20,
+	20
     ],
     "bioms": {
 	"cave": {

@@ -82,6 +82,7 @@ class LogHandler:
         is_fork = log.get("is_fork", False)
         is_new_room = log.get("is_new_room", False)
         event = log.get("event", None)
+        consequence = log.get("consequence")
 
         floor = self.state["floor"]
         rooms = floor["rooms"]
@@ -106,6 +107,7 @@ class LogHandler:
             What loot is in room: {room_loot}
             Event that happened: {event}
             Room doors: {room_doors}
+             Consequences/Effects upon entry: {consequence}
         """
 
         system_content = PROMPTS["move"]

@@ -177,7 +177,8 @@ class FloorSystem:
         self.rooms_current_amount += 1
 
         # ===SETTING===
-        room_type = random.choice(LAYOUT["room_type"])
+        # room_type = random.choice(LAYOUT["room_type"])
+        room_type = random.choices(LAYOUT["room_type"], LAYOUT["room_type_weights"], k=1)[0]
         room_name = random.choice(self.biom["text_name"])
         room_mood = random.choice(self.biom["mood"])
 

@@ -25,11 +25,16 @@
     },
     "move_log_template": {
 	"type": "move",
+	"room_type": null,
 	"direction": null,
 	"room_index": null,
 	"is_fork": false,
 	"is_new_room": false,
-	"event": null
+	"event": null,
+	"consequence": null
+    },
+    "move_consequence_log_template": {
+	"health_delta": 0
     },
     "floor_entrance_log_template": {
 	"type": "entrance",

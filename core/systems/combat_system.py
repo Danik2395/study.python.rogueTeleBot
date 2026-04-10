@@ -21,13 +21,14 @@ class CombatSystem:
 
         self.player = player
 
-        self.player_object = Player(
-                player["current_health"],
-                player["base_defence"],
-                player["base_damage"],
-                player["base_speed"],
-                player["equipped_items"]
-                )
+        # self.player_object = Player(
+        #         player["current_health"],
+        #         player["base_defence"],
+        #         player["base_damage"],
+        #         player["base_speed"],
+        #         player["equipped_items"]
+        #         )
+        self.player_object = Player(player)
         self.turns = combat_state["turns"]
 
         self._set_enemies()

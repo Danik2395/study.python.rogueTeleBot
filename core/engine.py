@@ -3,6 +3,9 @@ Module for stateless engine.
 Operates systems
 """
 
+from hashlib import new
+import random
+
 from core.systems.floor_system import FloorSystem
 from core.systems.combat_system import CombatSystem
 from core.systems.move_system import MoveSystem
@@ -103,6 +106,25 @@ def move(direction: str, run_state: dict) -> dict[str, Any]:
 
             # We need to set enemies so buttons append correctly
             combat_state["enemies"] = CombatSystem.build_state_enemies(current_room_enemies)
+
+
+        if is_new_room and move_log["room_type"] == "camp":
+            dirty_camp_health_increase_limits = RULES["move"]["camp_health_increase_limits"]
+            camp_health_increase_limits = random.choice(dirty_camp_health_increase_limits)
+
+            low, high, *buff = camp_health_increase_limits
+            camp_health_increase = random.randint(low, high)
+
+            player = run_state["player"]
+            new_health = min(player["current_health"] + camp_health_increase, player["base_health"])
+            health_increase_delta = new_health - player["current_health"]
+            player["current_health"] = new_health
+
+            consequence = LOG["move_consequence_log_template"]
+            consequence["health_delta"] = health_increase_delta
+
+            move_log["consequence"] = consequence
+            move_log["event"] = "heal"
 
         return move_log
 

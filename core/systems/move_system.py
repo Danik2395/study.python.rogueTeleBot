@@ -49,8 +49,10 @@ class MoveSystem:
 
         # Changing current room
         self.floor["current_room_index"] = new_current_room_index
-
         move_log["room_index"] = new_current_room_index
+
+        current_room = self.floor["rooms"][new_current_room_index]
+        move_log["room_type"] =  current_room["room_type"]
 
         return move_log
 
@@ -59,14 +61,17 @@ class MoveSystem:
         Handles "movement" to the last fork (room with more one or more new doors)
         """
 
-        log = LOG["move_log_template"].copy()
-        log["is_fork"] = True
+        move_log = LOG["move_log_template"].copy()
+        move_log["is_fork"] = True
 
         if self.fork_stack:
             self.floor["current_room_index"] = self.fork_stack[-1]
         else:
             self.floor["current_room_index"] = 0
 
-        log["room_index"] = self.floor["current_room_index"]
+        current_room_index = move_log["room_index"] = self.floor["current_room_index"]
 
-        return log
+        current_room = self.floor["rooms"][current_room_index]
+        move_log["room_type"] =  current_room["room_type"]
+
+        return move_log

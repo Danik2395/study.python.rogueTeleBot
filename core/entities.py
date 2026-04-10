@@ -67,7 +67,7 @@ class Dummy:
 
 
 class Player(Dummy):
-    """Player class. Sets properties parcing values from jsons"""
+    """Player class. Sets properties parcing values from json"""
 
     class Dead(Exception):
         """Exception that occured on the players death"""
@@ -77,11 +77,18 @@ class Player(Dummy):
             self.dead_log = log
 
 
-    def __init__(self, health: int, defence: int, damage: int, speed: int, equipped_items: dict) -> None:
-        super().__init__("Player", health, defence, damage, speed)
-        # self.equipped_items = equipped_items
+    # def __init__(self, health: int, defence: int, damage: int, speed: int, equipped_items: dict) -> None:
+    def __init__(self, player: dict) -> None:
+        super().__init__(
+                "Player",
+                player["current_health"],
+                player["base_defence"],
+                player["base_damage"],
+                player["base_speed"]
+                )
+
         self.equipped_items = {}
-        for container_key, container in equipped_items.items():
+        for container_key, container in player["equipped_items"].items():
             slot = container_key.replace("equipped_", "")
             if container:
                 item_key_name, = container
