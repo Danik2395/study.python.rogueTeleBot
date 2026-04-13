@@ -100,11 +100,11 @@ def _combat_buttons(state: dict) -> list[Button]:
         if data.get("health", 0) > 0:
             enemy_text_name = ENEMIES[key_name]["text_name"]
             enemy_hp = data["health"]
-            label = f"{UI_LABELS['attack']} {enemy_text_name} ({enemy_hp} HP)"
-            buttons.append(Button(label=label, action=f"attack:{key_name}"))
+            label = f"{UI_LABELS['combat:attack']} {enemy_text_name} ({enemy_hp} HP)"
+            buttons.append(Button(label=label, action=f"combat:attack:{key_name}"))
 
+    buttons.append(Button(label=UI_LABELS["combat:defence"], action="combat:defence"))
     buttons.append(Button(label=UI_LABELS["inventory_open:inventory"], action="inventory_open:inventory"))
-    # buttons.append({"label": UI_LABELS["defence"], "action": "defence"})
 
     return buttons
 

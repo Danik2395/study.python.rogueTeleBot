@@ -69,8 +69,60 @@ class CombatSystem:
        self.turns = self.player_object.speed // COMBAT_RULES["turn_delimiter"]
        self.combat_state["turns"] = self.turns
 
+    def _enemies_turn(self, log: dict, low_damage: float, high_damage: float) -> None:
+        log["enemies_turn_triggered"] = True
+        if log.get("consequence") is None:
+            log["consequence"] = []
+
+        extra_def = self.player.get("extra_defence", {})
+        def_buff_active = (extra_def.get("for_turns") or 0) > 0
+        def_buff_value = extra_def.get("value", 0)
+
+        for key_name, enemy in self.enemies_objects.items():
+            consequence = LOG["combat_consequence_log_template"].copy()
+            consequence["attacker"] = key_name
+            consequence["target"] = "player"
+            consequence["stat"] = "damage"
+
+            enemy_damage = random.randint(
+                int(enemy.damage * low_damage),
+                int(enemy.damage * high_damage)
+            )
+
+            if def_buff_active:
+                effective_buff = def_buff_value if enemy.speed <= self.player_object.speed else def_buff_value / 2
+                enemy_damage = int(enemy_damage * (1 - effective_buff))
+
+            player_health_before = self.player_object.current_health
+            self.player_object.take_damage(enemy_damage)
+            consequence["delta"] = self.player_object.current_health - player_health_before
+
+            if self.player_object.current_health <= 0:
+                dead_log = LOG["dead_log_template"].copy()
+                dead_log["enemy"] = key_name
+                dead_log["damage"] = enemy_damage
+                raise self.player_object.Dead(dead_log)
+
+            log["consequence"].append(consequence)
+
+        if def_buff_active:
+            extra_def["for_turns"] = 0
+            extra_def["value"] = 0
+
+        self.player.update({
+            "base_health": self.player_object.base_health,
+            "current_health": self.player_object.current_health,
+            "base_damage": self.player_object.base_damage,
+            "base_defence": self.player_object.base_defence,
+            "base_speed": self.player_object.base_speed,
+        })
+        self._set_turns()
+
     def proceed_action(self, action_type: str, target_enemy_key_name: str = "") -> dict:
         """Proceeds player actions and returns combat action log"""
+
+        damage_scale = random.choice(COMBAT_RULES["damage_scale_limits"])
+        low_damage, high_damage, *buff = damage_scale
 
         match action_type:
             case "attack":
@@ -137,41 +189,33 @@ class CombatSystem:
 
                 # Enemies turn
                 if self.combat_state["turns"] <= 0:
+                    self._enemies_turn(log, low_damage, high_damage)
 
-                    log["enemies_turn_triggered"] = True
+                log["turns"] = self.combat_state["turns"]
+                return log
 
-                    # enemy stands for enemy_object. To shorten typing
-                    for key_name, enemy in self.enemies_objects.items():
-                        consequence = LOG["combat_consequence_log_template"].copy()
+            case "defence":
+                log = LOG["combat_log_template"].copy()
+                log["action"] = "defence"
+                log["consequence"] = []
 
-                        consequence["attacker"] = key_name
-                        consequence["target"] = "player"
-                        consequence["stat"] = "damage"
+                limits = COMBAT_RULES["defence_speed_limits"]
+                defence_lims = limits[0]
+                for entry in reversed(limits):
+                    if self.player_object.speed >= entry[0]:
+                        defence_lims = entry
+                        break
 
-                        enemy_damage = random.randint(int(enemy.damage * low_damage), int(enemy.damage * high_damage))
+                _, low, high, turns_cost = defence_lims
+                defence_percent = random.uniform(low, high)
 
-                        player_health_before = self.player_object.current_health
-                        self.player_object.take_damage(enemy_damage)
-                        delta_damage = self.player_object.current_health - player_health_before
-                        consequence["delta"] = delta_damage
+                self.player["extra_defence"]["value"] = defence_percent
+                self.player["extra_defence"]["for_turns"] = 1
 
-                        # If player dead transfering data to the upper structure
-                        if self.player_object.current_health <= 0:
-                            dead_log = LOG["dead_log_template"].copy()
-                            dead_log["enemy"] = key_name
-                            dead_log["damage"] = enemy_damage
-                            raise self.player_object.Dead(dead_log)
+                self.combat_state["turns"] -= turns_cost
 
-                        log["consequence"].append(consequence)
-
-                    self.player.update({
-                        "base_health": self.player_object.base_health,
-                        "current_health": self.player_object.current_health,
-                        "base_damage": self.player_object.base_damage,
-                        "base_defence": self.player_object.base_defence,
-                        "base_speed": self.player_object.base_speed,
-                    })
-                    self._set_turns()
+                if self.combat_state["turns"] <= 0:
+                    self._enemies_turn(log, low_damage, high_damage)
 
                 log["turns"] = self.combat_state["turns"]
                 return log

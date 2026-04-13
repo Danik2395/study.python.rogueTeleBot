@@ -7,7 +7,7 @@
 | cmd_start | — | — |
 | init_run | — | — |
 | move | forward, backward, left, right, down, to_fork | — |
-| attack | {enemy_key_name} | — |
+| combat | attack, defence | {enemy_key_name} |
 | inventory_open | inventory (default), room_loot | — |
 | inventory_select | {item_key_name} | {source} |
 | move_item_to | {destination} | — |
@@ -46,8 +46,12 @@
 
 ## Combat mode
 
-- attack:{enemy}
+- combat:attack:{enemy_key_name}
+- combat:defence
 - inventory_open:inventory
+
+### Defence
+When player chooses defence, a random protection buff is applied based on player speed. Buff reduces incoming damage for the next enemy turn. Buff effectiveness is halved against emenies faster the player.
 
 ## Inventory mode (overlay)
 
@@ -135,7 +139,8 @@ When item is moved to the other place menu remains the same letting select anoth
 - [x] Integrate LLM
 - [ ] Add new features
     - [x] Add meta progression
-    - [ ] Add camp room
+    - [x] Add camp room
+    - [x] Add defence logic
     - [ ] Add flee chance
     - [ ] Develop an user interface in bot
 - [ ] Neat the balance

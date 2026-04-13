@@ -3,7 +3,6 @@ Module for stateless engine.
 Operates systems
 """
 
-from hashlib import new
 import random
 
 from core.systems.floor_system import FloorSystem
@@ -228,6 +227,25 @@ def attack(target_enemy_name: str, run_state: dict) -> dict:
         current_room["cleared"] = True
 
     return combat_log
+
+def defence(run_state: dict) -> dict:
+    floor = run_state["floor"]
+    current_room_index = floor["current_room_index"]
+    current_room = floor["rooms"][current_room_index]
+
+    player = run_state["player"]
+    room_enemies = current_room["enemies"]
+    combat_state = run_state["combat_state"]
+
+    combat_system = CombatSystem(player, room_enemies, combat_state)
+
+    try:
+        return combat_system.proceed_action("defence")
+    except player_dead_exception as d:
+        run_state["active"] = False
+        run_state["menu_context"]["opened_menu"] = "dead"
+        run_state["menu_context"]["type"] = "dead"
+        return d.dead_log
 
 def inventory_open(loot_source: str, run_state: dict) -> dict:
     log = LOG["inventory_log_template"].copy()

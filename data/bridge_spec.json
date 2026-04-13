@@ -15,8 +15,8 @@
 	"move:down": "Перейти на нижний этаж",
 	"move:to_fork": "К развилке",
 
-	"attack": "Атаковать",
-	"defence": "Повысить защиту",
+	"combat:attack": "Атаковать",
+	"combat:defence": "Защититься",
 
 	"goto_menu:inventory:inventory": "Инвентарь",
 	"goto_menu:inventory:room_loot": "Вещи в комнате",

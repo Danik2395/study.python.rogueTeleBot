@@ -71,6 +71,10 @@
 	    "base_defence": 0,
 	    "base_speed": 8,
 	    "memory_fragments": 0,
+	    "extra_defence": {
+		"for_turns": null,
+		"value": 0
+	    },
 	    "equipped_items": {
 		"equipped_weapon": {},
 		"equipped_armour": {}

@@ -1,4 +1,3 @@
-from asyncio import run
 import copy
 
 import core.engine as engine
@@ -101,6 +100,11 @@ class RogueInterface:
         combat_log = engine.attack(target_enemy_name, run_state)
 
         return await self._finalize_game(user_id, run_state, combat_log)
+
+    async def defence(self, user_id: int) -> Contract:
+        run_state = await self.database.get_user_run_state(user_id)
+        log = engine.defence(run_state)
+        return await self._finalize_game(user_id, run_state, log)
 
     async def inventory_open(self, user_id: int, loot_source: str = "inventory") -> Contract:
         state = await self.database.get_user_run_state(user_id)
@@ -252,9 +256,13 @@ async def process_action(user_id: int, action: str | None, rogue_interface: "Rog
                 return await rogue_interface.move_down(user_id)
             return await rogue_interface.move(user_id, direction)
 
-        case "attack":
-            target = parsed.params["target_enemy_name"]
-            return await rogue_interface.attack(user_id, target)
+        case "combat":
+            action = parsed.params["action"]
+            if action == "attack":
+                target = parsed.params["target_enemy_name"]
+                return await rogue_interface.attack(user_id, target)
+            if action == "defence":
+                return await rogue_interface.defence(user_id)
 
         case "inventory_open":
             loot_source = parsed.params["loot_source"]

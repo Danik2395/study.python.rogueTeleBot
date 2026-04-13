@@ -23,6 +23,6 @@ class ActionParser:
 
         params = {}
         for i, name in enumerate(arg_names):
-            params[name] = args[i]
+            params[name] = args[i] if i < len(args) else None
 
         return ParsedAction(command=command, params=params)
