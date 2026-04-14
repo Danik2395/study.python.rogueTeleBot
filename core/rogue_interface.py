@@ -40,6 +40,10 @@ class RogueInterface:
         return Contract(buttons=buttons)
 
     async def get_ui_message_id(self, user_id: int) -> int:
+        """
+        Raises:
+            ValueError if no message in database
+        """
         ui_message_id =  await self.database.get_ui_message_id(user_id)
 
         if ui_message_id == 0:

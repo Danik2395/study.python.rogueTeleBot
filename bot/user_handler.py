@@ -4,13 +4,13 @@ import random
 random.seed(42)
 
 from aiogram import Router, F, types, Bot, exceptions
-from aiogram.enums import ParseMode
-from aiogram.types import Message, message, pre_checkout_query, user
-from aiogram.fsm.state import State, StatesGroup
-from aiogram.filters import Filter, Command
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-from aiogram.types import InlineKeyboardMarkup
-from aiogram.exceptions import TelegramBadRequest
+# from aiogram.enums import ParseMode
+# from aiogram.types import Message, message, pre_checkout_query, user
+# from aiogram.fsm.state import State, StatesGroup
+from aiogram.filters import Command
+# from aiogram.utils.keyboard import InlineKeyboardBuilder
+# from aiogram.types import InlineKeyboardMarkup
+# from aiogram.exceptions import TelegramBadRequest
 
 from data.presets import FTEXT
 from core.rogue_interface import RogueInterface, process_action, NoAction
@@ -40,28 +40,28 @@ class UserController:
 
 
     async def _update_bot_message(self, user_id: int, text: str, keyboard: types.InlineKeyboardMarkup) -> None:
-        ui_message: int = 0
         try:
             ui_message = await self.interface.get_ui_message_id(user_id)
+        except ValueError:
+            ui_message = 0
 
-            await self.bot.edit_message_text(
-                chat_id=user_id,
-                message_id=ui_message,
-                text=text,
-                reply_markup=keyboard
-            )
-            return
-
-        except (ValueError, exceptions.TelegramBadRequest, exceptions.TelegramForbiddenError):
-            new_ui_message = await self.bot.send_message(
+        if ui_message:
+            try:
+                await self.bot.edit_message_text(
                     chat_id=user_id,
+                    message_id=ui_message,
                     text=text,
                     reply_markup=keyboard
-                    )
+                )
+                return
+            except (exceptions.TelegramBadRequest, exceptions.TelegramForbiddenError):
+                asyncio.create_task(self._delete_bot_message(message_id=ui_message, chat_id=user_id, delay=3))
 
-            await self._delete_bot_message(message_id=ui_message, chat_id=user_id)
-            pass
-
+        new_ui_message = await self.bot.send_message(
+            chat_id=user_id,
+            text=text,
+            reply_markup=keyboard
+        )
         await self.interface.save_ui_message_id(user_id, new_ui_message.message_id)
 
     async def _delete_object_message(self, *, message: types.Message, delay: int = 0, warning_message: types.Message | None = None) -> None:
@@ -92,7 +92,7 @@ class UserController:
         cmd_start_text = random.choice(FTEXT["cmd_start"])
 
         # await message.answer(cmd_start_text, reply_markup=keyboard)
-        await self._delete_object_message(message=message, delay=5)
+        asyncio.create_task(self._delete_object_message(message=message, delay=3))
         await self._update_bot_message(user_id, cmd_start_text, keyboard)
 
     async def cmd_expanse(self, message: types.Message) -> None:
