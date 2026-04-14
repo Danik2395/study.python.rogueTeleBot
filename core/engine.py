@@ -13,7 +13,7 @@ from core.systems.recall_system import RecallSystem
 from core.entities import Player
 # from core.log_handler import LogHandler
 from core.state_wrapper import StateWrapper
-from data.presets import RULES, LOG, ENEMIES
+from data.presets import RULES, LOG, ENEMIES, LAYOUT
 
 import copy
 from typing import Any
@@ -101,6 +101,7 @@ def move(direction: str, run_state: dict) -> dict[str, Any]:
             combat_state = run_state["combat_state"]
 
             combat_state["in_combat"] = True
+            combat_state["flee_direction"] = RULES["opposite_direction"][direction]
             move_log["event"] = "combat"
 
             # We need to set enemies so buttons append correctly
@@ -179,6 +180,7 @@ def move_down(run_state: dict, user_data: dict) -> dict[str, Any]:
     combat_state["in_combat"] = False
     combat_state["enemies"] = None
     combat_state["turns"] = None
+    combat_state["flee_direction"] = None
 
     inventory_state = run_state["inventory_state"]
     inventory_state["selected_item_key_name"] = None
@@ -246,6 +248,40 @@ def defence(run_state: dict) -> dict:
         run_state["menu_context"]["opened_menu"] = "dead"
         run_state["menu_context"]["type"] = "dead"
         return d.dead_log
+
+def flee(run_state: dict) -> dict:
+    floor = run_state["floor"]
+    biom_key = floor["biom_key_name"]
+
+    flee_chance_limits = LAYOUT["bioms"][biom_key]["flee_chance_limits"]
+
+    current_room_index = floor["current_room_index"]
+    current_room = floor["rooms"][current_room_index]
+    player = run_state["player"]
+    combat_state = run_state["combat_state"]
+
+    combat_system = CombatSystem(player, current_room["enemies"], combat_state)
+
+    try:
+        combat_log = combat_system.proceed_action("flee", flee_chance_limits=flee_chance_limits)
+    except player_dead_exception as d:
+        run_state["active"] = False
+        run_state["menu_context"]["opened_menu"] = "dead"
+        run_state["menu_context"]["type"] = "dead"
+        return d.dead_log
+
+    if combat_log.get("fled"):
+        flee_direction = combat_state["flee_direction"]
+        move_system = MoveSystem(floor)
+        move_log = move_system.move(flee_direction)
+        move_log["event"] = "flee"
+        combat_state["in_combat"] = False
+        combat_state["turns"] = None
+        combat_state["enemies"] = None
+        combat_state["flee_direction"] = None
+        return move_log
+
+    return combat_log
 
 def inventory_open(loot_source: str, run_state: dict) -> dict:
     log = LOG["inventory_log_template"].copy()

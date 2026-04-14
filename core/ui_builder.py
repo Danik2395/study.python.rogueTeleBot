@@ -104,6 +104,7 @@ def _combat_buttons(state: dict) -> list[Button]:
             buttons.append(Button(label=label, action=f"combat:attack:{key_name}"))
 
     buttons.append(Button(label=UI_LABELS["combat:defence"], action="combat:defence"))
+    buttons.append(Button(label=UI_LABELS["combat:flee"], action="combat:flee"))
     buttons.append(Button(label=UI_LABELS["inventory_open:inventory"], action="inventory_open:inventory"))
 
     return buttons

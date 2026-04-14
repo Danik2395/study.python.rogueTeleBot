@@ -7,7 +7,7 @@
 | cmd_start | — | — |
 | init_run | — | — |
 | move | forward, backward, left, right, down, to_fork | — |
-| combat | attack, defence | {enemy_key_name} |
+| combat | attack, defence, flee| {enemy_key_name} |
 | inventory_open | inventory (default), room_loot | — |
 | inventory_select | {item_key_name} | {source} |
 | move_item_to | {destination} | — |
@@ -48,10 +48,16 @@
 
 - combat:attack:{enemy_key_name}
 - combat:defence
+- combat:flee
 - inventory_open:inventory
 
 ### Defence
 When player chooses defence, a random protection buff is applied based on player speed. Buff reduces incoming damage for the next enemy turn. Buff effectiveness is halved against emenies faster the player.
+
+### Flee chance
+The escape button casts a chance that depends on the biome.
+Success — the player moves back (to the previous room), the fight is ended.
+Failure is the forced turn of enemies without resetting the player's turns.
 
 ## Inventory mode (overlay)
 
@@ -141,6 +147,6 @@ When item is moved to the other place menu remains the same letting select anoth
     - [x] Add meta progression
     - [x] Add camp room
     - [x] Add defence logic
-    - [ ] Add flee chance
+    - [x] Add flee chance
     - [ ] Develop an user interface in bot
 - [ ] Neat the balance

@@ -17,6 +17,7 @@
 
 	"combat:attack": "Атаковать",
 	"combat:defence": "Защититься",
+	"combat:flee": "Бежать",
 
 	"goto_menu:inventory:inventory": "Инвентарь",
 	"goto_menu:inventory:room_loot": "Вещи в комнате",

@@ -11,6 +11,11 @@
     ],
     "bioms": {
 	"cave": {
+	    "biom_text_name": [
+		"Пещера",
+		"Пещера",
+		"Пещера"
+	    ],
 	    "text_name": [
 		"пещера",
 		"каменная комната"
@@ -44,6 +49,7 @@
 		"entrance_door_chance": 0.8,
 		"entrance_down_chance": -1
 	    },
+	    "flee_chance_limits": [0.3, 0.6],
 	    "doors_template": {
 		    "forward": null,
 		    "backward": null,

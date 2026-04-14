@@ -9,6 +9,7 @@
 	"turns": null,
 	"enemies_turn_triggered": false,
 	"combat_ended": false,
+	"fled": null,
 	"consequence": null
     },
     "combat_consequence_log_template": {
@@ -83,6 +84,7 @@
 	},
 	"combat_state": {
 	    "in_combat": false,
+	    "flee_direction": null,
 	    "turns": null,
 	    "enemies": null
 	},
@@ -93,6 +95,7 @@
 	},
 	"floor": {
 	    "index": null,
+	    "biom_key_name": null,
 	    "current_room_index": null,
 	    "fork_stack": [],
 	    "down_in_room": -1,

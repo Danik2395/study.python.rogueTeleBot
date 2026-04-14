@@ -69,7 +69,7 @@ class CombatSystem:
        self.turns = self.player_object.speed // COMBAT_RULES["turn_delimiter"]
        self.combat_state["turns"] = self.turns
 
-    def _enemies_turn(self, log: dict, low_damage: float, high_damage: float) -> None:
+    def _enemies_turn(self, log: dict, low_damage: float, high_damage: float, reset_turns: bool = True) -> None:
         log["enemies_turn_triggered"] = True
         if log.get("consequence") is None:
             log["consequence"] = []
@@ -116,9 +116,10 @@ class CombatSystem:
             "base_defence": self.player_object.base_defence,
             "base_speed": self.player_object.base_speed,
         })
-        self._set_turns()
+        if reset_turns:
+            self._set_turns()
 
-    def proceed_action(self, action_type: str, target_enemy_key_name: str = "") -> dict:
+    def proceed_action(self, action_type: str, target_enemy_key_name: str = "", flee_chance_limits: list | None = None) -> dict:
         """Proceeds player actions and returns combat action log"""
 
         damage_scale = random.choice(COMBAT_RULES["damage_scale_limits"])
@@ -180,8 +181,10 @@ class CombatSystem:
 
                 if not self.enemies_objects:
                     self.combat_state["in_combat"] = False
-                    log["combat_ended"] = True
                     self.combat_state["turns"] = None
+                    self.combat_state["enemies"] = None
+                    self.combat_state["flee_direction"] = None
+                    log["combat_ended"] = True
 
                     return log
 
@@ -217,6 +220,27 @@ class CombatSystem:
                 if self.combat_state["turns"] <= 0:
                     self._enemies_turn(log, low_damage, high_damage)
 
+                log["turns"] = self.combat_state["turns"]
+                return log
+
+            case "flee":
+                log = LOG["combat_log_template"].copy()
+                log["action"] = "flee"
+                log["consequence"] = []
+
+                if flee_chance_limits is None:
+                    raise ValueError("flee_chance_limits must be provided for flee action")
+                low, high, *_ = flee_chance_limits
+                roll = random.uniform(0, 1)
+                threshold = random.uniform(low, high)
+
+                if roll <= threshold:
+                    log["fled"] = True
+                    return log
+
+                log["fled"] = False
+                log["action"] = "flee_fail"
+                self._enemies_turn(log, low_damage, high_damage, reset_turns=False)
                 log["turns"] = self.combat_state["turns"]
                 return log
 

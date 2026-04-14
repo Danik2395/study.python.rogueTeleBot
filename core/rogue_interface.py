@@ -106,6 +106,11 @@ class RogueInterface:
         log = engine.defence(run_state)
         return await self._finalize_game(user_id, run_state, log)
 
+    async def flee(self, user_id: int) -> Contract:
+        run_state = await self.database.get_user_run_state(user_id)
+        log = engine.flee(run_state)
+        return await self._finalize_game(user_id, run_state, log)
+
     async def inventory_open(self, user_id: int, loot_source: str = "inventory") -> Contract:
         state = await self.database.get_user_run_state(user_id)
 
@@ -263,6 +268,8 @@ async def process_action(user_id: int, action: str | None, rogue_interface: "Rog
                 return await rogue_interface.attack(user_id, target)
             if action == "defence":
                 return await rogue_interface.defence(user_id)
+            if action == "flee":
+                return await rogue_interface.flee(user_id)
 
         case "inventory_open":
             loot_source = parsed.params["loot_source"]

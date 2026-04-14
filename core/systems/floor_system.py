@@ -39,6 +39,8 @@ class FloorSystem:
                 self.biom_key = "void"
 
         self.biom = LAYOUT["bioms"][self.biom_key]
+        self.floor["biom_text_name"] = self.biom["biom_text_name"]
+        self.floor["biom_key_name"] = self.biom_key
 
     def _set_scale(self) -> None:
         """
