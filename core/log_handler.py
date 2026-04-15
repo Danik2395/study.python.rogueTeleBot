@@ -45,7 +45,7 @@ class LogHandler:
         if await self.database.is_log_cash_exists(log_hash):
             cash_text = await self.database.get_log_cash(log_hash)
 
-            if opened_menu not in ("menu_recall", "menu_expance", "menu_help"):
+            if opened_menu not in ("menu_recall", "menu_expanse", "menu_help"):
                 cash_text += f"\n\n{starus_bar}"
 
         match log_type:

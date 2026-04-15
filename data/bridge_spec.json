@@ -5,8 +5,8 @@
 	"noop": "noop",
 	"buttons_splitter": "——————",
 
-	"menu:menu_expanse:new_game": "Новая игра",
-	"menu:menu_expanse:continue": "Продолжить",
+	"menu:menu_expanse:new_game": "Шагнуть в Бездну",
+	"menu:menu_expanse:continue": "Вернуться в лабиринт",
 
 	"move:forward": "Двигаться вперёд",
 	"move:backward": "Двигаться назад",
@@ -41,14 +41,14 @@
 	"inventory_splitter:inventory": "--- Инвентарь ---",
 	"inventory_splitter:loot_source": "--- Комната ---",
 
-	"goto_menu:menu_expanse": "Главное меню",
-	"goto_menu:menu_recall": "Улучшения",
+	"goto_menu:menu_expanse": "Пространство",
+	"goto_menu:menu_recall": "Воспоминания",
 	"goto_menu:dead": "Экран смерти",
 
-	"menu:menu_recall:health": "Увеличить здоровье",
-	"menu:menu_recall:damage": "Увеличить урон",
-	"menu:menu_recall:defence": "Увеличить защиту",
-	"menu:menu_recall:speed": "Увеличить скорость",
+	"menu:menu_recall:health": "Живучесть",
+	"menu:menu_recall:damage": "Атака",
+	"menu:menu_recall:defence": "Стойкость",
+	"menu:menu_recall:speed": "Скорость",
 	"menu:menu_recall:back": "Назад",
 	"menu:menu_help:back": "Назад",
 

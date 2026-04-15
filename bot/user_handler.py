@@ -26,6 +26,8 @@ class UserController:
 
         self._register_handlers()
 
+        self.lock_users = set()
+
     def _register_handlers(self) -> None:
         """
         Method replaces decorators
@@ -34,7 +36,7 @@ class UserController:
         # Need to be highier then ignore command
         self.router.message(Command("start"))(self.cmd_start)
         self.router.message(Command("expanse"))(self.cmd_expanse)
-        self.router.message(Command("help"))(self.cmd_help)
+        # self.router.message(Command("help"))(self.cmd_help)
         self.router.message(~Command("start"))(self.cmd_ignore)
         self.router.callback_query()(self.callback_handler)
 
@@ -127,17 +129,17 @@ class UserController:
         await self._delete_object_message(message=message)
         await self._update_bot_message(user_id, menu_text, keyboard, contract.map_photo)
 
-    async def cmd_help(self, message: types.Message) -> None:
-
-        if message.from_user is None: return
-        user_id = message.from_user.id
-        contract = await self.interface.goto_menu_help(user_id)
-
-        keyboard = get_keyboard(contract.buttons)
-        help_text = contract.text
-
-        await self._delete_object_message(message=message)
-        await self._update_bot_message(user_id, help_text, keyboard, contract.map_photo)
+    # async def cmd_help(self, message: types.Message) -> None:
+    #
+    #     if message.from_user is None: return
+    #     user_id = message.from_user.id
+    #     contract = await self.interface.goto_menu_help(user_id)
+    #
+    #     keyboard = get_keyboard(contract.buttons)
+    #     help_text = contract.text
+    #
+    #     await self._delete_object_message(message=message)
+    #     await self._update_bot_message(user_id, help_text, keyboard, contract.map_photo)
 
     async def cmd_ignore(self, message: types.Message) -> None:
         ignore_message = random.choice(FTEXT["ignore_message"])
@@ -148,8 +150,13 @@ class UserController:
     # === Callback Processing ===
 
     async def callback_handler(self, callback: types.CallbackQuery) -> None:
+        user_id = callback.from_user.id
+        if user_id in self.lock_users:
+            return
+
+        self.lock_users.add(user_id)
+
         try:
-            user_id = callback.from_user.id
             action = callback.data
 
             contract = await process_action(user_id, action, self.interface)
@@ -159,7 +166,10 @@ class UserController:
             pprint(contract)
             # await callback.message.answer(contract.text, reply_markup=keyboard) #type: ignore
             await self._update_bot_message(user_id, contract.text, keyboard, contract.map_photo)
+
         except NoAction:
             pass
 
-        await callback.answer()
+        finally:
+            await callback.answer()
+            self.lock_users.remove(user_id)

@@ -24,6 +24,9 @@ DIRECTION_DELTA = {
 }
 
 def _should_render(log: dict, state: dict) -> bool:
+    menu_context = state["menu_context"]
+    opened_menu = menu_context["opened_menu"]
+
     log_type = log["type"]
     if log_type == "entrance":
         return True
@@ -33,7 +36,8 @@ def _should_render(log: dict, state: dict) -> bool:
     if log_type == "combat" and log.get("combat_ended"):
         return True
     if log_type == "continue" and state["menu_context"]["type"] in ("explore", "entrance"):
-        return True
+        if opened_menu not in ("menu_recall", "menu_expanse", "menu_help"):
+            return True
     return False
 
 def _compute_grid_positions(rooms: list[dict], start_idx: int) -> dict[int, tuple[int, int]]:
