@@ -8,6 +8,7 @@ class Dummy:
     def __init__(
             self,
             name: str,
+            base_health: int,
             health: int,
             defence: int,
             damage: int,
@@ -15,7 +16,7 @@ class Dummy:
             ) -> None:
         self.name = name
 
-        self.base_health = health
+        self.base_health = base_health
         self.extra_health = 0
         self.current_health = health
 
@@ -81,6 +82,7 @@ class Player(Dummy):
     def __init__(self, player: dict) -> None:
         super().__init__(
                 "Player",
+                player["base_health"],
                 player["current_health"],
                 player["base_defence"],
                 player["base_damage"],
@@ -133,6 +135,6 @@ class Enemy(Dummy):
         self.base_defence = enemy_data.get("defence", random.randint(3, 15))
         self.base_speed = enemy_data.get("speed", random.randint(5, 30))
 
-        super().__init__(self.name, base_health, self.base_defence, self.base_damage, self.base_speed)
+        super().__init__(self.name, base_health, base_health, self.base_defence, self.base_damage, self.base_speed)
 
         self.current_health = enemy_data.get("health", random.randint(5, 15))

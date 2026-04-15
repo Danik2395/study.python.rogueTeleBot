@@ -41,7 +41,8 @@
 	"move_item_to": {"args": ["destination"]},
 	"move_item_count_to": {"args": ["count", "destination"]},
 	"use_item": {"args": []},
-	"equip": {"args": ["item_key_name", "source"]}
+	"equip": {"args": ["item_key_name", "source"]},
+	"unequip": {"args": ["slot"]}
     },
     "parent_menu": {
 	"inventory": null,

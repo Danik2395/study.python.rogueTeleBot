@@ -16,7 +16,7 @@
 		"Пещера",
 		"Пещера"
 	    ],
-	    "text_name": [
+	    "room_text_name": [
 		"пещера",
 		"каменная комната"
 	    ],
@@ -61,6 +61,11 @@
 	    "valid_directions": ["forward", "backward", "left", "right", "down"]
 	},
 	"not_cave": {
+	    "biom_text_name": [
+		"Пещера",
+		"Пещера",
+		"Пещера"
+	    ],
 	    "text_name": ["dkdk"],
 	    "mood": ["djdj"],
 	    "loot_amount": [],

@@ -24,14 +24,29 @@ class LogHandler:
         self.client = AsyncOpenAI(api_key=environ['DEEPSEEK_API_KEY'], base_url="https://api.deepseek.com")
         self.state: dict
 
-    async def render(self, log: dict[str, Any], state: dict) -> str:
+    async def render(self, log: dict[str, Any], state: dict, state_type: str) -> str:
         self.state = state
 
         log_type = log.get("type")
         log_hash = self._hash_log(log)
 
+        menu_context = state["menu_context"]
+        opened_menu = menu_context["opened_menu"]
+
+        player = state["player"]
+        base_health = player["base_health"]
+        current_health = player["current_health"]
+        base_defence = player["base_defence"]
+        base_damage = player["base_damage"]
+        base_speed = player["base_speed"]
+
+        starus_bar = f"❤️ {current_health}/{base_health} | ⚔️ {base_damage} | 🛡 {base_defence} | ⚡ {base_speed}"
+
         if await self.database.is_log_cash_exists(log_hash):
-            return await self.database.get_log_cash(log_hash)
+            cash_text = await self.database.get_log_cash(log_hash)
+
+            if opened_menu not in ("menu_recall", "menu_expance", "menu_help"):
+                cash_text += f"\n\n{starus_bar}"
 
         match log_type:
             case "move":
@@ -52,6 +67,9 @@ class LogHandler:
                 text =  "Событие произошло, но текст для него пока не готов."
 
         await self.database.save_log_cash(log_hash, text)
+
+        if opened_menu not in ("menu_recall", "menu_expance", "menu_help"):
+            text+= f"\n\n{starus_bar}"
 
         return text
 
@@ -241,9 +259,11 @@ class LogHandler:
     async def _render_entrance(self, log: dict[str, Any]) -> str:
         current_floor_index = log.get("current_floor_index")
         prompt = log.get("prompt")
+        biom_text_name = log.get("biom_text_name")
 
         user_content = f"""
             Current floor index: {current_floor_index}
+            Biom name: {biom_text_name}
             Prompt of the room: {prompt}
         """
 

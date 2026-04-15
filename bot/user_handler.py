@@ -39,7 +39,9 @@ class UserController:
         self.router.callback_query()(self.callback_handler)
 
 
-    async def _update_bot_message(self, user_id: int, text: str, keyboard: types.InlineKeyboardMarkup) -> None:
+    async def _update_bot_message(self, user_id: int, text: str,
+                                  keyboard: types.InlineKeyboardMarkup,
+                                  map_photo: bytes | None = None) -> None:
         try:
             ui_message = await self.interface.get_ui_message_id(user_id)
         except ValueError:
@@ -47,21 +49,40 @@ class UserController:
 
         if ui_message:
             try:
-                await self.bot.edit_message_text(
-                    chat_id=user_id,
-                    message_id=ui_message,
-                    text=text,
-                    reply_markup=keyboard
-                )
+                if map_photo is not None:
+                    await self.bot.edit_message_media(
+                        chat_id=user_id,
+                        message_id=ui_message,
+                        media=types.InputMediaPhoto(
+                            media=types.BufferedInputFile(map_photo, filename="map.png"),
+                            caption=text
+                        ),
+                        reply_markup=keyboard
+                    )
+                else:
+                    await self.bot.edit_message_text(
+                        chat_id=user_id,
+                        message_id=ui_message,
+                        text=text,
+                        reply_markup=keyboard
+                    )
                 return
-            except (exceptions.TelegramBadRequest, exceptions.TelegramForbiddenError):
+            except (exceptions.TelegramBadRequest, exceptions.TelegramForbiddenError) as e:
                 asyncio.create_task(self._delete_bot_message(message_id=ui_message, chat_id=user_id, delay=3))
 
-        new_ui_message = await self.bot.send_message(
-            chat_id=user_id,
-            text=text,
-            reply_markup=keyboard
-        )
+        if map_photo is not None:
+            new_ui_message = await self.bot.send_photo(
+                chat_id=user_id,
+                photo=types.BufferedInputFile(map_photo, filename="map.png"),
+                caption=text,
+                reply_markup=keyboard
+            )
+        else:
+            new_ui_message = await self.bot.send_message(
+                chat_id=user_id,
+                text=text,
+                reply_markup=keyboard
+            )
         await self.interface.save_ui_message_id(user_id, new_ui_message.message_id)
 
     async def _delete_object_message(self, *, message: types.Message, delay: int = 0, warning_message: types.Message | None = None) -> None:
@@ -93,7 +114,7 @@ class UserController:
 
         # await message.answer(cmd_start_text, reply_markup=keyboard)
         asyncio.create_task(self._delete_object_message(message=message, delay=3))
-        await self._update_bot_message(user_id, cmd_start_text, keyboard)
+        await self._update_bot_message(user_id, cmd_start_text, keyboard, contract.map_photo)
 
     async def cmd_expanse(self, message: types.Message) -> None:
         if message.from_user is None: return
@@ -104,7 +125,7 @@ class UserController:
         menu_text = contract.text
 
         await self._delete_object_message(message=message)
-        await self._update_bot_message(user_id, menu_text, keyboard)
+        await self._update_bot_message(user_id, menu_text, keyboard, contract.map_photo)
 
     async def cmd_help(self, message: types.Message) -> None:
 
@@ -116,7 +137,7 @@ class UserController:
         help_text = contract.text
 
         await self._delete_object_message(message=message)
-        await self._update_bot_message(user_id, help_text, keyboard)
+        await self._update_bot_message(user_id, help_text, keyboard, contract.map_photo)
 
     async def cmd_ignore(self, message: types.Message) -> None:
         ignore_message = random.choice(FTEXT["ignore_message"])
@@ -137,7 +158,7 @@ class UserController:
 
             pprint(contract)
             # await callback.message.answer(contract.text, reply_markup=keyboard) #type: ignore
-            await self._update_bot_message(user_id, contract.text, keyboard)
+            await self._update_bot_message(user_id, contract.text, keyboard, contract.map_photo)
         except NoAction:
             pass
 

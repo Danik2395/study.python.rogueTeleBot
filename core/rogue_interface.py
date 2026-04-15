@@ -1,10 +1,11 @@
 import copy
 
 import core.engine as engine
-import core.ui_builder as ui_builder
+import core.ui.ui_builder as ui_builder
 from database.database import Database
 from core.log_handler import LogHandler
 from core.action_parcer import ActionParser
+from core.ui.map_generator import generate_map_image
 
 from data.presets import Contract, LOG, PARENT_MENU
 
@@ -147,7 +148,12 @@ class RogueInterface:
         inventory_state["selected_item_key_name"] = item_key_name
         inventory_state["selected_item_source"] = source
 
-        log = engine.inventory_equip(state)
+        log = engine.inventory_use(state)
+        return await self._finalize_game(user_id, state, log)
+
+    async def inventory_unequip_item(self, user_id: int, slot: str) -> Contract:
+        state = await self.database.get_user_run_state(user_id)
+        log = engine.inventory_unequip(slot, state)
         return await self._finalize_game(user_id, state, log)
 
     async def goto_menu(self, user_id: int, key_menu: str) -> Contract:
@@ -220,13 +226,14 @@ class RogueInterface:
         return await self.init_run(user_id)
 
     async def _finalize_game(self, user_id: int, state: dict, log: dict) -> Contract:
-        text_from_log = await self.log_handler.render(log, state)
+        state_type = ui_builder.get_state_type(log, state)
+        text_from_log = await self.log_handler.render(log, state, state_type)
 
         contract = Contract(text=text_from_log)
 
-        state_type = ui_builder.get_state_type(log, state)
         contract.state_type = state_type
         contract.buttons = ui_builder.get_game_buttons(log, state, state_type)
+        contract.map_photo = generate_map_image(log, state)
 
         menu_context = state["menu_context"]
         menu_context["type"] = state_type
@@ -300,6 +307,10 @@ async def process_action(user_id: int, action: str | None, rogue_interface: "Rog
             item_key_name = parsed.params["item_key_name"]
             source = parsed.params["source"]
             return await rogue_interface.inventory_equip_item(user_id, item_key_name, source)
+
+        case "unequip":
+            slot = parsed.params["slot"]
+            return await rogue_interface.inventory_unequip_item(user_id, slot)
 
         case "goto_menu":
             key_menu = parsed.params["key_menu"]

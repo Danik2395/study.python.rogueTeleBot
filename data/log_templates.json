@@ -40,6 +40,7 @@
     "floor_entrance_log_template": {
 	"type": "entrance",
 	"current_floor_index": null,
+	"biom_text_name": null,
 	"prompt": null
     },
     "inventory_log_template": {
@@ -95,7 +96,7 @@
 	},
 	"floor": {
 	    "index": null,
-	    "biom_key_name": null,
+	    "biom_text_name": null,
 	    "current_room_index": null,
 	    "fork_stack": [],
 	    "down_in_room": -1,

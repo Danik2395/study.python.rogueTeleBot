@@ -47,15 +47,18 @@ class InventorySystem:
 
     def use_item(self, player: dict) -> dict:
         key_name = self.inventory_state["selected_item_key_name"]
-        item_type = ITEMS[key_name]["type"]
+        item = ITEMS[key_name]
+        item_type = item["type"]
         match item_type:
             case "food":
                 return self._use_food(key_name, player)
 
             case "weapon":
+                player["base_damage"] += item["damage"]
                 return self._equip(key_name, "weapon", player)
 
             case "armour":
+                player["base_defence"] += item["defence"]
                 return self._equip(key_name, "armour", player)
 
             case _:
@@ -97,6 +100,30 @@ class InventorySystem:
         log["action"] = "equip"
         log["item_key_name"] = item_key_name
         log["source"] = source_key_name
+        log["slot"] = slot
+        return log
+
+    def unequip(self, slot: str, player: dict) -> dict:
+        source_key = f"equipped_{slot}"
+        source = self.get_container(source_key)
+        item_key_name, = source
+
+        item = ITEMS[item_key_name]
+        item_type = item["type"]
+        match item_type:
+            case "weapon":
+                player["base_damage"] -= item["damage"]
+
+            case "armour":
+                player["base_defence"] -= item["defence"]
+
+        self._increment_item_count(player["inventory"], item_key_name, 1)
+        source.clear()
+
+        log = LOG["inventory_log_template"].copy()
+        log["action"] = "unequip"
+        log["item_key_name"] = item_key_name
+        log["source"] = source_key
         log["slot"] = slot
         return log
 

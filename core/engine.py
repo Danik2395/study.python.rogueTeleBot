@@ -166,6 +166,7 @@ def move_down(run_state: dict, user_data: dict) -> dict[str, Any]:
     floor_system = FloorSystem(floor)
     floor_entrance_log = floor_system.gen_entrance()
     floor_entrance_log["current_floor_index"] = floor["index"]
+    floor_entrance_log["biom_text_name"] = floor["biom_text_name"]
 
     progress = user_data["progress"]
     if floor["index"] > progress["max_floor_reached"]:
@@ -329,12 +330,11 @@ def inventory_use(run_state: dict) -> dict:
     return inventory_system.use_item(player)
 
 
-def inventory_equip(run_state: dict) -> dict:
-    inventory_state = run_state["inventory_state"]
+def inventory_unequip(slot: str, run_state: dict) -> dict:
     player = run_state["player"]
     state_wrapped = StateWrapper(run_state)
-    inventory_system = InventorySystem(state_wrapped.get_container, inventory_state)
-    return inventory_system.use_item(player)
+    inventory_system = InventorySystem(state_wrapped.get_container, run_state["inventory_state"])
+    return inventory_system.unequip(slot, player)
 
 def recall_stat(user_data: dict, stat: str) -> dict:
     recall_system = RecallSystem(user_data)

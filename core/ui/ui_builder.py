@@ -196,7 +196,8 @@ def _inventory_select_buttons(state: dict) -> list[Button]:
     item_type = ITEMS[selected_item_key_name]["type"]
 
     if selected_item_source.startswith("equipped_"):
-        action_btn = Button(label=UI_LABELS["unequip"], action=f"move_item_to:inventory")
+        slot = selected_item_source.replace("equipped_", "")
+        action_btn = Button(label=UI_LABELS["unequip"], action=f"unequip:{slot}")
     elif item_type in ("weapon", "armour"):
         action_btn = Button(label=UI_LABELS["equip"], action=f"equip:{selected_item_key_name}:{selected_item_source}")
     else:

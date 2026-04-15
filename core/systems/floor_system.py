@@ -1,4 +1,5 @@
 import random
+import copy
 from typing import Any
 from data.presets import LAYOUT, ITEMS, ENEMIES, RULES, LOG
 
@@ -39,8 +40,8 @@ class FloorSystem:
                 self.biom_key = "void"
 
         self.biom = LAYOUT["bioms"][self.biom_key]
-        self.floor["biom_text_name"] = self.biom["biom_text_name"]
-        self.floor["biom_key_name"] = self.biom_key
+        if not self.floor["biom_text_name"]:
+            self.floor["biom_text_name"] = random.choice(self.biom["biom_text_name"])
 
     def _set_scale(self) -> None:
         """
@@ -84,11 +85,11 @@ class FloorSystem:
         if not pool_amount_limits:
             pool_amount_limits = [0, 2]
         low, high, *buff = pool_amount_limits
-        amount = random.randint(low, high)
-        if amount <= 0:
+        enemies_amount = random.randint(low, high)
+        if enemies_amount <= 0:
             return []
-        amount = min(amount, len(self.floor_enemies_pool))
-        return random.sample(self.floor_enemies_pool, k=amount)
+        enemies_amount = min(enemies_amount, len(self.floor_enemies_pool))
+        return random.sample(self.floor_enemies_pool, k=enemies_amount)
 
     def _gen_room_loot_pool(self, pool_amount_limits: list) -> dict:
         if not self.floor_loot_pool:
@@ -96,12 +97,12 @@ class FloorSystem:
         if not pool_amount_limits:
             pool_amount_limits = [0, 2]
         low, high, *buff = pool_amount_limits
-        amount = random.randint(low, high)
-        if amount <= 0:
+        items_amount = random.randint(low, high)
+        if items_amount <= 0:
             return {}
-        amount = min(amount, len(self.floor_loot_pool))
-        keys = random.sample(self.floor_loot_pool, k=amount)
-        return {k: {"count": 1} for k in keys} # TODO: сделать темплейты для генерации количества рандомного для предметов
+        items_amount = min(items_amount, len(self.floor_loot_pool))
+        item_keys = random.sample(self.floor_loot_pool, k=items_amount)
+        return {key: {"count": 1} for key in item_keys} # TODO: сделать темплейты для генерации количества рандомного для предметов
 
     def _gen_room_doors(
             self,
@@ -181,15 +182,15 @@ class FloorSystem:
         # ===SETTING===
         # room_type = random.choice(LAYOUT["room_type"])
         room_type = random.choices(LAYOUT["room_type"], LAYOUT["room_type_weights"], k=1)[0]
-        room_name = random.choice(self.biom["text_name"])
+        room_name = random.choice(self.biom["room_text_name"])
         room_mood = random.choice(self.biom["mood"])
 
         # ===DOORS===
         prev_room_doors = prev_room["doors"]
         prev_room_index = prev_room["index"]
         room_doors = self._gen_room_doors(room_type, prev_room_doors, prev_room_index, backward_direction)
-        opposite_direction = RULES["opposite_direction"][backward_direction]
-        prev_room_doors[opposite_direction] = room_index
+        move_direction = RULES["opposite_direction"][backward_direction]
+        prev_room_doors[move_direction] = room_index
 
         # ===ENEMIES===
         room_enemies = {}

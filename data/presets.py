@@ -47,3 +47,4 @@ class Contract():
     text: str = ""
     buttons: list[Button] = field(default_factory=list[Button])
     state_type: str = ""
+    map_photo: bytes | None = field(default=None)
