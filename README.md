@@ -143,10 +143,10 @@ When item is moved to the other place menu remains the same letting select anoth
 - [x] Create  an asynchronous database
 - [x] Develop an asynchronous bot
 - [x] Integrate LLM
-- [ ] Add new features
+- [x] Add new features
     - [x] Add meta progression
     - [x] Add camp room
     - [x] Add defence logic
     - [x] Add flee chance
-    - [ ] Develop an user interface in bot
+    - [x] Develop an user interface in bot
 - [ ] Neat the balance

@@ -8,7 +8,7 @@ from os import environ
 from dotenv import load_dotenv
 
 from database.database import Database
-from data.presets import PROMPTS, ITEMS, ENEMIES, LOG_LABELS, FTEXT
+from data.presets import PROMPTS, ITEMS, ENEMIES, LOG_LABELS, FTEXT, UI_LABELS
 
 load_dotenv()
 
@@ -24,7 +24,7 @@ class LogHandler:
         self.client = AsyncOpenAI(api_key=environ['DEEPSEEK_API_KEY'], base_url="https://api.deepseek.com")
         self.state: dict
 
-    async def render(self, log: dict[str, Any], state: dict, state_type: str) -> str:
+    async def render(self, log: dict[str, Any], state: dict, user_data: dict | None) -> str:
         self.state = state
 
         log_type = log.get("type")
@@ -48,6 +48,12 @@ class LogHandler:
             if opened_menu not in ("menu_recall", "menu_expanse", "menu_help"):
                 cash_text += f"\n\n{starus_bar}"
 
+            if opened_menu == "menu_recall" and user_data:
+                memory_fragments_value = user_data["global_recalls"]["memory_fragments"]
+                cash_text += f"\n\n🌀 {memory_fragments_value}"
+
+            return cash_text
+
         match log_type:
             case "move":
                 text = await self._render_move(log)
@@ -68,8 +74,12 @@ class LogHandler:
 
         await self.database.save_log_cash(log_hash, text)
 
-        if opened_menu not in ("menu_recall", "menu_expance", "menu_help"):
+        if opened_menu not in ("menu_recall", "menu_expanse", "menu_help"):
             text+= f"\n\n{starus_bar}"
+
+        if opened_menu == "menu_recall" and user_data:
+            memory_fragments_value = user_data["global_recalls"]["memory_fragments"]
+            text += f"\n\n🌀 {memory_fragments_value}"
 
         return text
 

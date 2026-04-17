@@ -202,7 +202,6 @@ class FloorSystem:
         loot_amount = random.choice(self.biom["loot_amount"])
         room_loot = self._gen_room_loot_pool(loot_amount)
 
-        # TODO: убери это. всё должно из темплейтов браться
         new_room: dict[str, Any] = {
                 "index": room_index,
                 "type": "room",

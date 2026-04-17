@@ -35,8 +35,6 @@ with open("data/prompts.json", "r", encoding="utf-8") as f:
     PROMPTS = json.load(f)
 
 
-    # TODO: проставь типы dict[str, Any]
-
 @dataclass
 class Button:
     label: str = ""

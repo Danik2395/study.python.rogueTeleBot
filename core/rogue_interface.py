@@ -29,6 +29,7 @@ class RogueInterface:
 
         if is_user_exists:
             state = await self.database.get_user_run_state(user_id)
+            user_data = await self.database.get_user_global_data(user_id)
         else:
             user_data = engine.init_data()
             state = copy.deepcopy(LOG["run_state_template"])
@@ -36,7 +37,7 @@ class RogueInterface:
             await self.database.save_user_global_data(user_id, user_data)
             await self.database.save_user_run_state(user_id, state)
 
-        buttons = ui_builder.menu_buttons(state, "menu_expanse") # If state == {} wont show continue button
+        buttons = ui_builder.menu_buttons(state, "menu_expanse", user_data) # If state == {} wont show continue button
 
         return Contract(buttons=buttons)
 
@@ -227,17 +228,22 @@ class RogueInterface:
 
     async def _finalize_game(self, user_id: int, state: dict, log: dict) -> Contract:
         state_type = ui_builder.get_state_type(log, state)
-        text_from_log = await self.log_handler.render(log, state, state_type)
+
+        menu_context = state["menu_context"]
+        menu_context["type"] = state_type
+
+        user_data = None
+        if menu_context:
+            user_data = await self.database.get_user_global_data(user_id)
+
+        text_from_log = await self.log_handler.render(log, state, user_data)
 
         contract = Contract(text=text_from_log)
 
         contract.state_type = state_type
-        contract.buttons = ui_builder.get_game_buttons(log, state, state_type)
+        contract.buttons = ui_builder.get_game_buttons(log, state, state_type, user_data)
         contract.map_photo = generate_map_image(log, state)
 
-        menu_context = state["menu_context"]
-        menu_context["type"] = state_type
-        # menu_context["opened_menu"] = state_type
 
         await self.database.save_user_run_state(user_id, state)
 

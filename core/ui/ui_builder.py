@@ -31,7 +31,7 @@ def get_state_type(log: dict, state: dict) -> str:
 
     return state["menu_context"]["type"]
 
-def get_game_buttons(log: dict, state: dict, state_type: str) -> list[Button]:
+def get_game_buttons(log: dict, state: dict, state_type: str, user_data: dict | None) -> list[Button]:
     menu_context = state["menu_context"]
     opened_menu = menu_context["opened_menu"]
     if opened_menu is not None:
@@ -44,7 +44,7 @@ def get_game_buttons(log: dict, state: dict, state_type: str) -> list[Button]:
                     return _inventory_select_buttons(state)
             # Fallback for inventory
             return _inventory_buttons(state)
-        return menu_buttons(state, opened_menu)
+        return menu_buttons(state, opened_menu, user_data)
 
     match state_type:
         case "dead":
@@ -215,7 +215,7 @@ def _dead_buttons() -> list[Button]:
         Button(label=UI_LABELS["goto_menu:menu_expanse"], action="goto_menu:menu_expanse")
     ]
 
-def menu_buttons(state: dict, key_menu: str) -> list[Button]:
+def menu_buttons(state: dict, key_menu: str, user_data: dict | None) -> list[Button]:
     buttons = []
 
     if key_menu == "menu_expanse":
@@ -224,14 +224,18 @@ def menu_buttons(state: dict, key_menu: str) -> list[Button]:
                 buttons.append(Button(label=UI_LABELS["menu:menu_expanse:continue"], action="menu:menu_expanse:continue"))
             if not state.get("active"):
                 buttons.append(Button(label=UI_LABELS["goto_menu:menu_recall"], action="goto_menu:menu_recall"))
+
     elif key_menu == "menu_recall":
-        buttons = [
-            Button(label=UI_LABELS["menu:menu_recall:health"], action="menu:menu_recall:health"),
-            Button(label=UI_LABELS["menu:menu_recall:damage"], action="menu:menu_recall:damage"),
-            Button(label=UI_LABELS["menu:menu_recall:defence"], action="menu:menu_recall:defence"),
-            Button(label=UI_LABELS["menu:menu_recall:speed"], action="menu:menu_recall:speed"),
-            Button(label=UI_LABELS["back_from_menu"], action="back_from_menu:menu_recall")
-        ]
+        recall_costs = user_data["global_recalls"]["recall_cost"] if user_data else {}
+        recall_names = ["health", "damage", "defence", "speed"]
+
+        buttons = []
+        for recall_name in recall_names:
+            buttons.append(Button(label=f"{UI_LABELS[f"menu:menu_recall:{recall_name}"]} \
+                                  {recall_costs[recall_name]}", action=f"menu:menu_recall:{recall_name}"))
+        buttons.append(Button(label=f"{UI_LABELS["back_from_menu"]}", action="back_from_menu:menu_recall"))
+
+
     elif key_menu == "menu_help":
         buttons = [
             Button(label=UI_LABELS["goto_menu:menu_expanse"], action="goto_menu:menu_expanse")
