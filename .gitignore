@@ -3,6 +3,7 @@ pyrightconfig.json
 llm_test.py
 runner.py
 active_runs.json
+tmux-session
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

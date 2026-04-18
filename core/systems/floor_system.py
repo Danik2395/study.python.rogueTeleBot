@@ -48,6 +48,8 @@ class FloorSystem:
         self.biom = LAYOUT["bioms"][self.biom_key]
         if not self.floor["biom_text_name"]:
             self.floor["biom_text_name"] = random.choice(self.biom["biom_text_name"])
+        if not self.floor["biom_key_name"]:
+            self.floor["biom_key_name"] = self.biom_key
 
     def _set_scale(self) -> None:
         """

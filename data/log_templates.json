@@ -96,6 +96,7 @@
 	},
 	"floor": {
 	    "index": null,
+	    "biom_key_name": null,
 	    "biom_text_name": null,
 	    "current_room_index": null,
 	    "fork_stack": [],

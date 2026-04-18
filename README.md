@@ -149,4 +149,4 @@ When item is moved to the other place menu remains the same letting select anoth
     - [x] Add defence logic
     - [x] Add flee chance
     - [x] Develop an user interface in bot
-- [ ] Neat the balance
+- [x] Neat the balance
