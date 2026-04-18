@@ -1,7 +1,6 @@
 import asyncio
 from pprint import pprint
 import random
-random.seed(42)
 
 from aiogram import Router, types, Bot, exceptions
 from aiogram.filters import Command
@@ -93,7 +92,8 @@ class UserController:
         except:
             pass
         finally:
-            self.lock_messages.remove(message.message_id)
+            msg_id = message.message_id
+            self.lock_messages.discard(msg_id)
 
     async def _delete_bot_message(self, *, message_id: int, delay: int = 0, chat_id: int) -> None:
         self.lock_messages.add(message_id)
@@ -103,7 +103,7 @@ class UserController:
         except:
             pass
         finally:
-            self.lock_messages.remove(message_id)
+            self.lock_messages.discard(message_id)
 
     # === Commands ===
 
@@ -145,8 +145,8 @@ class UserController:
 
             await self.interface.save_ui_message_id(user_id, ui_message.message_id)
         finally:
-            self.lock_users.remove(user_id)
-            self.lock_messages.remove(message.message_id)
+            self.lock_users.discard(user_id)
+            self.lock_messages.discard(message.message_id)
 
     async def cmd_expanse(self, message: types.Message) -> None:
         if message.from_user is None: return
@@ -166,8 +166,8 @@ class UserController:
             await self._delete_object_message(message=message)
             await self._update_bot_message(user_id, menu_text, keyboard, contract.map_photo)
         finally:
-            self.lock_users.remove(user_id)
-            self.lock_messages.remove(message.message_id)
+            self.lock_users.discard(user_id)
+            self.lock_messages.discard(message.message_id)
 
     # async def cmd_help(self, message: types.Message) -> None:
     #
@@ -212,4 +212,4 @@ class UserController:
 
         finally:
             await callback.answer()
-            self.lock_users.remove(user_id)
+            self.lock_users.discard(user_id)

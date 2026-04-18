@@ -35,9 +35,15 @@ class FloorSystem:
             case 1:
                 self.biom_key = "cave"
             case 2:
-                self.biom_key = "not_cave"
-            case _:
-                self.biom_key = "void"
+                self.biom_key = "forest"
+            case 3:
+                self.biom_key = "upside_down_forest"
+            case 4:
+                self.biom_key = "abandoned_mines"
+            case 5:
+                self.biom_key = "gold_town"
+            case 6:
+                self.biom_key = "labyrinth_of_flesh"
 
         self.biom = LAYOUT["bioms"][self.biom_key]
         if not self.floor["biom_text_name"]:
@@ -59,6 +65,7 @@ class FloorSystem:
 
         low, high, *buff = scale_limits
         self.floor_scale = random.uniform(low, high)
+        self.floor["floor_scale"] = self.floor_scale
 
     def _filter_enemies_pool(self) -> None:
         """Filter all enemies to lower scope of the floor"""

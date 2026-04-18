@@ -100,7 +100,8 @@
 	    "current_room_index": null,
 	    "fork_stack": [],
 	    "down_in_room": -1,
-	    "rooms": []
+	    "rooms": [],
+	    "floor_scale": 1.0
 	}
     },
 
@@ -110,11 +111,11 @@
 	    "max_floor_reached": 0
 	},
 	"global_recalls": {
-	    "recall_cost": {
-		"health": 50,
-		"damage": 60,
-		"defence": 40,
-		"speed": 55
+ 	    "recall_cost": {
+		"health": 30,
+		"damage": 40,
+		"defence": 25,
+		"speed": 35
 	    },
 	    "memory_fragments": 0,
 	    "plus_health": 0,

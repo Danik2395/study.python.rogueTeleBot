@@ -12,38 +12,38 @@
     "bioms": {
 	"cave": {
 	    "biom_text_name": [
-		"Пещера",
-		"Пещера",
-		"Пещера"
+		"Сырые пещеры",
+		"Каменные своды",
+		"Бездонный мрак"
 	    ],
 	    "room_text_name": [
 		"пещера",
-		"каменная комната"
+		"каменный мешок",
+		"грот"
 	    ],
 	    "mood": [
 		"сыро",
-		"тускло",
-		"напряжённо",
-		"затхло"
+		"темно",
+		"тихо",
+		"холодно",
+		"гнетуще"
 	    ],
 	    "loot_amount": [
-		[0, 2],
-		[1, 2],
-		[2, 3]
+		[0, 1],
+		[0, 2]
 	    ],
 	    "enemies_amount": [
-		[0, 2],
-		[1, 2],
-		[2, 3]
+		[0, 1],
+		[1, 2]
 	    ],
 	    "floor_scale": [
-		[1.1, 1.3],
-		[1.0, 1.2]
+		[1.0, 1.1],
+		[0.95, 1.15]
 	    ],
 	    "branch_rules": {
-		"branch_power": 0.5,
-		"power_decrease": 0.12,
-		"door_chance": 0.45,
+		"branch_power": 0.45,
+		"power_decrease": 0.1,
+		"door_chance": 0.4,
 		"down_threshold": 0.1,
 		"down_chance": 0.3,
 		"entrance_door_chance": 0.8,
@@ -51,69 +51,301 @@
 	    },
 	    "flee_chance_limits": [0.3, 0.6],
 	    "doors_template": {
-		    "forward": null,
-		    "backward": null,
-		    "left": null,
-		    "right": null,
-		    "down": null,
-		    "branch_power": null
+		"forward": null,
+		"backward": null,
+		"left": null,
+		"right": null,
+		"down": null,
+		"branch_power": null
 	    },
-	    "valid_directions": ["forward", "backward", "left", "right", "down"]
+	    "valid_directions": [
+		"forward",
+		"backward",
+		"left",
+		"right",
+		"down"
+	    ]
 	},
-	"not_cave": {
+	"forest": {
 	    "biom_text_name": [
-		"Пещера",
-		"Пещера",
-		"Пещера"
+		"Подземный лес",
+		"Светящаяся роща",
+		"Грибная чаща"
 	    ],
-	    "text_name": ["dkdk"],
-	    "mood": ["djdj"],
-	    "loot_amount": [],
-	    "enemies_amount": [],
-	    "floor_scale": [],
+	    "room_text_name": [
+		"грибница",
+		"сплетение корней",
+		"заросли"
+	    ],
+	    "mood": [
+		"тошнотворно",
+		"душно",
+		"ядовито",
+		"туманно",
+		"шелестит"
+	    ],
+	    "loot_amount": [
+		[0, 2],
+		[1, 2]
+	    ],
+	    "enemies_amount": [
+		[1, 2],
+		[0, 2]
+	    ],
+	    "floor_scale": [
+		[1.15, 1.35],
+		[1.1, 1.3]
+	    ],
 	    "branch_rules": {
-		"branch_power": 0.5,
+		"branch_power": 0.6,
 		"power_decrease": 0.12,
-		"door_chance": 0.45,
+		"door_chance": 0.5,
 		"down_threshold": 0.1,
 		"down_chance": 0.3,
 		"entrance_door_chance": 0.8,
 		"entrance_down_chance": -1
 	    },
+	    "flee_chance_limits": [0.25, 0.55],
 	    "doors_template": {
-		    "forward": null,
-		    "backward": null,
-		    "left": null,
-		    "right": null,
-		    "down": null,
-		    "branch_power": null
+		"forward": null,
+		"backward": null,
+		"left": null,
+		"right": null,
+		"down": null,
+		"branch_power": null
 	    },
-	    "valid_directions": ["forward", "backward", "left", "right", "down"]
+	    "valid_directions": [
+		"forward",
+		"backward",
+		"left",
+		"right",
+		"down"
+	    ]
 	},
-	"void": {
-	    "text_name": [],
-	    "mood": [],
-	    "loot_amount": [],
-	    "enemies_amount": [],
-	    "floor_scale": [],
+	"upside_down_forest": {
+	    "biom_text_name": [
+		"Перевернутый лес",
+		"Искаженная чаща"
+	    ],
+	    "room_text_name": [
+		"висящие корни",
+		"потолочный пруд",
+		"вывернутая роща"
+	    ],
+	    "mood": [
+		"головокружительно",
+		"абсурдно",
+		"искаженно",
+		"пугающе",
+		"неестественно"
+	    ],
+	    "loot_amount": [
+		[1, 2],
+		[0, 2]
+	    ],
+	    "enemies_amount": [
+		[1, 2],
+		[1, 3]
+	    ],
+	    "floor_scale": [
+		[1.4, 1.6],
+		[1.3, 1.55]
+	    ],
 	    "branch_rules": {
-		"branch_power": 0.5,
-		"power_decrease": 0.12,
+		"branch_power": 0.7,
+		"power_decrease": 0.18,
+		"door_chance": 0.3,
+		"down_threshold": 0.12,
+		"down_chance": 0.35,
+		"entrance_door_chance": 0.7,
+		"entrance_down_chance": -1
+	    },
+	    "flee_chance_limits": [0.2, 0.5],
+	    "doors_template": {
+		"forward": null,
+		"backward": null,
+		"left": null,
+		"right": null,
+		"down": null,
+		"branch_power": null
+	    },
+	    "valid_directions": [
+		"forward",
+		"backward",
+		"left",
+		"right",
+		"down"
+	    ]
+	},
+	"abandoned_mines": {
+	    "biom_text_name": [
+		"Заброшенные шахты",
+		"Ржавые выработки",
+		"Старые рудники"
+	    ],
+	    "room_text_name": [
+		"штрек",
+		"затопленный туннель",
+		"провал"
+	    ],
+	    "mood": [
+		"ржаво",
+		"скрипуче",
+		"мертво",
+		"затхло",
+		"мрачно"
+	    ],
+	    "loot_amount": [
+		[0, 2],
+		[1, 2]
+	    ],
+	    "enemies_amount": [
+		[1, 3],
+		[2, 3]
+	    ],
+	    "floor_scale": [
+		[1.65, 1.85],
+		[1.55, 1.8]
+	    ],
+	    "branch_rules": {
+		"branch_power": 0.35,
+		"power_decrease": 0.08,
+		"door_chance": 0.3,
+		"down_threshold": 0.15,
+		"down_chance": 0.5,
+		"entrance_door_chance": 0.6,
+		"entrance_down_chance": -1
+	    },
+	    "flee_chance_limits": [0.15, 0.4],
+	    "doors_template": {
+		"forward": null,
+		"backward": null,
+		"left": null,
+		"right": null,
+		"down": null,
+		"branch_power": null
+	    },
+	    "valid_directions": [
+		"forward",
+		"backward",
+		"left",
+		"right",
+		"down"
+	    ]
+	},
+	"gold_town": {
+	    "biom_text_name": [
+		"Золотой город",
+		"Позолоченные руины"
+	    ],
+	    "room_text_name": [
+		"пустая улица",
+		"истлевшая площадь",
+		"золотой склеп",
+		"глухой переулок"
+	    ],
+	    "mood": [
+		"безмолвно",
+		"величественно",
+		"упадочно",
+		"пусто",
+		"желчно"
+	    ],
+	    "loot_amount": [
+		[1, 3],
+		[2, 3]
+	    ],
+	    "enemies_amount": [
+		[2, 3],
+		[2, 4]
+	    ],
+	    "floor_scale": [
+		[1.9, 2.1],
+		[1.8, 2.05]
+	    ],
+	    "branch_rules": {
+		"branch_power": 0.55,
+		"power_decrease": 0.08,
 		"door_chance": 0.45,
 		"down_threshold": 0.1,
 		"down_chance": 0.3,
+		"entrance_door_chance": 0.9,
+		"entrance_down_chance": -1
+	    },
+	    "flee_chance_limits": [0.1, 0.35],
+	    "doors_template": {
+		"forward": null,
+		"backward": null,
+		"left": null,
+		"right": null,
+		"down": null,
+		"branch_power": null
+	    },
+	    "valid_directions": [
+		"forward",
+		"backward",
+		"left",
+		"right",
+		"down"
+	    ]
+	},
+	"labyrinth_of_flesh": {
+	    "biom_text_name": [
+		"Лабиринт плоти",
+		"Пульсирующие коридоры",
+		"Утроба"
+	    ],
+	    "room_text_name": [
+		"кишечный тракт",
+		"комната из плоти",
+		"костяной зал",
+		"кровоточащий тупик"
+	    ],
+	    "mood": [
+		"мясисто",
+		"влажно",
+		"пульсирует",
+		"тошнотворно",
+		"живо",
+		"болезненно"
+	    ],
+	    "loot_amount": [
+		[1, 3],
+		[0, 2]
+	    ],
+	    "enemies_amount": [
+		[2, 4],
+		[3, 4]
+	    ],
+	    "floor_scale": [
+		[2.2, 2.45],
+		[2.1, 2.4]
+	    ],
+	    "branch_rules": {
+		"branch_power": 0.65,
+		"power_decrease": 0.15,
+		"door_chance": 0.6,
+		"down_threshold": 0.05,
+		"down_chance": 0.4,
 		"entrance_door_chance": 0.8,
 		"entrance_down_chance": -1
 	    },
+	    "flee_chance_limits": [0.05, 0.25],
 	    "doors_template": {
-		    "forward": null,
-		    "backward": null,
-		    "left": null,
-		    "right": null,
-		    "down": null,
-		    "branch_power": null
+		"forward": null,
+		"backward": null,
+		"left": null,
+		"right": null,
+		"down": null,
+		"branch_power": null
 	    },
-	    "valid_directions": ["forward", "backward", "left", "right", "down"]
+	    "valid_directions": [
+		"forward",
+		"backward",
+		"left",
+		"right",
+		"down"
+	    ]
 	}
     },
     "entrance_prompt": {

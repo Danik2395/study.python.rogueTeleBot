@@ -1,22 +1,1205 @@
 {
-  "items": {
-    "sword": {
-	"type": "weapon",
-	"text_name": "меч",
-	"damage": 5,
-	"defence": 0,
-	"weight": 4,
-	"min_floor": 1
+    "items": {
+	"blind_cave_fish": {
+	    "type": "food",
+	    "text_name": "Слепая пещерная рыба",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 1,
+	    "heal": 8,
+	    "poison": 0
+	},
+	"pale_lichen": {
+	    "type": "food",
+	    "text_name": "Бледный лишайник",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 4,
+	    "poison": 0
+	},
+	"stone_root": {
+	    "type": "food",
+	    "text_name": "Каменный корень",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 1,
+	    "heal": 6,
+	    "poison": 0
+	},
+	"wet_moss_clump": {
+	    "type": "food",
+	    "text_name": "Комок сырого мха",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 5,
+	    "poison": 0
+	},
+	"crystal_dew_drops": {
+	    "type": "food",
+	    "text_name": "Кристальная роса",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 7,
+	    "poison": 0
+	},
+	"salt_crust": {
+	    "type": "food",
+	    "text_name": "Соляная корка",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 4,
+	    "poison": 0
+	},
+	"cave_slug_meat": {
+	    "type": "food",
+	    "text_name": "Мясо пещерного слизня",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 1,
+	    "heal": 8,
+	    "poison": 0
+	},
+	"bitter_cave_water": {
+	    "type": "food",
+	    "text_name": "Горькая пещерная вода",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 5,
+	    "poison": 0
+	},
+	"albino_centipede": {
+	    "type": "food",
+	    "text_name": "Белая многоножка",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 6,
+	    "poison": 0
+	},
+	"subterranean_fungus": {
+	    "type": "food",
+	    "text_name": "Подземный гриб",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 5,
+	    "poison": 0
+	},
+	"damp_earth_bulb": {
+	    "type": "food",
+	    "text_name": "Влажная земляная луковица",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 1,
+	    "heal": 7,
+	    "poison": 0
+	},
+	"mineral_paste": {
+	    "type": "food",
+	    "text_name": "Минеральная паста",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 4,
+	    "poison": 0
+	},
+	"limestone_drip": {
+	    "type": "food",
+	    "text_name": "Известняковая капля",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 5,
+	    "poison": 0
+	},
+	"chalky_spore_sac": {
+	    "type": "food",
+	    "text_name": "Меловой споровый мешок",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 6,
+	    "poison": 0
+	},
+	"blind_beetle_grub": {
+	    "type": "food",
+	    "text_name": "Личинка слепого жука",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 7,
+	    "poison": 0
+	},
+	"dark_water_algae": {
+	    "type": "food",
+	    "text_name": "Водоросль темных вод",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 5,
+	    "poison": 0
+	},
+	"shadow_truffle": {
+	    "type": "food",
+	    "text_name": "Теневой трюфель",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 1,
+	    "heal": 8,
+	    "poison": 0
+	},
+	"petrified_sap": {
+	    "type": "food",
+	    "text_name": "Окаменевший сок",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 4,
+	    "poison": 0
+	},
+	"gravel_worm": {
+	    "type": "food",
+	    "text_name": "Гравийный червь",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 6,
+	    "poison": 0
+	},
+	"guano_extract": {
+	    "type": "food",
+	    "text_name": "Вытяжка из гуано",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 1,
+	    "heal": 5,
+	    "poison": 0
+	},
+	"ironwood_branch": {
+	    "type": "weapon",
+	    "text_name": "Ветвь железного древа",
+	    "damage": 5,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"toxic_thorn": {
+	    "type": "weapon",
+	    "text_name": "Токсичный шип",
+	    "damage": 4,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"jagged_bark_blade": {
+	    "type": "weapon",
+	    "text_name": "Клинок из коры",
+	    "damage": 6,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"hardened_root_club": {
+	    "type": "weapon",
+	    "text_name": "Дубина из корня",
+	    "damage": 5,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"spore_encrusted_club": {
+	    "type": "weapon",
+	    "text_name": "Покрытая спорами дубина",
+	    "damage": 6,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"petrified_fungus_spear": {
+	    "type": "weapon",
+	    "text_name": "Копье из окаменевшего гриба",
+	    "damage": 5,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"fungal_stalk_whip": {
+	    "type": "weapon",
+	    "text_name": "Хлыст из грибной ножки",
+	    "damage": 4,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"sharpened_sapwood": {
+	    "type": "weapon",
+	    "text_name": "Заостренная заболонь",
+	    "damage": 4,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"hollow_reed_pike": {
+	    "type": "weapon",
+	    "text_name": "Острая тростниковая пика",
+	    "damage": 5,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"vine_strangling_cord": {
+	    "type": "weapon",
+	    "text_name": "Удушающая лоза",
+	    "damage": 4,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"glowing_wood_splinter": {
+	    "type": "weapon",
+	    "text_name": "Светящаяся щепка",
+	    "damage": 5,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"chitin_spiked_branch": {
+	    "type": "weapon",
+	    "text_name": "Ветвь с хитиновыми шипами",
+	    "damage": 6,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"resin_coated_club": {
+	    "type": "weapon",
+	    "text_name": "Покрытая смолой дубина",
+	    "damage": 5,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"bramble_lash": {
+	    "type": "weapon",
+	    "text_name": "Ежевичная плеть",
+	    "damage": 4,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"mycellium_wrapped_bone": {
+	    "type": "weapon",
+	    "text_name": "Обмотанная мицелием кость",
+	    "damage": 5,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"dead_branch_shiv": {
+	    "type": "weapon",
+	    "text_name": "Заточка из сухой ветви",
+	    "damage": 4,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"needle_leaf_dagger": {
+	    "type": "weapon",
+	    "text_name": "Кинжал из хвойного листа",
+	    "damage": 4,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"toxic_sap_blade": {
+	    "type": "weapon",
+	    "text_name": "Клинок с ядовитым соком",
+	    "damage": 6,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"root_burl_mace": {
+	    "type": "weapon",
+	    "text_name": "Булава из корневого нароста",
+	    "damage": 6,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"split_log_cleaver": {
+	    "type": "weapon",
+	    "text_name": "Тесак из расколотого полена",
+	    "damage": 6,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 2,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"reverse_falling_fruit": {
+	    "type": "food",
+	    "text_name": "Падающий вверх фрукт",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 14,
+	    "poison": 0
+	},
+	"sky_root_extract": {
+	    "type": "food",
+	    "text_name": "Экстракт небесного корня",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 12,
+	    "poison": 0
+	},
+	"inverted_dew": {
+	    "type": "food",
+	    "text_name": "Перевернутая роса",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 15,
+	    "poison": 0
+	},
+	"glowing_canopy_spore": {
+	    "type": "food",
+	    "text_name": "Светящаяся спора кроны",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 10,
+	    "poison": 1
+	},
+	"anti_gravity_sap": {
+	    "type": "food",
+	    "text_name": "Антигравитационный сок",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 3,
+	    "heal": 16,
+	    "poison": 0
+	},
+	"dangling_fungus": {
+	    "type": "food",
+	    "text_name": "Свисающий гриб",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 3,
+	    "heal": 11,
+	    "poison": 2
+	},
+	"sky_pond_algae": {
+	    "type": "food",
+	    "text_name": "Водоросль из небесного пруда",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 3,
+	    "heal": 13,
+	    "poison": 0
+	},
+	"ascending_spire_moss": {
+	    "type": "food",
+	    "text_name": "Восходящий мох",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 12,
+	    "poison": 0
+	},
+	"dizzying_nectar": {
+	    "type": "food",
+	    "text_name": "Головокружительный нектар",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 12,
+	    "poison": 3
+	},
+	"falling_seed_pod": {
+	    "type": "food",
+	    "text_name": "Падающий семенной короб",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 3,
+	    "heal": 14,
+	    "poison": 0
+	},
+	"inverted_bark_beetle": {
+	    "type": "food",
+	    "text_name": "Перевернутый короед",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 8,
+	    "poison": 1
+	},
+	"floating_spore_cluster": {
+	    "type": "food",
+	    "text_name": "Парящее скопление спор",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 3,
+	    "heal": 15,
+	    "poison": 0
+	},
+	"zenith_berry": {
+	    "type": "food",
+	    "text_name": "Зенитная ягода",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 9,
+	    "poison": 2
+	},
+	"root_tip_condensation": {
+	    "type": "food",
+	    "text_name": "Конденсат с кончика корня",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 11,
+	    "poison": 0
+	},
+	"twisted_vine_fruit": {
+	    "type": "food",
+	    "text_name": "Плод искаженной лозы",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 3,
+	    "heal": 10,
+	    "poison": 1
+	},
+	"hanging_soil_clump": {
+	    "type": "food",
+	    "text_name": "Комок висящей почвы",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 3,
+	    "heal": 12,
+	    "poison": 0
+	},
+	"ceiling_drip_fungus": {
+	    "type": "food",
+	    "text_name": "Гриб потолочной капели",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 3,
+	    "heal": 16,
+	    "poison": 0
+	},
+	"upward_growing_shoot": {
+	    "type": "food",
+	    "text_name": "Растущий вверх побег",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 13,
+	    "poison": 0
+	},
+	"buoyant_leaf_paste": {
+	    "type": "food",
+	    "text_name": "Паста из плавучих листьев",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 2,
+	    "min_floor": 3,
+	    "heal": 11,
+	    "poison": 1
+	},
+	"disorienting_extract": {
+	    "type": "food",
+	    "text_name": "Дезориентирующий экстракт",
+	    "damage": 0,
+	    "defence": 0,
+	    "weight": 1,
+	    "min_floor": 3,
+	    "heal": 12,
+	    "poison": 3
+	},
+	"rusted_miner_helm": {
+	    "type": "armour",
+	    "text_name": "Ржавый шлем рудокопа",
+	    "damage": 0,
+	    "defence": 4,
+	    "weight": 4,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"chain_link_vest": {
+	    "type": "armour",
+	    "text_name": "Жилет из цепей",
+	    "damage": 0,
+	    "defence": 5,
+	    "weight": 5,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"boiler_plate_cuirass": {
+	    "type": "armour",
+	    "text_name": "Кираса из котельного железа",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 6,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"heavy_leather_apron": {
+	    "type": "armour",
+	    "text_name": "Тяжелый кожаный фартук",
+	    "damage": 0,
+	    "defence": 4,
+	    "weight": 4,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"reinforced_work_boots": {
+	    "type": "armour",
+	    "text_name": "Усиленные рабочие ботинки",
+	    "damage": 0,
+	    "defence": 4,
+	    "weight": 5,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"iron_slag_plating": {
+	    "type": "armour",
+	    "text_name": "Пластины из железного шлака",
+	    "damage": 0,
+	    "defence": 5,
+	    "weight": 5,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"rivet_studded_harness": {
+	    "type": "armour",
+	    "text_name": "Усеянная заклепками сбруя",
+	    "damage": 0,
+	    "defence": 5,
+	    "weight": 4,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"discarded_vent_cover": {
+	    "type": "armour",
+	    "text_name": "Щиток из вентиляционной решетки",
+	    "damage": 0,
+	    "defence": 5,
+	    "weight": 5,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"copper_wire_mesh": {
+	    "type": "armour",
+	    "text_name": "Сетка из медной проволоки",
+	    "damage": 0,
+	    "defence": 4,
+	    "weight": 4,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"gear_forged_pauldrons": {
+	    "type": "armour",
+	    "text_name": "Наплечники из шестеренок",
+	    "damage": 0,
+	    "defence": 5,
+	    "weight": 5,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"soot_stained_coat": {
+	    "type": "armour",
+	    "text_name": "Пальто со стальными вставками",
+	    "damage": 0,
+	    "defence": 5,
+	    "weight": 6,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"dented_iron_bucket": {
+	    "type": "armour",
+	    "text_name": "Ведро-шлем",
+	    "damage": 0,
+	    "defence": 4,
+	    "weight": 4,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"drill_bit_guard": {
+	    "type": "armour",
+	    "text_name": "Защита из буровых коронок",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 6,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"cable_wrapped_bracers": {
+	    "type": "armour",
+	    "text_name": "Обмотанные кабелем наручи",
+	    "damage": 0,
+	    "defence": 4,
+	    "weight": 4,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"track_iron_splints": {
+	    "type": "armour",
+	    "text_name": "Поножи из вагонеточных рельс",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 6,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"blast_shielding": {
+	    "type": "armour",
+	    "text_name": "Взрывозащитный экран",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 6,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"welder_iron_mask": {
+	    "type": "armour",
+	    "text_name": "Железная маска сварщика",
+	    "damage": 0,
+	    "defence": 4,
+	    "weight": 4,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"hardened_coal_dust_vest": {
+	    "type": "armour",
+	    "text_name": "Жилет из застывшей угольной пыли",
+	    "damage": 0,
+	    "defence": 5,
+	    "weight": 5,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"makeshift_cog_buckler": {
+	    "type": "armour",
+	    "text_name": "Самодельный баклер из шестерни",
+	    "damage": 0,
+	    "defence": 4,
+	    "weight": 4,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"heavy_tarp_mantle": {
+	    "type": "armour",
+	    "text_name": "Тяжелая брезентовая мантия",
+	    "damage": 0,
+	    "defence": 4,
+	    "weight": 5,
+	    "min_floor": 4,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"gilded_executioner_sword": {
+	    "type": "weapon",
+	    "text_name": "Позолоченный меч палача",
+	    "damage": 10,
+	    "defence": 0,
+	    "weight": 5,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"heavy_gold_bullion": {
+	    "type": "weapon",
+	    "text_name": "Дубина из золотого слитка",
+	    "damage": 9,
+	    "defence": 0,
+	    "weight": 5,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"tarnished_coin_flail": {
+	    "type": "weapon",
+	    "text_name": "Кистень из потускневших монет",
+	    "damage": 8,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"broken_scale_weight": {
+	    "type": "weapon",
+	    "text_name": "Гиря от сломанных весов",
+	    "damage": 7,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"jeweled_dagger_hilt": {
+	    "type": "weapon",
+	    "text_name": "Обломок украшенного кинжала",
+	    "damage": 7,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"banker_ledger_chain": {
+	    "type": "weapon",
+	    "text_name": "Цепь от гроссбуха банкира",
+	    "damage": 8,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"golden_candlestick_mace": {
+	    "type": "weapon",
+	    "text_name": "Булава из золотого подсвечника",
+	    "damage": 9,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"coin_filled_sock": {
+	    "type": "weapon",
+	    "text_name": "Мешок, набитый монетами",
+	    "damage": 7,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"aristocrat_rapier": {
+	    "type": "weapon",
+	    "text_name": "Рапира аристократа",
+	    "damage": 8,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"melted_gold_spear": {
+	    "type": "weapon",
+	    "text_name": "Копье из расплавленного золота",
+	    "damage": 9,
+	    "defence": 0,
+	    "weight": 5,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"cursed_treasure_blade": {
+	    "type": "weapon",
+	    "text_name": "Клинок проклятых сокровищ",
+	    "damage": 10,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"heavy_brass_key": {
+	    "type": "weapon",
+	    "text_name": "Тяжелый латунный ключ",
+	    "damage": 7,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"merchant_ivory_cane": {
+	    "type": "weapon",
+	    "text_name": "Трость из слоновой кости",
+	    "damage": 8,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"gilded_scythe": {
+	    "type": "weapon",
+	    "text_name": "Позолоченная коса",
+	    "damage": 10,
+	    "defence": 0,
+	    "weight": 5,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"beggar_shiv_with_jewel": {
+	    "type": "weapon",
+	    "text_name": "Заточка нищего с рубином",
+	    "damage": 7,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"ruined_statue_arm": {
+	    "type": "weapon",
+	    "text_name": "Рука разрушенной статуи",
+	    "damage": 9,
+	    "defence": 0,
+	    "weight": 5,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"golden_tooth_club": {
+	    "type": "weapon",
+	    "text_name": "Дубина с золотыми зубами",
+	    "damage": 8,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"corrupted_scepter": {
+	    "type": "weapon",
+	    "text_name": "Искаженный скипетр",
+	    "damage": 9,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"razor_sharp_coin_edge": {
+	    "type": "weapon",
+	    "text_name": "Лезвие из острой монеты",
+	    "damage": 7,
+	    "defence": 0,
+	    "weight": 3,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"bloodstained_abacus": {
+	    "type": "weapon",
+	    "text_name": "Окровавленные счеты",
+	    "damage": 7,
+	    "defence": 0,
+	    "weight": 4,
+	    "min_floor": 5,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"ribbed_bone_carapace": {
+	    "type": "armour",
+	    "text_name": "Панцирь из ребер",
+	    "damage": 0,
+	    "defence": 7,
+	    "weight": 5,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"hardened_flesh_mantle": {
+	    "type": "armour",
+	    "text_name": "Мантия из затвердевшей плоти",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 4,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"pulsating_vein_harness": {
+	    "type": "armour",
+	    "text_name": "Сбруя из пульсирующих вен",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 5,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"chitinous_tooth_armor": {
+	    "type": "armour",
+	    "text_name": "Доспех из хитиновых зубов",
+	    "damage": 0,
+	    "defence": 8,
+	    "weight": 6,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"flayed_skin_tunic": {
+	    "type": "armour",
+	    "text_name": "Туника из освежеванной кожи",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 4,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"calcified_marrow_plate": {
+	    "type": "armour",
+	    "text_name": "Пластина из обызвествленного мозга",
+	    "damage": 0,
+	    "defence": 8,
+	    "weight": 6,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"living_muscle_cuirass": {
+	    "type": "armour",
+	    "text_name": "Кираса из живых мышц",
+	    "damage": 0,
+	    "defence": 7,
+	    "weight": 5,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"eye_cluster_shield": {
+	    "type": "armour",
+	    "text_name": "Щит со скоплением глаз",
+	    "damage": 0,
+	    "defence": 7,
+	    "weight": 6,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"cartilage_reinforced_vest": {
+	    "type": "armour",
+	    "text_name": "Жилет, усиленный хрящами",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 4,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"gut_string_mail": {
+	    "type": "armour",
+	    "text_name": "Кольчуга из кишок",
+	    "damage": 0,
+	    "defence": 7,
+	    "weight": 5,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"bone_spur_bracers": {
+	    "type": "armour",
+	    "text_name": "Наручи с костяными шпорами",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 4,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"weeping_sore_shroud": {
+	    "type": "armour",
+	    "text_name": "Заскорузлый саван из плоти",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 5,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"fused_spine_guard": {
+	    "type": "armour",
+	    "text_name": "Защита из сросшихся позвоночников",
+	    "damage": 0,
+	    "defence": 9,
+	    "weight": 7,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"organ_sac_padding": {
+	    "type": "armour",
+	    "text_name": "Подкладка из органных мешков",
+	    "damage": 0,
+	    "defence": 7,
+	    "weight": 5,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"blood_coagulated_cloak": {
+	    "type": "armour",
+	    "text_name": "Плащ из свернувшейся крови",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 4,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"skull_fragment_helm": {
+	    "type": "armour",
+	    "text_name": "Шлем из осколков черепа",
+	    "damage": 0,
+	    "defence": 7,
+	    "weight": 5,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"neural_web_mesh": {
+	    "type": "armour",
+	    "text_name": "Сеть из нервных волокон",
+	    "damage": 0,
+	    "defence": 6,
+	    "weight": 4,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"blister_hide_armor": {
+	    "type": "armour",
+	    "text_name": "Доспех из волдырчатой шкуры",
+	    "damage": 0,
+	    "defence": 8,
+	    "weight": 6,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"acid_resistant_mucus_coat": {
+	    "type": "armour",
+	    "text_name": "Покрытие из слизи",
+	    "damage": 0,
+	    "defence": 7,
+	    "weight": 5,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	},
+	"chimerical_scale_mail": {
+	    "type": "armour",
+	    "text_name": "Чешуя химерической твари",
+	    "damage": 0,
+	    "defence": 9,
+	    "weight": 7,
+	    "min_floor": 6,
+	    "heal": 0,
+	    "poison": 0
+	}
     },
-    "apple": {
-	"type": "food",
-	"text_name": "яблоко",
-	"damage": 0,
-	"weight": 1,
-	"heal": 6,
-	"poison": 0,
-	"min_floor": 1
-    }
-  },
-  "item_template": { "count": 1 }
+    "item_template": { "count": 1 }
 }

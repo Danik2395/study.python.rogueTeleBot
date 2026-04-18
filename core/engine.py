@@ -204,7 +204,8 @@ def attack(target_enemy_name: str, run_state: dict) -> dict:
     room_enemies = current_room["enemies"]
     combat_state = run_state["combat_state"]
 
-    combat_system = CombatSystem(player, room_enemies, combat_state)
+    floor_scale = floor["floor_scale"]
+    combat_system = CombatSystem(player, room_enemies, combat_state, floor_scale)
 
     combat_log: dict# = {}
     try:
@@ -240,7 +241,8 @@ def defence(run_state: dict) -> dict:
     room_enemies = current_room["enemies"]
     combat_state = run_state["combat_state"]
 
-    combat_system = CombatSystem(player, room_enemies, combat_state)
+    floor_scale = floor["floor_scale"]
+    combat_system = CombatSystem(player, room_enemies, combat_state, floor_scale)
 
     try:
         return combat_system.proceed_action("defence")
@@ -261,7 +263,8 @@ def flee(run_state: dict) -> dict:
     player = run_state["player"]
     combat_state = run_state["combat_state"]
 
-    combat_system = CombatSystem(player, current_room["enemies"], combat_state)
+    floor_scale = floor["floor_scale"]
+    combat_system = CombatSystem(player, current_room["enemies"], combat_state, floor_scale)
 
     try:
         combat_log = combat_system.proceed_action("flee", flee_chance_limits=flee_chance_limits)

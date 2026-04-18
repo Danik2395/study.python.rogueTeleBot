@@ -12,6 +12,79 @@ Terminal runner (`runner.py`) used for debugging without the bot.
 - aiosqlite (async SQLite)
 - JSON files for all game data (presets, templates, rules, layout)
 
+## Development Commands & Style Guidelines
+
+### Dependencies & Environment
+- Install dependencies: `pip install -r piprequirements.txt`
+- Virtual environment: `python -m venv venv`
+- Activate: `source venv/bin/activate` (Linux/Mac) or `venv\Scripts\activate` (Windows)
+- Type checking: `pyright` (requires `pip install pyright`)
+- Linting & formatting: (not yet configured; consider adopting `ruff` with `ruff check .` and `ruff format .`)
+- Running the bot: `python -m bot.bot_runner` (requires `.env` with `BOT_TOKEN`)
+- Terminal debugger: `python runner.py`
+- Database file: `rogue_database.db` (auto‑created, ignored by git)
+
+### Testing
+No test suite yet. When adding tests:
+- Use `pytest` with `pytest tests/`
+- Run a single test: `pytest tests/test_module.py::test_function -v`
+- Place tests in `tests/` mirroring source structure.
+
+### Code Style Guidelines
+
+#### Imports
+1. Standard library
+2. Third‑party packages
+3. Local modules (absolute imports from project root)
+Use `import module` or `from package import name`. Avoid relative imports unless inside a package.
+```python
+import copy
+import random
+
+import core.engine as engine
+from data.presets import LOG, ENEMIES
+```
+
+#### Formatting
+- Line length: 100 characters (soft limit)
+- Indentation: 4 spaces
+- Strings: double quotes (`"`) for all string literals (including dict keys)
+- Trailing commas: in multi‑line collections
+- No trailing whitespace
+- Blank lines: separate logical blocks, but avoid excessive spacing.
+
+#### Type Annotations
+- Use type hints for function arguments and return values.
+- Do not annotate local variables unless clarity is needed.
+- Use `from typing import Any, Optional, Union, etc.` when needed.
+- For complex nested dicts, use `dict[str, Any]` or define a `TypeAlias`.
+
+#### Naming Conventions
+- `snake_case` for functions, variables, modules
+- `CamelCase` for classes
+- `UPPER_SNAKE_CASE` for constants
+- `key_name` for JSON dict keys (as in data files)
+- `text_name` for human‑readable names (Russian)
+- `source` / `destination` for container keys (`"inventory"`, `"room_loot"`, `"equipped_weapon"`)
+
+#### Error Handling
+- **Trust the Contract**: Never write defensive checks for keys that are guaranteed by JSON presets.
+- Let `KeyError` or `ValueError` surface if state is corrupted.
+- Use custom exceptions only for domain‑specific failures (e.g., `Player.Dead`).
+- Avoid `try/except` blocks unless dealing with external I/O or explicitly required.
+
+#### Documentation
+- **No docstrings** in production code (per project philosophy).
+- Inline comments only for complex algorithmic logic or non‑obvious hacks.
+- Keep comments in **English**.
+- Use `# TODO:` for temporary notes (Russian allowed).
+
+#### Architectural Boundaries
+- Systems mutate state and return logs. No UI or DB access.
+- UI Builder reads state/log, returns buttons. No mutations.
+- Interface manages flow, no game rules.
+- Never hardcode values; extract from JSON presets.
+
 ## Architecture layers
 
 ```

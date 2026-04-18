@@ -1,24 +1,1204 @@
 {
     "enemies": {
-	"dragon": {
-	    "text_name": "Дракон",
+	"cave_skitterer": {
+	    "text_name": "Слепой ползун",
 	    "health": 20,
-	    "damage": 4,
-	    "defence": 5,
-	    "speed": 10,
+	    "damage": 6,
+	    "defence": 0,
+	    "speed": 16,
 	    "min_floor": 1,
 	    "biom": ["cave"],
-	    "memory_fragments": 3
+	    "memory_fragments": 1
 	},
-	"lizard": {
-	    "text_name": "Ящерица",
-	    "health": 10,
-	    "damage": 2,
-	    "defence": 3,
+	"shadow_leech": {
+	    "text_name": "Теневая пиявка",
+	    "health": 15,
+	    "damage": 8,
+	    "defence": 1,
+	    "speed": 14,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"rock_biter": {
+	    "text_name": "Камнеед",
+	    "health": 30,
+	    "damage": 5,
+	    "defence": 2,
 	    "speed": 15,
 	    "min_floor": 1,
 	    "biom": ["cave"],
 	    "memory_fragments": 2
+	},
+	"damp_strangler": {
+	    "text_name": "Сырой душитель",
+	    "health": 22,
+	    "damage": 7,
+	    "defence": 0,
+	    "speed": 17,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"pit_stalker": {
+	    "text_name": "Охотник из провала",
+	    "health": 18,
+	    "damage": 9,
+	    "defence": 0,
+	    "speed": 18,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 2
+	},
+	"echo_mimic": {
+	    "text_name": "Эхо-подражатель",
+	    "health": 25,
+	    "damage": 6,
+	    "defence": 1,
+	    "speed": 15,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"blind_ripper": {
+	    "text_name": "Слепой потрошитель",
+	    "health": 20,
+	    "damage": 10,
+	    "defence": 0,
+	    "speed": 16,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 2
+	},
+	"cave_crawler": {
+	    "text_name": "Пещерный трупоед",
+	    "health": 28,
+	    "damage": 5,
+	    "defence": 2,
+	    "speed": 14,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"stone_spitter": {
+	    "text_name": "Каменный плевун",
+	    "health": 24,
+	    "damage": 7,
+	    "defence": 1,
+	    "speed": 15,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"ceiling_dropper": {
+	    "text_name": "Потолочная тварь",
+	    "health": 16,
+	    "damage": 9,
+	    "defence": 0,
+	    "speed": 17,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 2
+	},
+	"dark_scavenger": {
+	    "text_name": "Падальщик мрака",
+	    "health": 26,
+	    "damage": 6,
+	    "defence": 1,
+	    "speed": 14,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"narrow_lurker": {
+	    "text_name": "Узкий соглядатай",
+	    "health": 18,
+	    "damage": 8,
+	    "defence": 0,
+	    "speed": 18,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"abyss_child": {
+	    "text_name": "Дитя бездны",
+	    "health": 30,
+	    "damage": 7,
+	    "defence": 2,
+	    "speed": 14,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 2
+	},
+	"stalactite_piercer": {
+	    "text_name": "Сталактитовый пронзатель",
+	    "health": 22,
+	    "damage": 10,
+	    "defence": 1,
+	    "speed": 16,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 2
+	},
+	"deep_centipede": {
+	    "text_name": "Глубинная многоножка",
+	    "health": 25,
+	    "damage": 5,
+	    "defence": 0,
+	    "speed": 17,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"wall_skulker": {
+	    "text_name": "Стенолаз",
+	    "health": 19,
+	    "damage": 7,
+	    "defence": 0,
+	    "speed": 15,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"pale_hunter": {
+	    "text_name": "Бледный ловец",
+	    "health": 28,
+	    "damage": 8,
+	    "defence": 1,
+	    "speed": 16,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 2
+	},
+	"gravel_tooth": {
+	    "text_name": "Гравийный зубоскал",
+	    "health": 20,
+	    "damage": 6,
+	    "defence": 2,
+	    "speed": 14,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"silent_chaser": {
+	    "text_name": "Безмолвный преследователь",
+	    "health": 17,
+	    "damage": 9,
+	    "defence": 0,
+	    "speed": 18,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 2
+	},
+	"shale_razor": {
+	    "text_name": "Сланцевая бритва",
+	    "health": 23,
+	    "damage": 8,
+	    "defence": 1,
+	    "speed": 15,
+	    "min_floor": 1,
+	    "biom": ["cave"],
+	    "memory_fragments": 1
+	},
+	"root_weaver": {
+	    "text_name": "Ткач корней",
+	    "health": 40,
+	    "damage": 9,
+	    "defence": 3,
+	    "speed": 11,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 2
+	},
+	"spore_carrier": {
+	    "text_name": "Разносчик спор",
+	    "health": 35,
+	    "damage": 10,
+	    "defence": 2,
+	    "speed": 10,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 3
+	},
+	"fungal_husk": {
+	    "text_name": "Грибная оболочка",
+	    "health": 45,
+	    "damage": 8,
+	    "defence": 4,
+	    "speed": 9,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 2
+	},
+	"rot_crawler": {
+	    "text_name": "Ползучая гниль",
+	    "health": 32,
+	    "damage": 11,
+	    "defence": 2,
+	    "speed": 12,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 2
+	},
+	"bioluminescent_stinger": {
+	    "text_name": "Светящийся жалонос",
+	    "health": 30,
+	    "damage": 12,
+	    "defence": 2,
+	    "speed": 13,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 3
+	},
+	"bark_aberration": {
+	    "text_name": "Корявая аберрация",
+	    "health": 42,
+	    "damage": 9,
+	    "defence": 4,
+	    "speed": 9,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 3
+	},
+	"moss_choker": {
+	    "text_name": "Моховой удушитель",
+	    "health": 38,
+	    "damage": 10,
+	    "defence": 3,
+	    "speed": 10,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 2
+	},
+	"sap_bleeder": {
+	    "text_name": "Кровоточащий ствол",
+	    "health": 45,
+	    "damage": 8,
+	    "defence": 3,
+	    "speed": 9,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 3
+	},
+	"venom_spitter": {
+	    "text_name": "Ядовитый плевун",
+	    "health": 33,
+	    "damage": 11,
+	    "defence": 2,
+	    "speed": 11,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 2
+	},
+	"overgrowth_horror": {
+	    "text_name": "Ужас зарослей",
+	    "health": 44,
+	    "damage": 10,
+	    "defence": 3,
+	    "speed": 10,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 3
+	},
+	"parasite_host": {
+	    "text_name": "Носитель паразитов",
+	    "health": 36,
+	    "damage": 9,
+	    "defence": 2,
+	    "speed": 11,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 2
+	},
+	"tangled_fiend": {
+	    "text_name": "Спутанный изверг",
+	    "health": 39,
+	    "damage": 10,
+	    "defence": 3,
+	    "speed": 10,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 3
+	},
+	"thorn_strangler": {
+	    "text_name": "Шипастый душитель",
+	    "health": 34,
+	    "damage": 12,
+	    "defence": 2,
+	    "speed": 12,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 2
+	},
+	"pale_mycelium": {
+	    "text_name": "Бледный мицелий",
+	    "health": 41,
+	    "damage": 8,
+	    "defence": 4,
+	    "speed": 9,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 2
+	},
+	"woody_crawler": {
+	    "text_name": "Древесный ползун",
+	    "health": 37,
+	    "damage": 9,
+	    "defence": 3,
+	    "speed": 11,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 2
+	},
+	"spore_cloud_entity": {
+	    "text_name": "Сущность из спор",
+	    "health": 31,
+	    "damage": 11,
+	    "defence": 2,
+	    "speed": 13,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 3
+	},
+	"fungal_bruiser": {
+	    "text_name": "Грибной костолом",
+	    "health": 45,
+	    "damage": 10,
+	    "defence": 4,
+	    "speed": 9,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 3
+	},
+	"vine_snatcher": {
+	    "text_name": "Хватающая лоза",
+	    "health": 35,
+	    "damage": 10,
+	    "defence": 2,
+	    "speed": 12,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 2
+	},
+	"dead_leaf_stalker": {
+	    "text_name": "Ловец в листве",
+	    "health": 32,
+	    "damage": 11,
+	    "defence": 2,
+	    "speed": 13,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 3
+	},
+	"hollow_trunk_beast": {
+	    "text_name": "Тварь из дупла",
+	    "health": 43,
+	    "damage": 9,
+	    "defence": 3,
+	    "speed": 10,
+	    "min_floor": 2,
+	    "biom": ["forest"],
+	    "memory_fragments": 3
+	},
+	"inverted_leaper": {
+	    "text_name": "Перевернутый прыгун",
+	    "health": 30,
+	    "damage": 11,
+	    "defence": 3,
+	    "speed": 18,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"gravity_anomaly": {
+	    "text_name": "Гравитационная аномалия",
+	    "health": 38,
+	    "damage": 10,
+	    "defence": 4,
+	    "speed": 15,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 4
+	},
+	"falling_stalker": {
+	    "text_name": "Падающий ловец",
+	    "health": 28,
+	    "damage": 12,
+	    "defence": 2,
+	    "speed": 19,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"ceiling_root_snare": {
+	    "text_name": "Потолочный силок",
+	    "health": 35,
+	    "damage": 9,
+	    "defence": 5,
+	    "speed": 16,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"sky_drop_horror": {
+	    "text_name": "Ужас падающего неба",
+	    "health": 40,
+	    "damage": 11,
+	    "defence": 3,
+	    "speed": 15,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 4
+	},
+	"twisted_canopy_dweller": {
+	    "text_name": "Обитатель искаженной кроны",
+	    "health": 33,
+	    "damage": 10,
+	    "defence": 3,
+	    "speed": 17,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"inverted_spidertree": {
+	    "text_name": "Перевернутый древопаук",
+	    "health": 25,
+	    "damage": 13,
+	    "defence": 2,
+	    "speed": 20,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 4
+	},
+	"hanging_strangler": {
+	    "text_name": "Висячий удушитель",
+	    "health": 36,
+	    "damage": 10,
+	    "defence": 4,
+	    "speed": 16,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"updraft_floater": {
+	    "text_name": "Парящий во мгле",
+	    "health": 29,
+	    "damage": 11,
+	    "defence": 2,
+	    "speed": 18,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"plummet_fiend": {
+	    "text_name": "Стремительно падающий",
+	    "health": 32,
+	    "damage": 12,
+	    "defence": 3,
+	    "speed": 19,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 4
+	},
+	"reverse_crawler": {
+	    "text_name": "Обратный ползун",
+	    "health": 37,
+	    "damage": 9,
+	    "defence": 4,
+	    "speed": 15,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"canopy_diver": {
+	    "text_name": "Ныряльщик из крон",
+	    "health": 31,
+	    "damage": 11,
+	    "defence": 2,
+	    "speed": 18,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"vertiginous_phantom": {
+	    "text_name": "Фантом головокружения",
+	    "health": 27,
+	    "damage": 12,
+	    "defence": 3,
+	    "speed": 19,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 4
+	},
+	"zenith_predator": {
+	    "text_name": "Зенитный хищник",
+	    "health": 34,
+	    "damage": 11,
+	    "defence": 4,
+	    "speed": 16,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"roots_up_walker": {
+	    "text_name": "Ходящий по корням",
+	    "health": 39,
+	    "damage": 9,
+	    "defence": 5,
+	    "speed": 15,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 4
+	},
+	"upside_down_lurker": {
+	    "text_name": "Перевернутый соглядатай",
+	    "health": 26,
+	    "damage": 10,
+	    "defence": 2,
+	    "speed": 18,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"floating_husk": {
+	    "text_name": "Парящая оболочка",
+	    "health": 35,
+	    "damage": 10,
+	    "defence": 3,
+	    "speed": 17,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"gravity_warper": {
+	    "text_name": "Искажитель тяжести",
+	    "health": 40,
+	    "damage": 9,
+	    "defence": 4,
+	    "speed": 15,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 4
+	},
+	"ceiling_creeper": {
+	    "text_name": "Потолочный крадун",
+	    "health": 28,
+	    "damage": 11,
+	    "defence": 2,
+	    "speed": 19,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 3
+	},
+	"skyward_maw": {
+	    "text_name": "Пасть в небе",
+	    "health": 38,
+	    "damage": 12,
+	    "defence": 4,
+	    "speed": 16,
+	    "min_floor": 3,
+	    "biom": ["upside_down_forest"],
+	    "memory_fragments": 4
+	},
+	"rusted_juggernaut": {
+	    "text_name": "Ржавая громадина",
+	    "health": 55,
+	    "damage": 12,
+	    "defence": 10,
+	    "speed": 6,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 5
+	},
+	"iron_slag_golem": {
+	    "text_name": "Шлаковый голем",
+	    "health": 60,
+	    "damage": 10,
+	    "defence": 12,
+	    "speed": 5,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 6
+	},
+	"mine_cart_mimic": {
+	    "text_name": "Живая вагонетка",
+	    "health": 45,
+	    "damage": 14,
+	    "defence": 8,
+	    "speed": 7,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 4
+	},
+	"coal_breather": {
+	    "text_name": "Угольный выдыхатель",
+	    "health": 42,
+	    "damage": 11,
+	    "defence": 9,
+	    "speed": 6,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 4
+	},
+	"forgotten_driller": {
+	    "text_name": "Забытый бурильщик",
+	    "health": 50,
+	    "damage": 15,
+	    "defence": 11,
+	    "speed": 5,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 5
+	},
+	"chain_bound_horror": {
+	    "text_name": "Скованный цепями ужас",
+	    "health": 58,
+	    "damage": 13,
+	    "defence": 10,
+	    "speed": 6,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 6
+	},
+	"gear_grinder": {
+	    "text_name": "Жерновщик",
+	    "health": 48,
+	    "damage": 12,
+	    "defence": 12,
+	    "speed": 5,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 5
+	},
+	"toxic_gas_husk": {
+	    "text_name": "Оболочка рудничного газа",
+	    "health": 40,
+	    "damage": 14,
+	    "defence": 8,
+	    "speed": 8,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 4
+	},
+	"collapsed_shaft_dweller": {
+	    "text_name": "Житель обрушенного штрека",
+	    "health": 52,
+	    "damage": 11,
+	    "defence": 10,
+	    "speed": 6,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 5
+	},
+	"iron_vein_crawler": {
+	    "text_name": "Ползун железной жилы",
+	    "health": 44,
+	    "damage": 12,
+	    "defence": 11,
+	    "speed": 7,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 4
+	},
+	"heavy_crusher": {
+	    "text_name": "Тяжелый дробитель",
+	    "health": 56,
+	    "damage": 15,
+	    "defence": 12,
+	    "speed": 5,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 6
+	},
+	"slag_spitter": {
+	    "text_name": "Плюющийся шлаком",
+	    "health": 46,
+	    "damage": 13,
+	    "defence": 9,
+	    "speed": 7,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 5
+	},
+	"rust_flake_swarm": {
+	    "text_name": "Рой ржавчины",
+	    "health": 41,
+	    "damage": 10,
+	    "defence": 8,
+	    "speed": 8,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 4
+	},
+	"blind_miner": {
+	    "text_name": "Слепой рудокоп",
+	    "health": 49,
+	    "damage": 12,
+	    "defence": 10,
+	    "speed": 6,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 5
+	},
+	"lantern_angler": {
+	    "text_name": "Фонарный удельщик",
+	    "health": 43,
+	    "damage": 11,
+	    "defence": 9,
+	    "speed": 7,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 4
+	},
+	"structural_aberration": {
+	    "text_name": "Структурная аберрация",
+	    "health": 54,
+	    "damage": 13,
+	    "defence": 11,
+	    "speed": 5,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 6
+	},
+	"ore_crusted_beast": {
+	    "text_name": "Покрытая рудой тварь",
+	    "health": 51,
+	    "damage": 14,
+	    "defence": 12,
+	    "speed": 6,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 5
+	},
+	"deep_drill_automaton": {
+	    "text_name": "Глубинный автомат",
+	    "health": 59,
+	    "damage": 15,
+	    "defence": 10,
+	    "speed": 5,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 6
+	},
+	"suffocating_dust": {
+	    "text_name": "Удушающая пыль",
+	    "health": 40,
+	    "damage": 12,
+	    "defence": 8,
+	    "speed": 8,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 4
+	},
+	"echoing_hammer": {
+	    "text_name": "Эхо молота",
+	    "health": 47,
+	    "damage": 14,
+	    "defence": 10,
+	    "speed": 6,
+	    "min_floor": 4,
+	    "biom": ["abandoned_mines"],
+	    "memory_fragments": 5
+	},
+	"gilded_wretch": {
+	    "text_name": "Позолоченный бедняк",
+	    "health": 28,
+	    "damage": 12,
+	    "defence": 5,
+	    "speed": 10,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 5
+	},
+	"coin_hoarder": {
+	    "text_name": "Собиратель монет",
+	    "health": 32,
+	    "damage": 11,
+	    "defence": 6,
+	    "speed": 9,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 6
+	},
+	"starved_merchant": {
+	    "text_name": "Истощенный торговец",
+	    "health": 25,
+	    "damage": 13,
+	    "defence": 4,
+	    "speed": 11,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 5
+	},
+	"golden_mask_cultist": {
+	    "text_name": "Культист в золотой маске",
+	    "health": 30,
+	    "damage": 12,
+	    "defence": 5,
+	    "speed": 10,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 6
+	},
+	"wealth_corrupted": {
+	    "text_name": "Искаженный богатством",
+	    "health": 35,
+	    "damage": 14,
+	    "defence": 7,
+	    "speed": 8,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 7
+	},
+	"blind_appraiser": {
+	    "text_name": "Слепой оценщик",
+	    "health": 26,
+	    "damage": 11,
+	    "defence": 4,
+	    "speed": 12,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 5
+	},
+	"molten_gold_spitter": {
+	    "text_name": "Плюющий расплавом",
+	    "health": 33,
+	    "damage": 14,
+	    "defence": 6,
+	    "speed": 9,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 6
+	},
+	"ruined_aristocrat": {
+	    "text_name": "Разоренный аристократ",
+	    "health": 29,
+	    "damage": 13,
+	    "defence": 5,
+	    "speed": 10,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 6
+	},
+	"silent_banker": {
+	    "text_name": "Безмолвный банкир",
+	    "health": 34,
+	    "damage": 10,
+	    "defence": 7,
+	    "speed": 8,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 7
+	},
+	"debt_collector": {
+	    "text_name": "Сборщик долгов",
+	    "health": 31,
+	    "damage": 14,
+	    "defence": 6,
+	    "speed": 9,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 6
+	},
+	"gem_eyed_husk": {
+	    "text_name": "Оболочка с самоцветами",
+	    "health": 27,
+	    "damage": 12,
+	    "defence": 4,
+	    "speed": 11,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 5
+	},
+	"gold_dust_phantom": {
+	    "text_name": "Фантом золотой пыли",
+	    "health": 25,
+	    "damage": 11,
+	    "defence": 4,
+	    "speed": 12,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 5
+	},
+	"beggar_king": {
+	    "text_name": "Король нищих",
+	    "health": 35,
+	    "damage": 13,
+	    "defence": 7,
+	    "speed": 8,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 7
+	},
+	"avarice_embodiment": {
+	    "text_name": "Воплощение алчности",
+	    "health": 34,
+	    "damage": 14,
+	    "defence": 6,
+	    "speed": 9,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 7
+	},
+	"coin_purse_mimic": {
+	    "text_name": "Прожорливая мошна",
+	    "health": 28,
+	    "damage": 13,
+	    "defence": 5,
+	    "speed": 10,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 6
+	},
+	"tarnished_guard": {
+	    "text_name": "Потускневший страж",
+	    "health": 33,
+	    "damage": 11,
+	    "defence": 7,
+	    "speed": 8,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 6
+	},
+	"greedy_maw": {
+	    "text_name": "Алкающая пасть",
+	    "health": 30,
+	    "damage": 14,
+	    "defence": 5,
+	    "speed": 10,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 6
+	},
+	"cursed_jeweler": {
+	    "text_name": "Проклятый ювелир",
+	    "health": 29,
+	    "damage": 12,
+	    "defence": 6,
+	    "speed": 9,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 5
+	},
+	"velvet_strangler": {
+	    "text_name": "Бархатный душитель",
+	    "health": 26,
+	    "damage": 13,
+	    "defence": 4,
+	    "speed": 11,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 5
+	},
+	"empty_vault_dweller": {
+	    "text_name": "Житель пустых хранилищ",
+	    "health": 32,
+	    "damage": 11,
+	    "defence": 7,
+	    "speed": 8,
+	    "min_floor": 5,
+	    "biom": ["gold_town"],
+	    "memory_fragments": 6
+	},
+	"throbbing_mass": {
+	    "text_name": "Пульсирующая масса",
+	    "health": 65,
+	    "damage": 15,
+	    "defence": 6,
+	    "speed": 11,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 7
+	},
+	"bone_marrow_drinker": {
+	    "text_name": "Пьющий костный мозг",
+	    "health": 55,
+	    "damage": 17,
+	    "defence": 5,
+	    "speed": 14,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 8
+	},
+	"flesh_weaver": {
+	    "text_name": "Ткач плоти",
+	    "health": 60,
+	    "damage": 16,
+	    "defence": 7,
+	    "speed": 12,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 7
+	},
+	"exposed_nerve_horror": {
+	    "text_name": "Ужас оголенного нерва",
+	    "health": 50,
+	    "damage": 18,
+	    "defence": 5,
+	    "speed": 15,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 8
+	},
+	"tooth_wall_mimic": {
+	    "text_name": "Зубастая стена",
+	    "health": 70,
+	    "damage": 15,
+	    "defence": 8,
+	    "speed": 10,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 8
+	},
+	"blood_vessel_crawler": {
+	    "text_name": "Ползун по венам",
+	    "health": 52,
+	    "damage": 14,
+	    "defence": 5,
+	    "speed": 14,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 7
+	},
+	"muscle_fibrous_brute": {
+	    "text_name": "Мышечный громила",
+	    "health": 68,
+	    "damage": 18,
+	    "defence": 7,
+	    "speed": 11,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 8
+	},
+	"digesting_maw": {
+	    "text_name": "Переваривающая пасть",
+	    "health": 62,
+	    "damage": 17,
+	    "defence": 6,
+	    "speed": 12,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 7
+	},
+	"spine_centipede": {
+	    "text_name": "Спинная многоножка",
+	    "health": 58,
+	    "damage": 16,
+	    "defence": 8,
+	    "speed": 13,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 8
+	},
+	"eye_cluster": {
+	    "text_name": "Скопление глаз",
+	    "health": 54,
+	    "damage": 15,
+	    "defence": 6,
+	    "speed": 14,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 7
+	},
+	"gore_spitter": {
+	    "text_name": "Плюющий кровью",
+	    "health": 56,
+	    "damage": 16,
+	    "defence": 5,
+	    "speed": 13,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 7
+	},
+	"cartilage_construct": {
+	    "text_name": "Хрящевой конструкт",
+	    "health": 66,
+	    "damage": 15,
+	    "defence": 8,
+	    "speed": 10,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 8
+	},
+	"bile_dripper": {
+	    "text_name": "Капающий желчью",
+	    "health": 53,
+	    "damage": 17,
+	    "defence": 6,
+	    "speed": 12,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 7
+	},
+	"weeping_sore": {
+	    "text_name": "Кровоточащая язва",
+	    "health": 59,
+	    "damage": 14,
+	    "defence": 5,
+	    "speed": 11,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 7
+	},
+	"marrow_stalker": {
+	    "text_name": "Ловец мозга",
+	    "health": 51,
+	    "damage": 18,
+	    "defence": 5,
+	    "speed": 15,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 8
+	},
+	"flayed_hunter": {
+	    "text_name": "Освежеванный охотник",
+	    "health": 57,
+	    "damage": 16,
+	    "defence": 6,
+	    "speed": 14,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 8
+	},
+	"living_intestine": {
+	    "text_name": "Живая кишка",
+	    "health": 64,
+	    "damage": 15,
+	    "defence": 7,
+	    "speed": 12,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 7
+	},
+	"palpitating_hulk": {
+	    "text_name": "Бьющаяся громада",
+	    "health": 69,
+	    "damage": 17,
+	    "defence": 8,
+	    "speed": 10,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 8
+	},
+	"acid_blood_fiend": {
+	    "text_name": "Тварь с кислотной кровью",
+	    "health": 55,
+	    "damage": 18,
+	    "defence": 6,
+	    "speed": 13,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 8
+	},
+	"organic_chimeric_beast": {
+	    "text_name": "Органическая химера",
+	    "health": 63,
+	    "damage": 16,
+	    "defence": 7,
+	    "speed": 11,
+	    "min_floor": 6,
+	    "biom": ["labyrinth_of_flesh"],
+	    "memory_fragments": 7
 	}
     },
     "npcs": {

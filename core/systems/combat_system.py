@@ -7,12 +7,14 @@ class CombatSystem:
             self,
             player: dict,
             room_enemies: list,
-            combat_state: dict
+            combat_state: dict,
+            floor_scale: float = 1.0
             ) -> None:
         self.room_enemies = room_enemies
 
         self.combat_state = combat_state
         self.combat_state["in_combat"] = True
+        self.floor_scale = floor_scale
 
         # Enemies from state
         self.enemies_data: dict
@@ -54,9 +56,13 @@ class CombatSystem:
 
         # If its the first action take data from presets
         if self.enemies_data is None:
-            self.enemies_data = {
-                    key_name: ENEMIES[key_name].copy() for key_name in self.room_enemies
-                    }
+            stat_scale = COMBAT_RULES["stat_scale"]
+            self.enemies_data = {}
+            for key_name in self.room_enemies:
+                base = ENEMIES[key_name].copy()
+                for stat, weight in stat_scale.items(): # "health": 12
+                    base[stat] = int(base[stat] * (1 + (self.floor_scale - 1) * weight))
+                self.enemies_data[key_name] = base
             # Initialize combat_state["enemies"] on the first room visit
             self.combat_state["enemies"] = self.enemies_data
 
@@ -69,7 +75,7 @@ class CombatSystem:
        self.turns = self.player_object.speed // COMBAT_RULES["turn_delimiter"]
        self.combat_state["turns"] = self.turns
 
-    def _enemies_turn(self, log: dict, low_damage: float, high_damage: float, reset_turns: bool = True) -> None:
+    def _enemies_turn(self, log: dict, reset_turns: bool = True) -> None:
         log["enemies_turn_triggered"] = True
         if log.get("consequence") is None:
             log["consequence"] = []
@@ -77,6 +83,9 @@ class CombatSystem:
         extra_def = self.player.get("extra_defence", {})
         def_buff_active = (extra_def.get("for_turns") or 0) > 0
         def_buff_value = extra_def.get("value", 0)
+
+        damage_scale = random.choice(COMBAT_RULES["damage_scale_limits"])
+        low_damage, high_damage, *buff = damage_scale
 
         for key_name, enemy in self.enemies_objects.items():
             consequence = LOG["combat_consequence_log_template"].copy()
@@ -101,6 +110,10 @@ class CombatSystem:
                 dead_log = LOG["dead_log_template"].copy()
                 dead_log["enemy"] = key_name
                 dead_log["damage"] = enemy_damage
+                self.player.update({
+                    "base_health": self.player_object.base_health,
+                    "current_health": self.player_object.current_health,
+                    })
                 raise self.player_object.Dead(dead_log)
 
             log["consequence"].append(consequence)
@@ -121,9 +134,6 @@ class CombatSystem:
 
     def proceed_action(self, action_type: str, target_enemy_key_name: str = "", flee_chance_limits: list | None = None) -> dict:
         """Proceeds player actions and returns combat action log"""
-
-        damage_scale = random.choice(COMBAT_RULES["damage_scale_limits"])
-        low_damage, high_damage, *buff = damage_scale
 
         match action_type:
             case "attack":
@@ -192,7 +202,7 @@ class CombatSystem:
 
                 # Enemies turn
                 if self.combat_state["turns"] <= 0:
-                    self._enemies_turn(log, low_damage, high_damage)
+                    self._enemies_turn(log)
 
                 log["turns"] = self.combat_state["turns"]
                 return log
@@ -218,7 +228,7 @@ class CombatSystem:
                 self.combat_state["turns"] -= turns_cost
 
                 if self.combat_state["turns"] <= 0:
-                    self._enemies_turn(log, low_damage, high_damage)
+                    self._enemies_turn(log)
 
                 log["turns"] = self.combat_state["turns"]
                 return log
@@ -240,7 +250,7 @@ class CombatSystem:
 
                 log["fled"] = False
                 log["action"] = "flee_fail"
-                self._enemies_turn(log, low_damage, high_damage, reset_turns=False)
+                self._enemies_turn(log, reset_turns=False)
                 log["turns"] = self.combat_state["turns"]
                 return log
 
