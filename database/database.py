@@ -13,7 +13,7 @@ class Database:
 
     @classmethod
     async def create(cls) -> "Database":
-        db = await aiosqlite.connect("database/rogue_database.db")
+        db = await aiosqlite.connect(DATABASE)
         cur = await db.cursor()
 
         instance = cls(db, cur)
