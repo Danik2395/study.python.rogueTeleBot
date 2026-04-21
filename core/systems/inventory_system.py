@@ -49,15 +49,26 @@ class InventorySystem:
         key_name = self.inventory_state["selected_item_key_name"]
         item = ITEMS[key_name]
         item_type = item["type"]
+        equipped_items = player["equipped_items"]
         match item_type:
             case "food":
                 return self._use_food(key_name, player)
 
             case "weapon":
+                weapon_dict = equipped_items["equipped_weapon"]
+                weapon_key_name= next(iter(weapon_dict), None)
+                if weapon_key_name:
+                    weapon = ITEMS[weapon_key_name]
+                    player["base_damage"] -= weapon["damage"]
                 player["base_damage"] += item["damage"]
                 return self._equip(key_name, "weapon", player)
 
             case "armour":
+                armour_dict = equipped_items["equipped_armour"]
+                armour_key_name= next(iter(armour_dict), None)
+                if armour_key_name:
+                    armour = ITEMS[armour_key_name]
+                    player["base_defence"] -= armour["defence"]
                 player["base_defence"] += item["defence"]
                 return self._equip(key_name, "armour", player)
 
