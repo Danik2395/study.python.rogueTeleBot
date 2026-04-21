@@ -233,30 +233,39 @@ class LogHandler:
         count_in_source = log.get("count_in_source")
         count_in_destination = log.get("count_in_destination")
 
-        # Преобразуем ключи в читаемые названия
-        source_readable = source
-        destination_readable = move_destination
-        if source is None:
-            source_readable = "неизвестно"
-        else:
-            source_readable = LOG_LABELS[source]
-
-        if move_destination is None:
-            destination_readable = "неизвестно"
-        else:
-            destination_readable = LOG_LABELS[move_destination]
-
+        source_readable = LOG_LABELS.get(source, source) if source else "неизвестно"
+        destination_readable = LOG_LABELS.get(move_destination, move_destination) if move_destination else "неизвестно"
         item_text_name = ITEMS.get(item_key_name, {}).get("text_name", item_key_name)
 
+        match action:
+            case "open":
+                if source == "inventory":
+                    semantic_action = "Игрок открывает свой инвентарь — осматривает вещи при себе."
+                else:
+                    semantic_action = f"Игрок осматривает вещи в комнате (источник: {source_readable}). Это не карманы — это предметы, лежащие в помещении."
+            case "select":
+                semantic_action = f"Игрок выбирает предмет '{item_text_name}' из '{source_readable}' — только рассматривает его, НЕ перемещает."
+            case "move":
+                semantic_action = f"Игрок перекладывает '{item_text_name}' из '{source_readable}' в '{destination_readable}'. Количество перемещено: {count_delta}. Осталось в источнике: {count_in_source}. Теперь в цели: {count_in_destination}."
+            case "use":
+                semantic_action = f"Игрок использует '{item_text_name}' (еда/расходник) — потребляет его прямо сейчас."
+            case "equip":
+                semantic_action = f"Игрок экипирует '{item_text_name}' в слот '{slot}', надевает или берёт в руки."
+            case "unequip":
+                semantic_action = f"Игрок снимает '{item_text_name}' из слота '{slot}' и убирает в инвентарь."
+            case _:
+                semantic_action = f"Действие с предметом '{item_text_name}'."
+
         user_content = f"""
-            Action in inventory: {action}
+            Semantic action (use this as the primary description basis): {semantic_action}
+            Raw action type: {action}
             Item: {item_text_name} (key: {item_key_name})
-            Source: {source_readable} ({source})
-            Destination: {destination_readable} ({move_destination})
+            Source container: {source_readable} ({source})
+            Destination container: {destination_readable} ({move_destination})
             Slot: {slot}
-            Count delta: {count_delta}
-            Count in source: {count_in_source}
-            Count in destination: {count_in_destination}
+            Count moved: {count_delta}
+            Count remaining in source: {count_in_source}
+            Count now in destination: {count_in_destination}
         """
 
         system_content = PROMPTS["inventory"]
