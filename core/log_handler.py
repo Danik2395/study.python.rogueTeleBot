@@ -8,7 +8,7 @@ from os import environ
 from dotenv import load_dotenv
 
 from database.database import Database
-from data.presets import PROMPTS, ITEMS, ENEMIES, LOG_LABELS, FTEXT, UI_LABELS
+from data.presets import PROMPTS, ITEMS, ENEMIES, LOG_LABELS, FTEXT
 
 load_dotenv()
 
@@ -95,13 +95,15 @@ class LogHandler:
         system_content = f"{PROMPTS["general_system_prompt"]}\n{specified_system_content}"
 
         completion = await self.client.chat.completions.create(
-            model="deepseek-chat",
+            model="deepseek-v4-flash",
             messages=[
                 {"role": "system", "content": system_content},
                 {"role": "user", "content": user_content}
             ],
-            temperature=0.7
+            extra_body={"thinking": { "type": "disabled" }},
+            temperature=0.9
         )
+
         return completion.choices[0].message.content
 
     async def _render_move(self, log: dict[str, Any]) -> str:
